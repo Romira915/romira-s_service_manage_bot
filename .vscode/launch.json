@@ -1,0 +1,138 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'discord_bot_client'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=discord_bot_client"
+                ],
+                "filter": {
+                    "name": "discord_bot_client",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'discord_bot_client'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=discord_bot_client",
+                    "--package=discord_bot_client"
+                ],
+                "filter": {
+                    "name": "discord_bot_client",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'discord_bot_client'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=discord_bot_client",
+                    "--package=discord_bot_client"
+                ],
+                "filter": {
+                    "name": "discord_bot_client",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'homeserver_receive_process'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=homeserver_receive_process",
+                    "--package=homeserver_receive_process"
+                ],
+                "filter": {
+                    "name": "homeserver_receive_process",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'homeserver_receive_process'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=homeserver_receive_process",
+                    "--package=homeserver_receive_process"
+                ],
+                "filter": {
+                    "name": "homeserver_receive_process",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'valheim-connection-check'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=valheim-connection-check",
+                    "--package=valheim-connection-check"
+                ],
+                "filter": {
+                    "name": "valheim-connection-check",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'valheim-connection-check'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=valheim-connection-check",
+                    "--package=valheim-connection-check"
+                ],
+                "filter": {
+                    "name": "valheim-connection-check",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
