@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "discord_bot_client",
+    "homeserver_receive_process",
+    "valheim_connection_check",
+]
