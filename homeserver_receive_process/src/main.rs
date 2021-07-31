@@ -1,28 +1,25 @@
-use std::iter::Sum;
+use std::{fs::File, io::Read, iter::Sum};
 
 use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 use duct::cmd;
+use homeserver_receive_process::{home_server_config::Config, Command};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
-struct Command {
-    service: Option<String>,
-    request: String,
-    subrequest: Option<String>,
-    administrator: bool,
-}
+const CONFIG_PATH: &'static str = "./.config/home_server_config.toml";
 
 #[post("/minecraft")]
 async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
-    if let "start" | "status" = &*command.request {
-    } else if let ("stop" | "restart", true) = (&*command.request, command.administrator) {
+    if let "start" | "status" = command.request().as_str() {
+    } else if let ("stop" | "restart", true) =
+        (&*command.request().as_str(), command.administrator())
+    {
     } else {
         return HttpResponse::MethodNotAllowed().body("Not Allowed command");
     }
 
     let response = match cmd!(
         "systemctl",
-        &command.request,
+        &command.request(),
         "minecraft-server-mgpf.service"
     )
     .run()
@@ -45,9 +42,21 @@ async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    println!("start HttpServer");
+    let config: Config = {
+        let mut file = File::open(CONFIG_PATH).expect("file not found");
+
+        let mut toml_str = String::new();
+        file.read_to_string(&mut toml_str);
+
+        toml::from_str(&toml_str).expect("Fall to toml parser")
+    };
+
     HttpServer::new(|| App::new().service(post_minecraft))
-        .bind("0.0.0.0:8080")?
+        .bind(format!(
+            "{}:{}",
+            config.address().home_server_bind_ip(),
+            config.address().home_server_bind_port()
+        ))?
         .run()
         .await
 }

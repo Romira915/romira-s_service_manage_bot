@@ -1,8 +1,11 @@
 #[macro_use]
 use getset::{CopyGetters, Getters, MutGetters, Setters};
 use serde::{Deserialize, Serialize};
+use serenity::prelude::TypeMapKey;
 
-#[derive(Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default)]
+#[derive(
+    Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default, Clone,
+)]
 pub struct Config {
     #[getset(get = "pub")]
     address: Address,
@@ -12,7 +15,15 @@ pub struct Config {
     log: Log,
 }
 
-#[derive(Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default)]
+pub struct ConfigContainer;
+
+impl TypeMapKey for ConfigContainer {
+    type Value = Config;
+}
+
+#[derive(
+    Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default, Clone,
+)]
 pub struct Address {
     #[getset(get = "pub")]
     home_server_ip: String,
@@ -26,7 +37,9 @@ pub struct Address {
     valheim_confirmation_port: u32,
 }
 
-#[derive(Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default)]
+#[derive(
+    Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default, Clone,
+)]
 pub struct Discord {
     #[getset(get = "pub")]
     administrator: Option<Vec<u64>>,
@@ -36,7 +49,9 @@ pub struct Discord {
     prefix: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default)]
+#[derive(
+    Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default, Clone,
+)]
 pub struct Log {
     #[getset(get = "pub")]
     term_log: String,

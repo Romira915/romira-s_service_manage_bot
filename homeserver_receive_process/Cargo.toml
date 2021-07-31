@@ -7,6 +7,9 @@ version = "0.1.0"
 
 [dependencies]
 actix-web = "3.3.2"
+derive_builder = "0.10.2"
 duct = "0.13.5"
+getset = "0.1.1"
 serde = {version = "1.0.126", features = ["derive"]}
 serde_json = "1.0.66"
+toml = "0.5.8"
