@@ -1,6 +1,7 @@
 use std::time::Duration;
 
 use homeserver_receive_process::{Command, CommandBuilder};
+use serenity::builder::CreateMessage;
 use serenity::framework::standard::macros::{command, group};
 use serenity::framework::standard::{Args, CommandResult};
 use serenity::http::CacheHttp;
@@ -9,6 +10,8 @@ use serenity::prelude::*;
 use serenity::utils::Colour;
 
 use crate::bot_config::ConfigContainer;
+
+use super::EmbedMessageBuilder;
 
 const REQUEST_TIMEOUT: u64 = 5;
 
@@ -55,6 +58,7 @@ pub async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResul
 
 #[command]
 pub async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
     let url = Minecraft::generate_url(ctx).await;
 
     let post_data = CommandBuilder::default()
@@ -79,27 +83,19 @@ pub async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResu
         Err(err) => {
             msg.channel_id
                 .send_message(&ctx.http, |m| {
-                    m.embed(|e| {
-                        e.title("Error!");
-                        e.description("Error details.");
-                        e.image("https://p100k.jp/wp-content/uploads/2021/03/EI4vUVMUYAAZzj7-1024x905-1-1.jpg");
-                        e.colour(Colour::RED);
-                        e.field(format!(":warning:"), err.to_string(), false);
-                        e.author(|f| {
-                            f
-                            .name("Romira")
-                            .icon_url("https://ja.gravatar.com/userimage/209809480/54c9b5c07d112304433b04b2e4f53751.jpeg")
-                        });
-                        e.footer(|f| {
-                            f.text("error details.")
-                        });
-
-                        e
-                    })
+                    m.set_embed(
+                        EmbedMessageBuilder::default()
+                            .success(false)
+                            .message(err.to_string())
+                            .build(),
+                    )
                 })
-                .await.unwrap();
+                .await
+                .unwrap();
         }
     }
+
+    typing.stop();
 
     Ok(())
 }
