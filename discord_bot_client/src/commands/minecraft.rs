@@ -1,4 +1,4 @@
-use homeserver_receive_process::{Command, CommandBuilder};
+use homeserver_receive_process::CommandBuilder;
 use serenity::framework::standard::macros::{command, group};
 use serenity::framework::standard::{Args, CommandResult};
 use serenity::http::CacheHttp;
@@ -14,7 +14,7 @@ use crate::bot_config::ConfigContainer;
 pub struct Minecraft;
 
 #[command]
-pub async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+pub async fn start(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
     let home_server_ip_port = {
         let data_read = ctx.data.read().await;
         let config = data_read

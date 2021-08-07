@@ -4,7 +4,7 @@ pub mod commands;
 use std::collections::HashSet;
 
 use commands::simple::*;
-use log::{debug, info, LevelFilter};
+use log::{debug, info};
 use serenity::{
     async_trait,
     client::{Context, EventHandler},
