@@ -8,6 +8,7 @@ use commands::{
     simple::*,
 };
 use log::{debug, error, info, LevelFilter};
+
 use serenity::{
     async_trait,
     client::{Context, EventHandler},
