@@ -1,11 +1,11 @@
-use std::{fs::File, io::Read, iter::Sum};
+use std::{env, fs::File, io::Read, iter::Sum};
 
 use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 use duct::cmd;
 use homeserver_receive_process::{home_server_config::Config, Command};
 use serde::{Deserialize, Serialize};
 
-const CONFIG_PATH: &'static str = "./.config/home_server_config.toml";
+const CONFIG_PATH: &'static str = ".config/home_server_config.toml";
 
 #[post("/minecraft")]
 async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
@@ -54,7 +54,9 @@ async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let config: Config = {
-        let mut file = File::open(CONFIG_PATH).expect("file not found");
+        let mut exe_dir = env::current_exe().unwrap().parent().unwrap().to_path_buf();
+        exe_dir.push(CONFIG_PATH);
+        let mut file = File::open(exe_dir).expect("file not found");
 
         let mut toml_str = String::new();
         file.read_to_string(&mut toml_str);
