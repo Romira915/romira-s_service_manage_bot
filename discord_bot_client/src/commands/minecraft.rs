@@ -1,3 +1,4 @@
+use core::fmt;
 use std::time::Duration;
 
 use homeserver_receive_process::{Command, CommandBuilder};
@@ -16,7 +17,7 @@ use super::EmbedMessageBuilder;
 const REQUEST_TIMEOUT: u64 = 5;
 
 #[group]
-#[commands(start, status)]
+#[commands(start, status, stop, restart)]
 #[prefixes("minecraft", "mc")]
 #[description = "Minecraft管理コマンド"]
 pub struct Minecraft;
@@ -35,67 +36,107 @@ impl Minecraft {
             address.home_server_port()
         )
     }
+
+    async fn minecraft_command_exec(
+        command: MinecraftCommand,
+        ctx: &Context,
+        msg: &Message,
+    ) -> CommandResult {
+        let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
+        let url = Minecraft::generate_url(ctx).await;
+        let admin = match command {
+            MinecraftCommand::Start | MinecraftCommand::Status => false,
+            MinecraftCommand::Stop | MinecraftCommand::Restart => true,
+        };
+
+        let post_data = CommandBuilder::default()
+            .request(command.to_string())
+            .administrator(admin)
+            .build()
+            .unwrap();
+
+        let client = reqwest::Client::new();
+        let response = client
+            .post(url)
+            .json(&post_data)
+            .timeout(Duration::from_secs(REQUEST_TIMEOUT))
+            .send()
+            .await;
+
+        let _ = match response {
+            Ok(res) => {
+                let body = res.text().await.unwrap();
+                msg.channel_id
+                    .send_message(&ctx.http, |m| {
+                        m.set_embed(
+                            EmbedMessageBuilder::default()
+                                .success(true)
+                                .message(body)
+                                .build(),
+                        )
+                    })
+                    .await?
+            }
+            Err(err) => {
+                msg.channel_id
+                    .send_message(&ctx.http, |m| {
+                        m.set_embed(
+                            EmbedMessageBuilder::default()
+                                .success(false)
+                                .message(err.to_string())
+                                .build(),
+                        )
+                    })
+                    .await?
+            }
+        };
+
+        typing.stop();
+
+        Ok(())
+    }
 }
 
-#[command]
-pub async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
-    let url = Minecraft::generate_url(ctx).await;
-
-    let post_data = CommandBuilder::default()
-        .request("start".to_string())
-        .administrator(false)
-        .build()
-        .unwrap();
-
-    let client = reqwest::Client::new();
-    let response = client.post(url).json(&post_data).send().await.unwrap();
-
-    let body = response.text().await.unwrap();
-    msg.channel_id.say(&ctx.http, &body).await?;
-
-    Ok(())
+pub enum MinecraftCommand {
+    Start,
+    Status,
+    Stop,
+    Restart,
 }
 
-#[command]
-pub async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
-    let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
-    let url = Minecraft::generate_url(ctx).await;
-
-    let post_data = CommandBuilder::default()
-        .request("status".to_string())
-        .administrator(false)
-        .build()
-        .unwrap();
-
-    let client = reqwest::Client::new();
-    let response = client
-        .post(url)
-        .json(&post_data)
-        .timeout(Duration::from_secs(REQUEST_TIMEOUT))
-        .send()
-        .await;
-
-    match response {
-        Ok(res) => {
-            let body = res.text().await.unwrap();
-            msg.channel_id.say(&ctx.http, &body).await?;
-        }
-        Err(err) => {
-            msg.channel_id
-                .send_message(&ctx.http, |m| {
-                    m.set_embed(
-                        EmbedMessageBuilder::default()
-                            .success(false)
-                            .message(err.to_string())
-                            .build(),
-                    )
-                })
-                .await
-                .unwrap();
+impl fmt::Display for MinecraftCommand {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match *self {
+            Self::Start => write!(f, "start"),
+            Self::Status => write!(f, "status"),
+            Self::Stop => write!(f, "stop"),
+            Self::Restart => write!(f, "restart"),
         }
     }
+}
 
-    typing.stop();
+#[command]
+#[description = "Minecraftサーバを起動する"]
+async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    Minecraft::minecraft_command_exec(MinecraftCommand::Start, ctx, msg).await
+}
 
-    Ok(())
+#[command]
+#[description = "Minecraftサーバの状態を表示する"]
+async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    Minecraft::minecraft_command_exec(MinecraftCommand::Status, ctx, msg).await
+}
+
+#[command]
+#[owners_only]
+#[description = "Minecraftサーバを停止する"]
+async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    Minecraft::minecraft_command_exec(MinecraftCommand::Stop, ctx, msg).await
+}
+
+#[command]
+#[owners_only]
+#[description = "Minecraftサーバを再起動する"]
+async fn restart(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    Minecraft::minecraft_command_exec(MinecraftCommand::Restart, ctx, msg).await
 }

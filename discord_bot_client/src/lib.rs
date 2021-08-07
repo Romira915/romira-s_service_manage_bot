@@ -3,8 +3,11 @@ pub mod commands;
 
 use std::collections::HashSet;
 
-use commands::simple::*;
-use log::{debug, info, LevelFilter};
+use commands::{
+    conversation::{ai_chan, dousite, what, www, yosi},
+    simple::*,
+};
+use log::{debug, error, info, LevelFilter};
 use serenity::{
     async_trait,
     client::{Context, EventHandler},
@@ -14,6 +17,7 @@ use serenity::{
         Args, CommandGroup, CommandResult, HelpOptions,
     },
     model::{channel::Message, event::ResumedEvent, id::UserId, prelude::Ready},
+    utils::Colour,
 };
 
 #[group]
@@ -30,6 +34,84 @@ impl EventHandler for Handler {
 
     async fn resume(&self, _ctx: Context, _: ResumedEvent) {
         info!("Resumed")
+    }
+
+    async fn message(&self, ctx: Context, msg: Message) {
+        if msg.author.bot {
+            return;
+        }
+
+        if msg.content.starts_with("/") && msg.content.split_whitespace().count() == 2 {
+            if let Err(why)  = msg.channel_id.send_message(&ctx.http, |m|{
+                m.embed(|e| {
+                    e.title("コマンドを実行しようとしてる？")
+                    .description("`/` プレフィックスは無効になりました．\n今後は `~` プレフィックスを使用してください．\n\n詳しくは `~help` で参照できます．")
+                    .colour(Colour::ORANGE)
+                })
+            }).await {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if msg.content.starts_with("草") || {
+            let len = msg.content.chars().count();
+            let mut www = msg.content.clone();
+            www.retain(|f| f == 'w');
+            let www_len = www.chars().count();
+
+            www_len as f32 / len as f32 > 50.0
+        } {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(www()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if (msg.content.contains("ヨシ") || msg.content.contains("ﾖｼ"))
+            && (msg.content.contains("！") || msg.content.contains("!"))
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(yosi()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if msg.content.starts_with("?") || msg.content.starts_with("？") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(what()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if msg.content.contains("どうして") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(dousite()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        // Ai chan reply
+        if msg.content.contains("あいちゃん") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(ai_chan()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
     }
 }
 

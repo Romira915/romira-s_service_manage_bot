@@ -22,12 +22,23 @@ async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
         &command.request(),
         "minecraft-server-mgpf.service"
     )
+    .stdout_capture()
     .run()
     {
         Ok(output) => {
             let exit_code = output.status;
             if exit_code.success() {
-                HttpResponse::Ok().finish()
+                let content = if command.request() == "status" {
+                    let output = String::from_utf8(output.stdout).unwrap();
+                    let mut split = output.split_whitespace();
+                    split.position(|p| p == "Active:");
+
+                    format!("{} {}", split.next().unwrap(), split.next().unwrap())
+                } else {
+                    "Success".to_string()
+                };
+
+                HttpResponse::Ok().body(content)
             } else {
                 HttpResponse::ExpectationFailed()
                     .body(format!("Failed to systemctl\n{}", exit_code.to_string()))

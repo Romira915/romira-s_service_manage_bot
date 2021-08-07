@@ -2,7 +2,7 @@ extern crate discord_bot_client;
 
 use discord_bot_client::{
     bot_config::{self, Config as BotConfig, ConfigContainer},
-    commands::minecraft::*,
+    commands::{minecraft::*, valheim::*},
     *,
 };
 use log::error;
@@ -91,7 +91,8 @@ async fn main() {
         .configure(|c| c.owners(owners).prefix(config.discord().prefix()))
         .help(&MY_HELP)
         .group(&GENERAL_GROUP)
-        .group(&MINECRAFT_GROUP);
+        .group(&MINECRAFT_GROUP)
+        .group(&VALHEIM_GROUP);
 
     let mut client = Client::builder(&token)
         .framework(framework)

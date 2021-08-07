@@ -3,8 +3,10 @@ use serenity::{
     utils::Colour,
 };
 
+pub mod conversation;
 pub mod minecraft;
 pub mod simple;
+pub mod valheim;
 
 const SUCCESS_IMAGE_URL: &'static str =
     "https://i.pinimg.com/564x/c9/72/f0/c972f0909879d3ce4137c7140e26922c.jpg";
