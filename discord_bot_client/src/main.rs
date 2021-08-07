@@ -1,8 +1,9 @@
 extern crate discord_bot_client;
 
 use discord_bot_client::{
-    bot_config::{Config as BotConfig, ConfigContainer},
-    commands::minecraft::*,
+    bot_config::{self, Config as BotConfig, ConfigContainer},
+    commands::{minecraft::*, valheim::*},
+
     *,
 };
 use log::error;
@@ -29,7 +30,7 @@ use std::{collections::HashSet, sync::Arc};
 use std::{env, fs::File};
 use std::{io::prelude::*, str::FromStr};
 
-const CONFIG_PATH: &'static str = "./.config/bot_config.toml";
+const CONFIG_PATH: &'static str = ".config/bot_config.toml";
 
 struct ShardManagerContainer;
 
@@ -57,13 +58,15 @@ fn init_logger(config: &BotConfig) {
 
 #[tokio::main]
 async fn main() {
-    dotenv::dotenv().expect("Failed to load .env file");
-    if let Err(_) = env::var("RUST_LOG") {
-        env::set_var("RUST_LOG", "info");
-    }
+    // dotenv::dotenv().expect("Failed to load .env file");
+    // if let Err(_) = env::var("RUST_LOG") {
+    //     env::set_var("RUST_LOG", "info");
+    // }
 
     let config: BotConfig = {
-        let mut file = File::open(CONFIG_PATH).expect("file not found");
+        let mut exe_dir = env::current_exe().unwrap().parent().unwrap().to_path_buf();
+        exe_dir.push(CONFIG_PATH);
+        let mut file = File::open(exe_dir).expect("file not found");
 
         let mut toml_str = String::new();
         file.read_to_string(&mut toml_str);
@@ -91,7 +94,8 @@ async fn main() {
         .configure(|c| c.owners(owners).prefix(config.discord().prefix()))
         .help(&MY_HELP)
         .group(&GENERAL_GROUP)
-        .group(&MINECRAFT_GROUP);
+        .group(&MINECRAFT_GROUP)
+        .group(&VALHEIM_GROUP);
 
     let mut client = Client::builder(&token)
         .framework(framework)
