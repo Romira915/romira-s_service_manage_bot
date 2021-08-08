@@ -3,7 +3,6 @@ extern crate discord_bot_client;
 use discord_bot_client::{
     bot_config::{self, Config as BotConfig, ConfigContainer},
     commands::{minecraft::*, valheim::*},
-
     *,
 };
 use log::error;
