@@ -1,6 +1,5 @@
 use std::{env, fs::File, io::Read, iter::Sum};
 
-
 use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 use duct::cmd;
 use homeserver_receive_process::{home_server_config::Config, Command};
@@ -23,10 +22,12 @@ async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
         "minecraft-server-mgpf.service"
     )
     .stdout_capture()
+    .stderr_capture()
     .run()
     {
         Ok(output) => {
             let exit_code = output.status;
+
             if exit_code.success() {
                 let content = if command.request() == "status" {
                     let output = String::from_utf8(output.stdout).unwrap();
@@ -44,8 +45,14 @@ async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
                     .body(format!("Failed to systemctl\n{}", exit_code.to_string()))
             }
         }
-        Err(e) => HttpResponse::ExpectationFailed()
-            .body(format!("Failed to cmd! macro\n{}", e.to_string())),
+        Err(e) => {
+            if command.request() == "status" {
+                HttpResponse::ExpectationFailed().body("inactive (dead)")
+            } else {
+                HttpResponse::ExpectationFailed()
+                    .body(format!("Failed to cmd! macro\n{}", e.to_string()))
+            }
+        }
     };
 
     response

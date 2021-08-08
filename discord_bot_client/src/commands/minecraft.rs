@@ -66,12 +66,13 @@ impl Minecraft {
 
         let _ = match response {
             Ok(res) => {
+                let success = res.status().is_success();
                 let body = res.text().await.unwrap();
                 msg.channel_id
                     .send_message(&ctx.http, |m| {
                         m.set_embed(
                             EmbedMessageBuilder::default()
-                                .success(true)
+                                .success(success)
                                 .message(body)
                                 .build(),
                         )
