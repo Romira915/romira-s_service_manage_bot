@@ -4,7 +4,7 @@ pub mod commands;
 use std::collections::HashSet;
 
 use commands::{
-    conversation::{ai_chan, dousite, hamu, nannnoimiga, otu, what, www, yosi},
+    conversation::{ai_chan, dousite, hamu, nannnoimiga, otu, sake, what, www, yosi},
     simple::*,
 };
 use log::{debug, error, info, LevelFilter};
@@ -127,7 +127,7 @@ impl EventHandler for Handler {
         if msg.content.contains("酒") {
             if let Err(why) = msg
                 .channel_id
-                .send_message(&ctx.http, |m| m.set_embed(otu()))
+                .send_message(&ctx.http, |m| m.set_embed(sake()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
