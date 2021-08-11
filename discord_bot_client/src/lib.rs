@@ -4,7 +4,7 @@ pub mod commands;
 use std::collections::HashSet;
 
 use commands::{
-    conversation::{ai_chan, dousite, what, www, yosi},
+    conversation::{ai_chan, dousite, hamu, nannnoimiga, otu, what, www, yosi},
     simple::*,
 };
 use log::{debug, error, info, LevelFilter};
@@ -108,6 +108,46 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(ai_chan()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if msg.content.contains("おつかれ") || msg.content.contains("お疲れ") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(otu()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if msg.content.contains("酒") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(otu()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if msg.content.starts_with("あっ") || msg.content.starts_with("やべ") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(nannnoimiga()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if msg.content.contains("ハムうめぇ") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(hamu()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
