@@ -2,7 +2,7 @@ extern crate discord_bot_client;
 
 use discord_bot_client::{
     bot_config::{self, Config as BotConfig, ConfigContainer},
-    commands::{minecraft::*, valheim::*},
+    commands::{minecraft::*, sdtd::*, valheim::*},
     *,
 };
 use log::error;
@@ -25,7 +25,7 @@ use simplelog::{
     ColorChoice, CombinedLogger, Config, ConfigBuilder, LevelFilter, TermLogger, TerminalMode,
     WriteLogger,
 };
-use std::{collections::HashSet, sync::Arc};
+use std::{collections::HashSet, path::PathBuf, sync::Arc};
 use std::{env, fs::File};
 use std::{io::prelude::*, str::FromStr};
 
@@ -63,7 +63,11 @@ async fn main() {
     // }
 
     let config: BotConfig = {
-        let mut exe_dir = env::current_exe().unwrap().parent().unwrap().to_path_buf();
+        let mut exe_dir = if cfg!(debug_assertions) {
+            PathBuf::new()
+        } else {
+            env::current_exe().unwrap().parent().unwrap().to_path_buf()
+        };
         exe_dir.push(CONFIG_PATH);
         let mut file = File::open(exe_dir).expect("file not found");
 
@@ -94,7 +98,8 @@ async fn main() {
         .help(&MY_HELP)
         .group(&GENERAL_GROUP)
         .group(&MINECRAFT_GROUP)
-        .group(&VALHEIM_GROUP);
+        .group(&VALHEIM_GROUP)
+        .group(&SDTD_GROUP);
 
     let mut client = Client::builder(&token)
         .framework(framework)

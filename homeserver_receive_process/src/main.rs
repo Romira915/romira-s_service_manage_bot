@@ -6,8 +6,7 @@ use homeserver_receive_process::{home_server_config::Config, Command};
 
 const CONFIG_PATH: &'static str = ".config/home_server_config.toml";
 
-#[post("/minecraft")]
-async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
+async fn exec_systemctl(command: web::Json<Command>, service_name: &str) -> impl Responder {
     if let "start" | "status" = command.request().as_str() {
     } else if let ("stop" | "restart", true) =
         (&*command.request().as_str(), command.administrator())
@@ -16,14 +15,10 @@ async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
         return HttpResponse::MethodNotAllowed().body("Not Allowed command");
     }
 
-    let response = match cmd!(
-        "systemctl",
-        &command.request(),
-        "minecraft-server-mgpf.service"
-    )
-    .stdout_capture()
-    .stderr_capture()
-    .run()
+    let response = match cmd!("systemctl", &command.request(), service_name)
+        .stdout_capture()
+        .stderr_capture()
+        .run()
     {
         Ok(output) => {
             let exit_code = output.status;
@@ -58,6 +53,16 @@ async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
     response
 }
 
+#[post("/minecraft")]
+async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
+    exec_systemctl(command, "minecraft-server-mgpf.service").await
+}
+
+#[post("/sdtd")]
+async fn post_sdtd(command: web::Json<Command>) -> impl Responder {
+    exec_systemctl(command, "sdtd-server.service").await
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let config: Config = {
@@ -71,7 +76,7 @@ async fn main() -> std::io::Result<()> {
         toml::from_str(&toml_str).expect("Fall to toml parser")
     };
 
-    HttpServer::new(|| App::new().service(post_minecraft))
+    HttpServer::new(|| App::new().service(post_minecraft).service(post_sdtd))
         .bind(format!(
             "{}:{}",
             config.address().home_server_bind_ip(),

@@ -4,7 +4,10 @@ pub mod commands;
 use std::collections::HashSet;
 
 use commands::{
-    conversation::{ai_chan, dousite, hamu, nannnoimiga, otu, sake, what, www, yosi},
+    conversation::{
+        ai_chan, dousite, hamu, ikare, ikare_one, nannnoimiga, otu, sake, souhayarann, what, www,
+        yosi,
+    },
     simple::*,
 };
 use log::{debug, error, info, LevelFilter};
@@ -42,7 +45,9 @@ impl EventHandler for Handler {
             return;
         }
 
-        if msg.content.starts_with("/") && msg.content.split_whitespace().count() == 2 {
+        let content = msg.content.clone();
+
+        if content.starts_with("/") && content.split_whitespace().count() == 2 {
             if let Err(why)  = msg.channel_id.send_message(&ctx.http, |m|{
                 m.embed(|e| {
                     e.title("コマンドを実行しようとしてる？")
@@ -54,13 +59,13 @@ impl EventHandler for Handler {
             }
         }
 
-        if msg.content.starts_with("草") || {
-            let len = msg.content.chars().count();
-            let mut www = msg.content.clone();
-            www.retain(|f| f == 'w');
+        if content.ends_with("草") || {
+            let len = content.chars().count();
+            let mut www = content.clone();
+            www.retain(|f| f == 'w' || f == 'ｗ');
             let www_len = www.chars().count();
 
-            www_len as f32 / len as f32 > 50.0
+            www_len as f32 / len as f32 > 0.5
         } {
             if let Err(why) = msg
                 .channel_id
@@ -71,8 +76,8 @@ impl EventHandler for Handler {
             }
         }
 
-        if (msg.content.contains("ヨシ") || msg.content.contains("ﾖｼ"))
-            && (msg.content.contains("！") || msg.content.contains("!"))
+        if (content.contains("ヨシ") || content.contains("ﾖｼ"))
+            && (content.contains("！") || content.contains("!"))
         {
             if let Err(why) = msg
                 .channel_id
@@ -83,7 +88,7 @@ impl EventHandler for Handler {
             }
         }
 
-        if msg.content.starts_with("?") || msg.content.starts_with("？") {
+        if content.starts_with("?") || content.starts_with("？") {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(what()))
@@ -93,7 +98,7 @@ impl EventHandler for Handler {
             }
         }
 
-        if msg.content.contains("どうして") {
+        if content.contains("どうして") {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(dousite()))
@@ -104,7 +109,7 @@ impl EventHandler for Handler {
         }
 
         // Ai chan reply
-        if msg.content.contains("あいちゃん") {
+        if content.starts_with("あいちゃん") || content.starts_with("Aiちゃん") {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(ai_chan()))
@@ -114,7 +119,7 @@ impl EventHandler for Handler {
             }
         }
 
-        if msg.content.contains("おつかれ") || msg.content.contains("お疲れ") {
+        if content.contains("おつかれ") || content.contains("お疲れ") {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(otu()))
@@ -124,7 +129,7 @@ impl EventHandler for Handler {
             }
         }
 
-        if msg.content.contains("酒") {
+        if content.contains("酒") {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(sake()))
@@ -134,7 +139,7 @@ impl EventHandler for Handler {
             }
         }
 
-        if msg.content.starts_with("あっ") || msg.content.starts_with("やべ") {
+        if content.starts_with("あっ") || content.starts_with("やべ") {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(nannnoimiga()))
@@ -144,10 +149,41 @@ impl EventHandler for Handler {
             }
         }
 
-        if msg.content.contains("ハムうめぇ") {
+        if content.contains("ハムうめぇ") {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(hamu()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content == "(☝\u{fe0f} ՞ਊ ՞)☝\u{fe0f}" || content == "(☝ ՞ਊ ՞)☝" {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(ikare_one()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("(☝\u{fe0f} ՞ਊ ՞)☝\u{fe0f}") || content.contains("(☝ ՞ਊ ՞)☝(☝ ՞ਊ ՞)☝")
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.content(&content).set_embed(ikare()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("そうはならんやろ") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(souhayarann()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

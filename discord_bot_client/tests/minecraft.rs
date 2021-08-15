@@ -1,9 +1,9 @@
-use discord_bot_client::commands::minecraft::MinecraftCommand;
+use discord_bot_client::commands::minecraft::SystemctlCommand;
 
 #[test]
 fn enum_to_string() {
-    assert_eq!("start".to_string(), MinecraftCommand::Start.to_string());
-    assert_eq!("status".to_string(), MinecraftCommand::Status.to_string());
-    assert_eq!("stop".to_string(), MinecraftCommand::Stop.to_string());
-    assert_eq!("restart".to_string(), MinecraftCommand::Restart.to_string());
+    assert_eq!("start".to_string(), SystemctlCommand::Start.to_string());
+    assert_eq!("status".to_string(), SystemctlCommand::Status.to_string());
+    assert_eq!("stop".to_string(), SystemctlCommand::Stop.to_string());
+    assert_eq!("restart".to_string(), SystemctlCommand::Restart.to_string());
 }

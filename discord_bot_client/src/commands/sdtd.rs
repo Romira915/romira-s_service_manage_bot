@@ -13,17 +13,18 @@ use serenity::utils::Colour;
 
 use crate::bot_config::ConfigContainer;
 
+use super::minecraft::SystemctlCommand;
 use super::EmbedMessageBuilder;
 
-const REQUEST_TIMEOUT: u64 = 5;
+const REQUEST_TIMEOUT: u64 = 15;
 
 #[group]
 #[commands(start, status, stop, restart)]
-#[prefixes("minecraft", "mc")]
-#[description = "Minecraft管理コマンド"]
-pub struct Minecraft;
+#[prefixes("sdtd", "sd")]
+#[description = "7dtd管理コマンド"]
+pub struct Sdtd;
 
-impl Minecraft {
+impl Sdtd {
     async fn generate_url(ctx: &Context) -> String {
         let data_read = ctx.data.read().await;
         let config = data_read
@@ -32,19 +33,19 @@ impl Minecraft {
 
         let address = config.address();
         format!(
-            "http://{}:{}/minecraft",
+            "http://{}:{}/sdtd",
             address.home_server_ip(),
             address.home_server_port()
         )
     }
 
-    async fn minecraft_command_exec(
+    async fn sdtd_command_exec(
         command: SystemctlCommand,
         ctx: &Context,
         msg: &Message,
     ) -> CommandResult {
         let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
-        let url = Minecraft::generate_url(ctx).await;
+        let url = Sdtd::generate_url(ctx).await;
         let admin = match command {
             SystemctlCommand::Start | SystemctlCommand::Status => false,
             SystemctlCommand::Stop | SystemctlCommand::Restart => true,
@@ -99,46 +100,26 @@ impl Minecraft {
     }
 }
 
-pub enum SystemctlCommand {
-    Start,
-    Status,
-    Stop,
-    Restart,
-}
-
-impl fmt::Display for SystemctlCommand {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match *self {
-            Self::Start => write!(f, "start"),
-            Self::Status => write!(f, "status"),
-            Self::Stop => write!(f, "stop"),
-            Self::Restart => write!(f, "restart"),
-        }
-    }
-}
-
 #[command]
-#[description = "Minecraftサーバを起動する"]
+#[description = "7dtdサーバを起動する"]
 async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
-    Minecraft::minecraft_command_exec(SystemctlCommand::Start, ctx, msg).await
+    Sdtd::sdtd_command_exec(SystemctlCommand::Start, ctx, msg).await
 }
 
 #[command]
-#[description = "Minecraftサーバの状態を表示する"]
+#[description = "7dtdサーバの状態を表示する"]
 async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
-    Minecraft::minecraft_command_exec(SystemctlCommand::Status, ctx, msg).await
+    Sdtd::sdtd_command_exec(SystemctlCommand::Status, ctx, msg).await
 }
 
 #[command]
-#[owners_only]
-#[description = "Minecraftサーバを停止する"]
+#[description = "7dtdサーバを停止する"]
 async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
-    Minecraft::minecraft_command_exec(SystemctlCommand::Stop, ctx, msg).await
+    Sdtd::sdtd_command_exec(SystemctlCommand::Stop, ctx, msg).await
 }
 
 #[command]
-#[owners_only]
-#[description = "Minecraftサーバを再起動する"]
+#[description = "7dtdサーバを再起動する"]
 async fn restart(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
-    Minecraft::minecraft_command_exec(SystemctlCommand::Restart, ctx, msg).await
+    Sdtd::sdtd_command_exec(SystemctlCommand::Restart, ctx, msg).await
 }

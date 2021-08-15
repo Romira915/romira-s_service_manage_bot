@@ -5,6 +5,7 @@ use serenity::{
 
 pub mod conversation;
 pub mod minecraft;
+pub mod sdtd;
 pub mod simple;
 pub mod valheim;
 

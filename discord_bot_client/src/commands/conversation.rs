@@ -34,7 +34,9 @@ pub fn dousite() -> CreateEmbed {
 
 pub fn ai_chan() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
-    embed.image("https://matome.hacker-hacker.com/wp-content/uploads/2020/05/genba-1.gif");
+    embed
+        .title("よくわかったね\n君は今日からヨシ！")
+        .image("https://matome.hacker-hacker.com/wp-content/uploads/2020/05/genba-1.gif");
 
     embed
 }
@@ -63,6 +65,34 @@ pub fn nannnoimiga() -> CreateEmbed {
 pub fn hamu() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
     embed.image("https://livedoor.blogimg.jp/mhworld_pc-y4hufkzc/imgs/9/1/910434f4.jpg");
+
+    embed
+}
+
+pub fn ikare_one() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed
+        .title("(☝ ՞ਊ ՞）☝")
+        .description("参考文献")
+        .url("https://is.gd/Pu9FA8");
+
+    embed
+}
+
+pub fn ikare() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed
+        .title("(☝ ՞ਊ ՞）☝")
+        .image("https://kai-you.net/images/a/2016/12/30c99b2f0472631f8669ecdf17c7ca0e.jpg");
+
+    embed
+}
+
+pub fn souhayarann() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed
+        .title("なっとるやろがい！！")
+        .image("https://assets.st-note.com/production/uploads/images/13219811/picture_pc_a39235ada75c9200b1d1ae689e731630.jpg?width=800");
 
     embed
 }
