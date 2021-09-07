@@ -96,3 +96,12 @@ pub fn souhayarann() -> CreateEmbed {
 
     embed
 }
+
+pub fn tenjou() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed
+        .title("もしかして: ")
+        .image("http://www.tamura-kensetsu.com/tkblog/photo/yabudukanoiegoutenjyoubefre.jpg");
+
+    embed
+}
