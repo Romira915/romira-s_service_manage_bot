@@ -12,6 +12,8 @@ pub struct Config {
     #[getset(get = "pub")]
     discord: Discord,
     #[getset(get = "pub")]
+    gameinfo: Option<GameInfo>,
+    #[getset(get = "pub")]
     log: Log,
 }
 
@@ -47,6 +49,14 @@ pub struct Discord {
     token: String,
     #[getset(get = "pub")]
     prefix: String,
+}
+
+#[derive(
+    Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default, Clone,
+)]
+pub struct GameInfo {
+    #[getset(get = "pub")]
+    sdtd_password: Option<String>,
 }
 
 #[derive(

@@ -1,4 +1,5 @@
 use core::fmt;
+use std::borrow::BorrowMut;
 use std::time::Duration;
 
 use homeserver_receive_process::{Command, CommandBuilder};
@@ -45,6 +46,7 @@ impl Sdtd {
         msg: &Message,
     ) -> CommandResult {
         let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
+        let data_read = ctx.data.read().await;
         let url = Sdtd::generate_url(ctx).await;
         let admin = match command {
             SystemctlCommand::Start | SystemctlCommand::Status => false,
@@ -71,12 +73,32 @@ impl Sdtd {
                 let body = res.text().await.unwrap();
                 msg.channel_id
                     .send_message(&ctx.http, |m| {
-                        m.set_embed(
-                            EmbedMessageBuilder::default()
+                        m.set_embed({
+                            let mut e = EmbedMessageBuilder::default()
                                 .success(success)
                                 .message(body)
-                                .build(),
-                        )
+                                .build();
+
+                            // when exec start, show message 7dtd password
+                            if let SystemctlCommand::Start = command {
+                                let game_info = data_read
+                                    .get::<ConfigContainer>()
+                                    .expect("Expected ConfigContainer in TypeMap")
+                                    .gameinfo();
+                                if let Some(game_info) = game_info {
+                                    e.field(
+                                        "[7dtd pass info]",
+                                        game_info
+                                            .sdtd_password()
+                                            .as_ref()
+                                            .unwrap_or(&String::new()),
+                                        false,
+                                    );
+                                }
+                            }
+
+                            e
+                        })
                     })
                     .await?
             }

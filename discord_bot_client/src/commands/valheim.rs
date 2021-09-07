@@ -22,6 +22,8 @@ pub struct Valheim;
 #[command]
 #[description = "Valheimサーバを起動する"]
 async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
+
     let embed = match cmd!(
         "az",
         "vm",
@@ -66,12 +68,16 @@ async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
         .send_message(&ctx.http, |m| m.set_embed(embed))
         .await?;
 
+    typing.stop();
+
     Ok(())
 }
 
 #[command]
 #[description = "Valheimサーバの状態を表示する"]
 async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
+
     let embed = match cmd!(
         "az",
         "vm",
@@ -120,12 +126,16 @@ async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
         .send_message(&ctx.http, |m| m.set_embed(embed))
         .await?;
 
+    typing.stop();
+
     Ok(())
 }
 
 #[command]
 #[description = "Valheimサーバを停止する"]
 async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
+
     let embed = match cmd!(
         "az",
         "vm",
@@ -159,12 +169,16 @@ async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
         .send_message(&ctx.http, |m| m.set_embed(embed))
         .await?;
 
+    typing.stop();
+
     Ok(())
 }
 
 #[command]
 #[description = "Valheimサーバを再起動する"]
 async fn restart(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
+
     msg.channel_id
         .send_message(&ctx.http, |m| {
             m.embed(|e| {
@@ -177,6 +191,8 @@ async fn restart(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult 
             })
         })
         .await?;
+
+    typing.stop();
 
     Ok(())
 }
