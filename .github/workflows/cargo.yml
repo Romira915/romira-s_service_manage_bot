@@ -73,6 +73,7 @@ jobs:
         run: |
           mkdir -p ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}/.config
           echo '${{ secrets.BOT_CONFIG }}' > ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}/.config/bot_config.toml
+          chmod 755 discord_bot_client homeserver_receive_process valheim-connection-check
           mv discord_bot_client ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}
       - uses: burnett01/rsync-deployments@5.1
         name: deploy discord bot
