@@ -78,13 +78,13 @@ jobs:
         name: deploy discord bot
         with:
           switches: -avzr --delete
-          path: ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}
+          path: ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}/
           remote_path: ${{ secrets.BOT_SERVER_PATH }}
           remote_host: ${{ secrets.BOT_SERVER_HOST }}
           remote_port: ${{ secrets.BOT_SERVER_PORT }}
           remote_user: ${{ secrets.BOT_SERVER_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Run a command remotely
+      - name: Restart Bot
         uses: docker://evaneos/ssh-action:0.1.0
         with:
           hosts: ${{ secrets.BOT_SERVER_HOST }}
