@@ -62,7 +62,6 @@ jobs:
             target/x86_64-unknown-linux-gnu/release/valheim-connection-check
 
   deploy:
-    if: github.ref == 'refs/heads/main'
     needs: [Build]
     runs-on: ubuntu-latest
     steps:
