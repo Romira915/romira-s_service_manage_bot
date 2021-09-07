@@ -72,7 +72,7 @@ jobs:
       - name: make release package
         run: |
           mkdir -p ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}/.config
-          echo '${{ secrets.BOT_CONFIG }}' >> ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}/.config/bot_config.toml
+          echo '${{ secrets.BOT_CONFIG }}' > ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}/.config/bot_config.toml
           mv discord_bot_client ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}
       - uses: burnett01/rsync-deployments@5.1
         name: deploy discord bot
