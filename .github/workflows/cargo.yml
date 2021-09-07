@@ -69,3 +69,6 @@ jobs:
         with:
           name: binary_artifact
           path: release_file/
+      - name: make release package
+        run: |
+          ls
