@@ -105,3 +105,10 @@ pub fn tenjou() -> CreateEmbed {
 
     embed
 }
+
+pub fn hugu() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed.image("https://image.itmedia.co.jp/nl/articles/1903/25/l_miya_1903mizuhakuhugu02.jpg");
+
+    embed
+}
