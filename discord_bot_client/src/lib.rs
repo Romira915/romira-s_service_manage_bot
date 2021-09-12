@@ -6,7 +6,7 @@ use std::collections::HashSet;
 use commands::{
     conversation::{
         ai_chan, dousite, hamu, hugu, ikare, ikare_one, mun, nannnoimiga, otu, sake, souhayarann,
-        tenjou, what, www, yosi,
+        tearai, tenjou, what, www, yosi,
     },
     simple::*,
 };
@@ -220,10 +220,10 @@ impl EventHandler for Handler {
             }
         }
 
-        if content.contains("えい、えい") {
+        if content.contains("ただいま") || content.contains("帰った") {
             if let Err(why) = msg
                 .channel_id
-                .send_message(&ctx.http, |m| m.set_embed(mun()))
+                .send_message(&ctx.http, |m| m.set_embed(tearai()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

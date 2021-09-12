@@ -121,3 +121,12 @@ pub fn mun() -> CreateEmbed {
 
     embed
 }
+
+pub fn tearai() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed
+        .title("おかえり")
+        .image("https://up.gc-img.net/post_img/2020/02/NJ7qIt2WJyy1ymo_6MqS8_1511.jpeg");
+
+    embed
+}
