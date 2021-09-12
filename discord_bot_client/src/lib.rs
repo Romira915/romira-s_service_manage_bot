@@ -5,7 +5,7 @@ use std::collections::HashSet;
 
 use commands::{
     conversation::{
-        ai_chan, dousite, hamu, hugu, ikare, ikare_one, nannnoimiga, otu, sake, souhayarann,
+        ai_chan, dousite, hamu, hugu, ikare, ikare_one, mun, nannnoimiga, otu, sake, souhayarann,
         tenjou, what, www, yosi,
     },
     simple::*,
@@ -200,10 +200,30 @@ impl EventHandler for Handler {
             }
         }
 
-        if content.contains("ふぐ") {
+        if content.contains("ふぐ") || content.contains("フグ") || content.contains("🐡") {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(hugu()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("えい、えい") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(mun()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("えい、えい") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(mun()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

@@ -112,3 +112,12 @@ pub fn hugu() -> CreateEmbed {
 
     embed
 }
+
+pub fn mun() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed
+        .title("むん！")
+        .image("https://livedoor.blogimg.jp/akb83-c9npozlg/imgs/c/4/c400e113.jpg");
+
+    embed
+}
