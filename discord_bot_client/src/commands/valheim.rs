@@ -7,7 +7,7 @@ use serenity::{
         macros::{command, group},
         Args, CommandResult,
     },
-    model::channel::Message,
+    model::{channel::Message, prelude::Activity},
     utils::Colour,
 };
 
@@ -50,6 +50,7 @@ async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     {
         Ok(output) => {
             if output.status.success() {
+                ctx.set_activity(Activity::playing("Valheim")).await;
                 EmbedMessageBuilder::default().success(true).build()
             } else {
                 EmbedMessageBuilder::default()
@@ -151,6 +152,7 @@ async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     {
         Ok(output) => {
             if output.status.success() {
+                ctx.reset_presence().await;
                 EmbedMessageBuilder::default().success(true).build()
             } else {
                 EmbedMessageBuilder::default()
