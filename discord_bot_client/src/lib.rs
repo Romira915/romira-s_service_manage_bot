@@ -20,7 +20,12 @@ use serenity::{
         macros::{group, help},
         Args, CommandGroup, CommandResult, HelpOptions,
     },
-    model::{channel::Message, event::ResumedEvent, id::UserId, prelude::Ready},
+    model::{
+        channel::Message,
+        event::ResumedEvent,
+        id::UserId,
+        prelude::{Activity, Ready},
+    },
     utils::Colour,
 };
 

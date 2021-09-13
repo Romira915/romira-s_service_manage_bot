@@ -71,6 +71,15 @@ impl Sdtd {
             Ok(res) => {
                 let success = res.status().is_success();
                 let body = res.text().await.unwrap();
+
+                match command {
+                    SystemctlCommand::Start | SystemctlCommand::Restart => {
+                        ctx.set_activity(Activity::playing("7 Days to Die")).await
+                    }
+                    SystemctlCommand::Stop => ctx.reset_presence().await,
+                    _ => (),
+                }
+
                 msg.channel_id
                     .send_message(&ctx.http, |m| {
                         m.set_embed({
