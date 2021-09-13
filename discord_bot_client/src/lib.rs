@@ -5,8 +5,8 @@ use std::collections::HashSet;
 
 use commands::{
     conversation::{
-        ai_chan, dousite, hamu, hugu, ikare, ikare_one, mun, nannnoimiga, otu, sake, souhayarann,
-        tenjou, what, www, yosi,
+        ai_chan, dousite, hamu, hugu, ikare, ikare_one, konata, mun, nannnoimiga, otu, pakupaku,
+        sake, souhayarann, tearai, tenjou, today_ganba, what, www, yosi,
     },
     simple::*,
 };
@@ -109,7 +109,7 @@ impl EventHandler for Handler {
         }
 
         // Ai chan reply
-        if content.starts_with("あいちゃん") || content.starts_with("Aiちゃん") {
+        if content.eq("あいちゃん") || content.eq("Aiちゃん") {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(ai_chan()))
@@ -214,6 +214,56 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(mun()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("ただいま") || content.contains("帰った") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(tearai()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("ぱくぱく") || content.contains("パクパク") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(pakupaku()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.ends_with("今日も一日") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(today_ganba()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.ends_with("😭") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.content(":sob:"))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.ends_with("・ｖ・") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(konata()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
