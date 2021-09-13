@@ -219,16 +219,6 @@ impl EventHandler for Handler {
                 error!("Error sending message: {:?}", why);
             }
         }
-
-        if content.contains("えい、えい") {
-            if let Err(why) = msg
-                .channel_id
-                .send_message(&ctx.http, |m| m.set_embed(mun()))
-                .await
-            {
-                error!("Error sending message: {:?}", why);
-            }
-        }
     }
 }
 
