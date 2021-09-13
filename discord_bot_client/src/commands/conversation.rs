@@ -101,6 +101,7 @@ pub fn tenjou() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
     embed
         .title("もしかして: ")
+        .url("https://www.google.com/search?q=%E3%81%A6%E3%82%93%E3%81%98%E3%82%87%E3%81%86")
         .image("http://www.tamura-kensetsu.com/tkblog/photo/yabudukanoiegoutenjyoubefre.jpg");
 
     embed
@@ -154,6 +155,20 @@ pub fn konata() -> CreateEmbed {
     embed.title("↑これこなた").description("参考文献").url(
         "https://discord.com/channels/617069702983843871/822758393617186826/886768085909008405",
     );
+
+    embed
+}
+
+pub fn teio_tuntun() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed.image("https://c.tenor.com/Dmk6LMwMDcMAAAAC/%E3%83%88%E3%82%A6%E3%82%AB%E3%82%A4%E3%83%86%E3%82%A4%E3%82%AA%E3%83%BC-%E3%83%80%E3%83%B3%E3%82%B9.gif");
+
+    embed
+}
+
+pub fn hopak() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed.image("https://objectstorage.ap-tokyo-1.oraclecloud.com/n/nr7eduszgfzb/b/image-bucket/o/gif%2Fkosakkudannsu-umamusume.gif");
 
     embed
 }

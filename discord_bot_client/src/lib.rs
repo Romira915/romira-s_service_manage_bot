@@ -5,8 +5,8 @@ use std::collections::HashSet;
 
 use commands::{
     conversation::{
-        ai_chan, dousite, hamu, hugu, ikare, ikare_one, konata, mun, nannnoimiga, otu, pakupaku,
-        sake, souhayarann, tearai, tenjou, today_ganba, what, www, yosi,
+        ai_chan, dousite, hamu, hopak, hugu, ikare, ikare_one, konata, mun, nannnoimiga, otu,
+        pakupaku, sake, souhayarann, tearai, teio_tuntun, tenjou, today_ganba, what, www, yosi,
     },
     simple::*,
 };
@@ -264,6 +264,29 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(konata()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.starts_with("( ˶ˆᴗˆ˶ )") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(teio_tuntun()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("コサックダンス")
+            || content.contains("こさっくだんす")
+            || content.contains("ホパーク")
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(hopak()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

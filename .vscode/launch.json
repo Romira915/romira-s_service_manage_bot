@@ -7,6 +7,24 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Debug executable 'discord_bot_client'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=discord_bot_client",
+                    "--package=discord_bot_client"
+                ],
+                "filter": {
+                    "name": "discord_bot_client",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Debug unit tests in library 'discord_bot_client'",
             "cargo": {
                 "args": [
@@ -22,24 +40,6 @@
             },
             "args": [],
             "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug executable 'discord_bot_client'",
-            "cargo": {
-                "args": [
-                    "build",
-                    "--bin=discord_bot_client",
-                    "--package=discord_bot_client"
-                ],
-                "filter": {
-                    "name": "discord_bot_client",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}",
         },
         {
             "type": "lldb",
