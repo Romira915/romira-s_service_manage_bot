@@ -29,20 +29,10 @@ async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
         "vm",
         "start",
         "--ids",
-        cmd!(
-            "az",
-            "vm",
-            "list",
-            "-g",
-            "Valheim",
-            "--query",
-            "\"[].id\"",
-            "-o",
-            "tsv"
-        )
-        .stdout_capture()
-        .read()
-        .unwrap_or_default(),
+        cmd!("az", "vm", "list", "-g", "Valheim", "--query", "[].id", "-o", "tsv")
+            .stdout_capture()
+            .read()
+            .unwrap_or_default(),
     )
     .stdout_capture()
     .stderr_capture()
