@@ -24,6 +24,15 @@ pub struct Valheim;
 async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
 
+    msg.channel_id
+        .send_message(&ctx.http, |m| {
+            m.embed(|e| {
+                e.title("このコマンドは正常に動作しないかもしれません．")
+                    .description("不具合の原因がわかってないので放置してます．すまんな")
+            })
+        })
+        .await?;
+
     let embed = match cmd!(
         "az",
         "vm",
@@ -78,7 +87,7 @@ async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
         "--resource-group",
         "Valheim",
         "--query",
-        "\"instanceView.statuses[1].displayStatus\"",
+        "instanceView.statuses[1].displayStatus",
         "-o",
         "tsv"
     )
