@@ -27,7 +27,7 @@ async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     msg.channel_id
         .send_message(&ctx.http, |m| {
             m.embed(|e| {
-                e.title("このコマンドは正常に動作しないかもしれません．")
+                e.title("このコマンドは正常に動作しないかもしれません．statusコマンドで要確認")
                     .description("不具合の原因がわかってないので放置してます．すまんな")
             })
         })
@@ -135,6 +135,15 @@ async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
 #[description = "Valheimサーバを停止する"]
 async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
+
+    msg.channel_id
+        .send_message(&ctx.http, |m| {
+            m.embed(|e| {
+                e.title("このコマンドは正常に動作しないかもしれません．statusコマンドで要確認")
+                    .description("たぶんcommand timeoutのせい．いつか直す．すまんな")
+            })
+        })
+        .await?;
 
     let embed = match cmd!(
         "az",
