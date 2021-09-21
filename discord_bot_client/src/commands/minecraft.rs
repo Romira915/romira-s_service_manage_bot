@@ -15,7 +15,7 @@ use crate::bot_config::ConfigContainer;
 
 use super::EmbedMessageBuilder;
 
-const REQUEST_TIMEOUT: u64 = 5;
+const REQUEST_TIMEOUT: u64 = 30;
 
 #[group]
 #[commands(start, status, stop, restart)]
