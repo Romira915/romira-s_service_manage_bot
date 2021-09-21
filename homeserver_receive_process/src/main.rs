@@ -63,6 +63,11 @@ async fn post_sdtd(command: web::Json<Command>) -> impl Responder {
     exec_systemctl(command, "sdtd-server.service").await
 }
 
+#[post("/terraria")]
+async fn post_terraria(command: web::Json<Command>) -> impl Responder {
+    exec_systemctl(command, "terraria-server.service").await
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let config: Config = {
@@ -76,12 +81,17 @@ async fn main() -> std::io::Result<()> {
         toml::from_str(&toml_str).expect("Fall to toml parser")
     };
 
-    HttpServer::new(|| App::new().service(post_minecraft).service(post_sdtd))
-        .bind(format!(
-            "{}:{}",
-            config.address().home_server_bind_ip(),
-            config.address().home_server_bind_port()
-        ))?
-        .run()
-        .await
+    HttpServer::new(|| {
+        App::new()
+            .service(post_minecraft)
+            .service(post_sdtd)
+            .service(post_terraria)
+    })
+    .bind(format!(
+        "{}:{}",
+        config.address().home_server_bind_ip(),
+        config.address().home_server_bind_port()
+    ))?
+    .run()
+    .await
 }

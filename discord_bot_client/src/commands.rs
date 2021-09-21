@@ -7,6 +7,7 @@ pub mod conversation;
 pub mod minecraft;
 pub mod sdtd;
 pub mod simple;
+pub mod terraria;
 pub mod valheim;
 
 const SUCCESS_IMAGE_URL: &'static str =
