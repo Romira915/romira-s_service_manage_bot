@@ -136,7 +136,7 @@ pub fn pakupaku() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
     embed
         .title("パクパクですわ")
-        .image("https://umamusume-umapyoi.com/wp-content/uploads/2021/07/e049941ecd6b2c435bd3ee3f44a42a8c.jpg");
+        .image("https://objectstorage.ap-tokyo-1.oraclecloud.com/n/nr7eduszgfzb/b/image-bucket/o/bot%2Fe049941ecd6b2c435bd3ee3f44a42a8c.jpg");
 
     embed
 }
@@ -168,7 +168,28 @@ pub fn teio_tuntun() -> CreateEmbed {
 
 pub fn hopak() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
-    embed.image("https://objectstorage.ap-tokyo-1.oraclecloud.com/n/nr7eduszgfzb/b/image-bucket/o/gif%2Fkosakkudannsu-umamusume.gif");
+    embed.image("https://objectstorage.ap-tokyo-1.oraclecloud.com/n/nr7eduszgfzb/b/image-bucket/o/bot%2Fkosakkudannsu-umamusume.gif");
+
+    embed
+}
+
+pub fn yada() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed.image("https://umamusu.more-gamer.com/wp-content/uploads/2021/07/qATOki7.gif");
+
+    embed
+}
+
+pub fn hadou() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed.image("https://ウマ娘プラス.com/wp-content/uploads/2018/06/ezgif-6-146909d34c.gif");
+
+    embed
+}
+
+pub fn pita() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed.image("https://xn--gckvb3e1a0dy660b.com/wp-content/uploads/2018/06/Uma-Musume-Gif-2.gif");
 
     embed
 }

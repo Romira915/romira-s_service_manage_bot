@@ -5,8 +5,9 @@ use std::collections::HashSet;
 
 use commands::{
     conversation::{
-        ai_chan, dousite, hamu, hopak, hugu, ikare, ikare_one, konata, mun, nannnoimiga, otu,
-        pakupaku, sake, souhayarann, tearai, teio_tuntun, tenjou, today_ganba, what, www, yosi,
+        ai_chan, dousite, hadou, hamu, hopak, hugu, ikare, ikare_one, konata, mun, nannnoimiga,
+        otu, pakupaku, pita, sake, souhayarann, tearai, teio_tuntun, tenjou, today_ganba, what,
+        www, yada, yosi,
     },
     simple::*,
 };
@@ -292,6 +293,42 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(hopak()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("やだ")
+            || content.contains("いやだ")
+            || content.contains("嫌")
+            || content.contains("イヤ")
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(yada()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("波動") || content.contains("はどう") || content.contains("昇龍拳")
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(hadou()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("ぴた") || content.contains("ピタ") || content.contains("ヒミツ")
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(pita()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
