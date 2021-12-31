@@ -6,6 +6,7 @@ use homeserver_receive_process::{home_server_config::Config, Command};
 
 const CONFIG_PATH: &'static str = ".config/home_server_config.toml";
 
+#[deny(clippy::if_same_then_else)]
 async fn exec_systemctl(command: web::Json<Command>, service_name: &str) -> impl Responder {
     if let "start" | "status" = command.request().as_str() {
     } else if let ("stop" | "restart", true) =
