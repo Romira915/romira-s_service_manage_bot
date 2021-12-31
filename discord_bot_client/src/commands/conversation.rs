@@ -193,3 +193,10 @@ pub fn pita() -> CreateEmbed {
 
     embed
 }
+
+pub fn akeome() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed.image("https://pbs.twimg.com/media/EqjcEy_UwAERsja.jpg");
+
+    embed
+}
