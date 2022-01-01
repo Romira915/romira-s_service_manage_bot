@@ -200,3 +200,17 @@ pub fn akeome() -> CreateEmbed {
 
     embed
 }
+
+pub fn motidesuwa() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed
+        .title("もちですわ")
+        .author(|a| {
+            a.name("pixiv")
+                .url("https://www.pixiv.net/artworks/95212164")
+        })
+        .url("https://twitter.com/katwo_1/status/1477190523538784256")
+        .image("https://pbs.twimg.com/media/FIAI8xjagAI2l9Z?format=jpg&name=large");
+
+    embed
+}

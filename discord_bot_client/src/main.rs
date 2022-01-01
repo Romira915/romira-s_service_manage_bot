@@ -72,7 +72,7 @@ async fn main() {
         let mut file = File::open(exe_dir).expect("file not found");
 
         let mut toml_str = String::new();
-        file.read_to_string(&mut toml_str);
+        file.read_to_string(&mut toml_str).unwrap();
 
         toml::from_str(&toml_str).expect("Fall to toml parser")
     };
