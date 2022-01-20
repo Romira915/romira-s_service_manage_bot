@@ -1,13 +1,14 @@
 pub mod bot_config;
 pub mod commands;
 
-use std::collections::HashSet;
+use std::{collections::HashSet, time::Duration};
 
 use commands::{
     conversation::{
         ai_chan, akeome, dousite, hadou, hamu, hopak, hugu, ikare, ikare_one, konata, kusa,
-        kusadora0, kusadora1, motidesuwa, mun, nannnoimiga, otu, pakupaku, pita, sake, souhayarann,
-        tearai, teio_tuntun, tenjou, today_ganba, what, www, yada, yosi,
+        kusadora0, kusadora1, motidesuwa, mun, nannnoimiga, otu, pakupaku, paxan, pita, sake,
+        sonnekineko_embeds, souhayarann, tearai, teio_tuntun, tenjou, today_ganba, what, www, yada,
+        yosi,
     },
     simple::*,
 };
@@ -31,6 +32,10 @@ use serenity::{
     },
     utils::Colour,
 };
+
+use tokio::time;
+
+const sonneki_interval_ms: u64 = 1000;
 
 #[group]
 #[commands(ping)]
@@ -369,6 +374,34 @@ impl EventHandler for Handler {
                 error!("Error sending message: {:?}", why);
             }
         }
+
+        if content.contains("損") || content.contains("くそったれ") {
+            sonnekineko(&ctx, &msg).await;
+        }
+
+        if content.contains("パァン") || content.contains("ぱぁん") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(paxan()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+    }
+}
+
+async fn sonnekineko(ctx: &Context, msg: &Message) {
+    for embed in &sonnekineko_embeds {
+        if let Err(why) = msg
+            .channel_id
+            .send_message(&ctx.http, |m| m.set_embed(embed()))
+            .await
+        {
+            error!("Error sending message: {:?}", why);
+        }
+
+        time::sleep(Duration::from_millis(sonneki_interval_ms)).await;
     }
 }
 

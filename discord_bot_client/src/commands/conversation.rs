@@ -1,4 +1,9 @@
+use chrono::{Duration, Utc};
 use serenity::builder::CreateEmbed;
+
+pub const kusa: [fn() -> CreateEmbed; 3] = [www, kusadora0, kusadora1];
+pub const sonnekineko_embeds: [fn() -> CreateEmbed; 4] =
+    [sonnekineko0, sonnekineko1, sonnekineko2, sonnekineko3];
 
 pub fn www() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
@@ -229,4 +234,53 @@ pub fn kusadora1() -> CreateEmbed {
     embed
 }
 
-pub const kusa: [fn() -> CreateEmbed; 3] = [www, kusadora0, kusadora1];
+pub fn sonnekineko0() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed.image("https://pbs.twimg.com/media/FJYrAmBaQAAUZCo?format=jpg&name=large");
+
+    embed
+}
+
+pub fn sonnekineko1() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed.image("https://pbs.twimg.com/media/FJYrAl-agAAkuV_?format=jpg&name=large");
+
+    embed
+}
+
+pub fn sonnekineko2() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed.image("https://pbs.twimg.com/media/FJYrAmCagAUcO58?format=jpg&name=large");
+
+    embed
+}
+
+pub fn sonnekineko3() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed
+        .title("デデーン！")
+        .image("https://pbs.twimg.com/media/FJYrAmZagAAd-W2?format=jpg&name=large");
+
+    embed
+}
+
+pub fn paxan() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    let utc_date = Utc::today();
+    let jst_date = utc_date + Duration::hours(9);
+    let season = {
+        let month = jst_date.format("%m").to_string().parse::<u32>().unwrap();
+        match month {
+            3..=5 => "春",
+            6..=8 => "夏",
+            9..=11 => "秋",
+            12 | 1..=2 => "冬",
+            _ => "何",
+        }
+    };
+    embed
+        .title(format!("{}のパァン祭", season))
+        .image("https://pbs.twimg.com/media/ETUdDbVU0AAiKh4.jpg");
+
+    embed
+}
