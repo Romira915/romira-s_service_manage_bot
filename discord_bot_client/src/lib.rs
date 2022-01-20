@@ -5,16 +5,18 @@ use std::collections::HashSet;
 
 use commands::{
     conversation::{
-        ai_chan, akeome, dousite, hadou, hamu, hopak, hugu, ikare, ikare_one, konata, motidesuwa,
-        mun, nannnoimiga, otu, pakupaku, pita, sake, souhayarann, tearai, teio_tuntun, tenjou,
-        today_ganba, what, www, yada, yosi,
+        ai_chan, akeome, dousite, hadou, hamu, hopak, hugu, ikare, ikare_one, konata, kusa,
+        kusadora0, kusadora1, motidesuwa, mun, nannnoimiga, otu, pakupaku, pita, sake, souhayarann,
+        tearai, teio_tuntun, tenjou, today_ganba, what, www, yada, yosi,
     },
     simple::*,
 };
 use log::{debug, error, info, LevelFilter};
 
+use rand::prelude::*;
 use serenity::{
     async_trait,
+    builder::CreateEmbed,
     client::{Context, EventHandler},
     framework::standard::{
         help_commands,
@@ -65,17 +67,23 @@ impl EventHandler for Handler {
             }
         }
 
-        if content.ends_with("草") || {
-            let len = content.chars().count();
-            let mut www = content.clone();
-            www.retain(|f| f == 'w' || f == 'ｗ');
-            let www_len = www.chars().count();
+        if content.ends_with("草")
+            || {
+                let len = content.chars().count();
+                let mut www = content.clone();
+                www.retain(|f| f == 'w' || f == 'ｗ');
+                let www_len = www.chars().count();
 
-            www_len as f32 / len as f32 > 0.5
-        } {
+                www_len as f32 / len as f32 > 0.5
+            }
+            || content.ends_with("www")
+        {
+            let mut rng = StdRng::from_rng(thread_rng()).unwrap();
+            let kusa_embed = kusa.choose(&mut rng).unwrap();
+
             if let Err(why) = msg
                 .channel_id
-                .send_message(&ctx.http, |m| m.set_embed(www()))
+                .send_message(&ctx.http, |m| m.set_embed(kusa_embed()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

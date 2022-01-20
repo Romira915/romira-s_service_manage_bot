@@ -214,3 +214,19 @@ pub fn motidesuwa() -> CreateEmbed {
 
     embed
 }
+
+pub fn kusadora0() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed.image("https://pbs.twimg.com/media/DIETxlPUQAEn9HD?format=jpg&name=900x900");
+
+    embed
+}
+
+pub fn kusadora1() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+    embed.image("https://pbs.twimg.com/media/DIETxlTUIAIsWXL?format=jpg&name=large");
+
+    embed
+}
+
+pub const kusa: [fn() -> CreateEmbed; 3] = [www, kusadora0, kusadora1];
