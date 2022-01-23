@@ -375,7 +375,8 @@ impl EventHandler for Handler {
             }
         }
 
-        if content.contains("損") || content.contains("くそったれ") {
+        if content.contains("損") || content.contains("くそったれ") || content.contains("デデーン")
+        {
             sonnekineko(&ctx, &msg).await;
         }
 
