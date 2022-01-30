@@ -284,3 +284,15 @@ pub fn paxan() -> CreateEmbed {
 
     embed
 }
+
+pub fn chiyopanchi() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("チヨパンチ！")
+        .author(|f|f.name("サクラチヨノオー"))
+        .footer(|f|f.text("ﾁﾖﾁﾖ"))
+        .image("https://xn--o9j0bk9l4k169rk1cxv4aci7a739c.com/wp-content/uploads/2022/01/1642651008435.gif");
+
+    embed
+}
