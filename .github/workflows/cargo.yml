@@ -23,6 +23,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: actions/cache@v2
         with:
           path: |
@@ -30,6 +32,11 @@ jobs:
             ~/.cargo/git
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+      - name: Restore mtime
+        run: python ./git-restore-mtime.py
 
       - uses: actions-rs/toolchain@v1
         with:
@@ -61,7 +68,7 @@ jobs:
             target/x86_64-unknown-linux-gnu/release/homeserver_receive_process
             target/x86_64-unknown-linux-gnu/release/valheim-connection-check
 
-  deploy:
+  Deploy:
     needs: [Build]
     runs-on: ubuntu-latest
     steps:
