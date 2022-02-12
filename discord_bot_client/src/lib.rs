@@ -6,9 +6,9 @@ use std::{collections::HashSet, time::Duration};
 use commands::{
     conversation::{
         ai_chan, akeome, chiyopanchi, dousite, hadou, hamu, hopak, hugu, ikare, ikare_one, konata,
-        kusa, kusadora0, kusadora1, motidesuwa, mun, nannnoimiga, otu, pakupaku, paxan, pita, sake,
-        sonnekineko_embeds, souhayarann, tearai, teio_tuntun, tenjou, today_ganba, what, www, yada,
-        yosi,
+        kusadora0, kusadora1, motidesuwa, mun, nannnoimiga, otu, pakupaku, paxan, pita, sake,
+        souhayarann, tearai, teio_tuntun, tenjou, today_ganba, tyuuname, what, www, yada, yosi,
+        KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS,
     },
     simple::*,
 };
@@ -84,7 +84,7 @@ impl EventHandler for Handler {
             || content.ends_with("www")
         {
             let mut rng = StdRng::from_rng(thread_rng()).unwrap();
-            let kusa_embed = kusa.choose(&mut rng).unwrap();
+            let kusa_embed = KUSA.choose(&mut rng).unwrap();
 
             if let Err(why) = msg
                 .channel_id
@@ -402,11 +402,30 @@ impl EventHandler for Handler {
                 error!("Error sending message: {:?}", why);
             }
         }
+
+        if content.contains("なめる") || content.contains("なめてる") || content.contains("舐め")
+        {
+            namebetu(&ctx, &msg).await;
+        }
     }
 }
 
 async fn sonnekineko(ctx: &Context, msg: &Message) {
-    for embed in &sonnekineko_embeds {
+    for embed in &SONNEKINEKO_EMBEDS {
+        if let Err(why) = msg
+            .channel_id
+            .send_message(&ctx.http, |m| m.set_embed(embed()))
+            .await
+        {
+            error!("Error sending message: {:?}", why);
+        }
+
+        time::sleep(Duration::from_millis(sonneki_interval_ms)).await;
+    }
+}
+
+async fn namebetu(ctx: &Context, msg: &Message) {
+    for embed in &NAMEURARA_EMBEDS {
         if let Err(why) = msg
             .channel_id
             .send_message(&ctx.http, |m| m.set_embed(embed()))

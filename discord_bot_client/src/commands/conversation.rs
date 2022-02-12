@@ -1,9 +1,10 @@
 use chrono::{Duration, Utc};
 use serenity::builder::CreateEmbed;
 
-pub const kusa: [fn() -> CreateEmbed; 3] = [www, kusadora0, kusadora1];
-pub const sonnekineko_embeds: [fn() -> CreateEmbed; 4] =
+pub const KUSA: [fn() -> CreateEmbed; 3] = [www, kusadora0, kusadora1];
+pub const SONNEKINEKO_EMBEDS: [fn() -> CreateEmbed; 4] =
     [sonnekineko0, sonnekineko1, sonnekineko2, sonnekineko3];
+pub const NAMEURARA_EMBEDS: [fn() -> CreateEmbed; 2] = [tyuuname, urabetu];
 
 pub fn www() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
@@ -292,6 +293,28 @@ pub fn chiyopanchi() -> CreateEmbed {
         .title("チヨパンチ！")
         .footer(|f|f.text("ﾁﾖﾁﾖ"))
         .image("https://xn--o9j0bk9l4k169rk1cxv4aci7a739c.com/wp-content/uploads/2022/01/1642651008435.gif");
+
+    embed
+}
+
+pub fn tyuuname() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("無礼るなよ")
+        .footer(|f| f.text("ﾙﾅﾙﾅ"))
+        .image("https://notissary.net/media/2021/06/a.jpg");
+
+    embed
+}
+
+pub fn urabetu() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("但し")
+        .footer(|f| f.text("ｳﾗﾗﾁｬﾝｶﾜｲｲ"))
+        .image("https://umamusume.gamerstand.net/wp-content/uploads/2021/08/1622687512216.jpg");
 
     embed
 }
