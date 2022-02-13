@@ -318,3 +318,13 @@ pub fn urabetu() -> CreateEmbed {
 
     embed
 }
+
+pub fn hello_tenjyo() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("Hello Tenjyo")
+        .image("https://objectstorage.ap-tokyo-1.oraclecloud.com/n/nr7eduszgfzb/b/image-bucket/o/bot%2Fhello-tenjouunknown.png");
+
+    embed
+}

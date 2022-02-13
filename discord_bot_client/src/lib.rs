@@ -5,10 +5,10 @@ use std::{collections::HashSet, time::Duration};
 
 use commands::{
     conversation::{
-        ai_chan, akeome, chiyopanchi, dousite, hadou, hamu, hopak, hugu, ikare, ikare_one, konata,
-        kusadora0, kusadora1, motidesuwa, mun, nannnoimiga, otu, pakupaku, paxan, pita, sake,
-        souhayarann, tearai, teio_tuntun, tenjou, today_ganba, tyuuname, what, www, yada, yosi,
-        KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS,
+        ai_chan, akeome, chiyopanchi, dousite, hadou, hamu, hello_tenjyo, hopak, hugu, ikare,
+        ikare_one, konata, kusadora0, kusadora1, motidesuwa, mun, nannnoimiga, otu, pakupaku,
+        paxan, pita, sake, souhayarann, tearai, teio_tuntun, tenjou, today_ganba, tyuuname, what,
+        www, yada, yosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS,
     },
     simple::*,
 };
@@ -210,9 +210,16 @@ impl EventHandler for Handler {
         }
 
         if content.contains("てんじょう") {
+            let embed = [tenjou, hello_tenjyo];
+            let embed = if rand::random::<f64>() < 0.2 {
+                embed[1]
+            } else {
+                embed[0]
+            };
+
             if let Err(why) = msg
                 .channel_id
-                .send_message(&ctx.http, |m| m.set_embed(tenjou()))
+                .send_message(&ctx.http, |m| m.set_embed(embed()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
@@ -406,6 +413,19 @@ impl EventHandler for Handler {
         if content.contains("なめる") || content.contains("なめてる") || content.contains("舐め")
         {
             namebetu(&ctx, &msg).await;
+        }
+
+        if content.contains("Hello Tenjyo")
+            || content.contains("はろーてんじょう")
+            || content.contains("ハロー")
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(hello_tenjyo()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
         }
     }
 }
