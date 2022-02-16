@@ -220,11 +220,12 @@ impl EventHandler for Handler {
             };
             let embed = tenjyo_embeds_added_probability
                 .choose_weighted(&mut rng, |item| item.0)
-                .unwrap();
+                .unwrap()
+                .1;
 
             if let Err(why) = msg
                 .channel_id
-                .send_message(&ctx.http, |m| m.set_embed(embed.1()))
+                .send_message(&ctx.http, |m| m.set_embed(embed()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
