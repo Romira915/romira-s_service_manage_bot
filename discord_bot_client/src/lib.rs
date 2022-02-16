@@ -7,8 +7,8 @@ use commands::{
     conversation::{
         ai_chan, akeome, chiyopanchi, dousite, hadou, hamu, hello_tenjyo, hopak, hugu, ikare,
         ikare_one, konata, kusadora0, kusadora1, motidesuwa, mun, nannnoimiga, otu, pakupaku,
-        paxan, pita, sake, souhayarann, tearai, teio_tuntun, tenjou, today_ganba, tyuuname, what,
-        www, yada, yosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS,
+        paxan, pita, sake, souhayarann, tearai, teio_tuntun, today_ganba, tyuuname, what, www,
+        yada, yosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS,
     },
     simple::*,
 };
@@ -210,16 +210,21 @@ impl EventHandler for Handler {
         }
 
         if content.contains("てんじょう") {
-            let embed = [tenjou, hello_tenjyo];
-            let embed = if rand::random::<f64>() < 0.2 {
-                embed[1]
-            } else {
-                embed[0]
+            let mut rng = StdRng::from_rng(thread_rng()).unwrap();
+
+            let tenjyo_embeds_added_probability = {
+                let prob = vec![0.8, 0.2];
+                prob.into_iter()
+                    .zip(TENJYO_EMBEDS)
+                    .collect::<Vec<(f64, fn() -> CreateEmbed)>>()
             };
+            let embed = tenjyo_embeds_added_probability
+                .choose_weighted(&mut rng, |item| item.0)
+                .unwrap();
 
             if let Err(why) = msg
                 .channel_id
-                .send_message(&ctx.http, |m| m.set_embed(embed()))
+                .send_message(&ctx.http, |m| m.set_embed(embed.1()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

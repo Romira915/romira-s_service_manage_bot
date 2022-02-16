@@ -5,6 +5,7 @@ pub const KUSA: [fn() -> CreateEmbed; 3] = [www, kusadora0, kusadora1];
 pub const SONNEKINEKO_EMBEDS: [fn() -> CreateEmbed; 4] =
     [sonnekineko0, sonnekineko1, sonnekineko2, sonnekineko3];
 pub const NAMEURARA_EMBEDS: [fn() -> CreateEmbed; 2] = [tyuuname, urabetu];
+pub const TENJYO_EMBEDS: [fn() -> CreateEmbed; 2] = [tenjyo, hello_tenjyo];
 
 pub fn www() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
@@ -103,7 +104,7 @@ pub fn souhayarann() -> CreateEmbed {
     embed
 }
 
-pub fn tenjou() -> CreateEmbed {
+pub fn tenjyo() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
     embed
         .title("もしかして: ")
