@@ -329,3 +329,23 @@ pub fn hello_tenjyo() -> CreateEmbed {
 
     embed
 }
+
+pub fn thesis_donot_end() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("ならば")
+        .image("https://pbs.twimg.com/media/FGAWubBaMAAqxLG.jpg");
+
+    embed
+}
+
+pub fn exactly() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("ざわ…  ざわ…")
+        .image("https://sns-gazo.co/linestamp/images/line_stamp_00159.jpg");
+
+    embed
+}
