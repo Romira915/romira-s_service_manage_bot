@@ -349,3 +349,13 @@ pub fn exactly() -> CreateEmbed {
 
     embed
 }
+
+pub fn tiyono_o_() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("ファイト・オー！チヨノー・オー！")
+        .image("https://umamusume-umapyoi.com/wp-content/uploads/2022/01/PV0R0JL.gif");
+
+    embed
+}
