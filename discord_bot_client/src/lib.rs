@@ -7,9 +7,9 @@ use commands::{
     conversation::{
         ai_chan, akeome, chiyopanchi, dousite, exactly, hadou, hamu, hello_tenjyo, hopak, hugu,
         ikare, ikare_one, konata, kusadora0, kusadora1, motidesuwa, mun, nannnoimiga, otu,
-        pakupaku, paxan, pita, sake, souhayarann, tearai, teio_tuntun, thesis_donot_end, tiyono_o_,
-        today_ganba, tyuuname, what, what_buru, www, yada, yosi, KUSA, NAMEURARA_EMBEDS,
-        SONNEKINEKO_EMBEDS, TENJYO_EMBEDS,
+        pakupaku, paxan, pita, sake, soturon_owata, souhayarann, tearai, teio_tuntun,
+        thesis_donot_end, tiyono_o_, today_ganba, tyuuname, what, what_buru, www, yada, yosi, KUSA,
+        NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS,
     },
     simple::*,
 };
@@ -469,6 +469,18 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(what_buru()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("卒論")
+            && (content.contains("終わった") || content.contains("おわった"))
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(soturon_owata()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

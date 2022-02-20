@@ -369,3 +369,12 @@ pub fn what_buru() -> CreateEmbed {
 
     embed
 }
+
+pub fn soturon_owata() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .image("https://umamusume-umapyoi.com/wp-content/uploads/2021/09/7f7cfe27d5a1e1a53593ef680f52a433.jpg");
+
+    embed
+}
