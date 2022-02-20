@@ -359,3 +359,13 @@ pub fn tiyono_o_() -> CreateEmbed {
 
     embed
 }
+
+pub fn what_buru() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("❔")
+        .image("http://umacoco.com/wp-content/uploads/2021/04/2y19YDc.jpg");
+
+    embed
+}

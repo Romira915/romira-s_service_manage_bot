@@ -8,8 +8,8 @@ use commands::{
         ai_chan, akeome, chiyopanchi, dousite, exactly, hadou, hamu, hello_tenjyo, hopak, hugu,
         ikare, ikare_one, konata, kusadora0, kusadora1, motidesuwa, mun, nannnoimiga, otu,
         pakupaku, paxan, pita, sake, souhayarann, tearai, teio_tuntun, thesis_donot_end, tiyono_o_,
-        today_ganba, tyuuname, what, www, yada, yosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS,
-        TENJYO_EMBEDS,
+        today_ganba, tyuuname, what, what_buru, www, yada, yosi, KUSA, NAMEURARA_EMBEDS,
+        SONNEKINEKO_EMBEDS, TENJYO_EMBEDS,
     },
     simple::*,
 };
@@ -459,6 +459,16 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(tiyono_o_()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("何") && (content.contains("?") || content.contains("？")) {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(what_buru()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
