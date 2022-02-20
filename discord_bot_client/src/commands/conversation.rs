@@ -378,3 +378,13 @@ pub fn soturon_owata() -> CreateEmbed {
 
     embed
 }
+
+pub fn imwin() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("なんで負けたか、明日まで考えといてください。")
+        .image("https://moto-neta.com/wp/wp-content/uploads/d40fac6480affb08286e08be51e809d2.jpg");
+
+    embed
+}
