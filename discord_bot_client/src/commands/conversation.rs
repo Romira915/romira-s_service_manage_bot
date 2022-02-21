@@ -389,3 +389,13 @@ pub fn imwin() -> CreateEmbed {
 
     embed
 }
+
+pub fn safety() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("ご安全に！")
+        .image("https://booth.pximg.net/30829f4a-b2ee-4814-9ff3-c5e038d7bc0c/i/2695603/ed16fd45-c743-480e-9dda-200489fbf5d5_base_resized.jpg");
+
+    embed
+}
