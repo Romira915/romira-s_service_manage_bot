@@ -356,7 +356,7 @@ pub fn tiyono_o_() -> CreateEmbed {
     embed
         .title("ファイト・オー！チヨノー・オー！")
         .footer(|f| f.text("ﾁﾖﾁﾖ"))
-        .image("https://umamusume-umapyoi.com/wp-content/uploads/2022/01/PV0R0JL.gif");
+        .image("https://objectstorage.ap-tokyo-1.oraclecloud.com/n/nr7eduszgfzb/b/image-bucket/o/bot%2Fhuxaito.gif");
 
     embed
 }
