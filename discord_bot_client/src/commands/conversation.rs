@@ -374,7 +374,7 @@ pub fn soturon_owata() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
 
     embed
-        .image("https://umamusume-umapyoi.com/wp-content/uploads/2021/09/7f7cfe27d5a1e1a53593ef680f52a433.jpg");
+        .image("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCyVEp9v4ZSJBa2S-okp-5kltGXswrH1rLNA&usqp=CAU");
 
     embed
 }
