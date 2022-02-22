@@ -399,3 +399,13 @@ pub fn safety() -> CreateEmbed {
 
     embed
 }
+
+pub fn monhanneko() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("地雷原ヨシ！")
+        .image("https://pbs.twimg.com/media/FMKhyzzVkAAoAiG?format=jpg&name=medium");
+
+    embed
+}

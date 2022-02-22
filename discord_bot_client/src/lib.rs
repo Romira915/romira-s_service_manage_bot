@@ -6,10 +6,10 @@ use std::{collections::HashSet, time::Duration};
 use commands::{
     conversation::{
         ai_chan, akeome, chiyopanchi, dousite, exactly, hadou, hamu, hello_tenjyo, hopak, hugu,
-        ikare, ikare_one, imwin, konata, kusadora0, kusadora1, motidesuwa, mun, nannnoimiga, otu,
-        pakupaku, paxan, pita, safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun,
-        thesis_donot_end, tiyono_o_, today_ganba, tyuuname, what, what_buru, www, yada, yosi, KUSA,
-        NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS,
+        ikare, ikare_one, imwin, konata, kusadora0, kusadora1, monhanneko, motidesuwa, mun,
+        nannnoimiga, otu, pakupaku, paxan, pita, safety, sake, soturon_owata, souhayarann, tearai,
+        teio_tuntun, thesis_donot_end, tiyono_o_, today_ganba, tyuuname, what, what_buru, www,
+        yada, yosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS,
     },
     simple::*,
 };
@@ -505,6 +505,18 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(safety()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if (content.contains("モンハン") || content.contains("もんはん"))
+            && content.contains("やろ")
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(monhanneko()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
