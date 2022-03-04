@@ -523,7 +523,10 @@ impl EventHandler for Handler {
             }
         }
 
-        if content.contains("(o・∇・o)") || content.contains("終わり") || content.contains("おわり")
+        if content.contains("(o・∇・o)")
+            || content.contains("終わり")
+            || content.contains("おわり")
+            || content.contains("もちょだよ")
         {
             if let Err(why) = msg
                 .channel_id
