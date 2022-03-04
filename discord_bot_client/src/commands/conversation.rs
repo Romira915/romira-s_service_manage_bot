@@ -409,3 +409,13 @@ pub fn monhanneko() -> CreateEmbed {
 
     embed
 }
+
+pub fn motyo() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("(o・∇・o)")
+        .image("https://pbs.twimg.com/media/EJfSAklUYAAFPAy?format=jpg&name=large");
+
+    embed
+}
