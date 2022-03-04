@@ -303,7 +303,7 @@ impl EventHandler for Handler {
             }
         }
 
-        if content.starts_with("( ˶ˆᴗˆ˶ )") {
+        if content.contains("( ˶ˆᴗˆ˶ )") {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(teio_tuntun()))
