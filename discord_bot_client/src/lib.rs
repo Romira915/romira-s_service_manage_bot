@@ -9,7 +9,8 @@ use commands::{
         ikare, ikare_one, imwin, konata, kusadora0, kusadora1, monhanneko, motidesuwa, motyo, mun,
         nannnoimiga, otu, pakupaku, paxan, pita, safety, sake, soturon_owata, souhayarann, tearai,
         teio_tuntun, thesis_donot_end, tiyono_o_, today_ganba, tyuuname, what, what_buru, www,
-        yada, yosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS,
+        yada, yosi, yosi_inoti, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS,
+        YOSI_EMBEDS,
     },
     simple::*,
 };
@@ -99,9 +100,22 @@ impl EventHandler for Handler {
         if (content.contains("ヨシ") || content.contains("ﾖｼ"))
             && (content.contains("！") || content.contains("!"))
         {
+            let mut rng = StdRng::from_rng(thread_rng()).unwrap();
+
+            let yosi_embeds_added_probability = {
+                let prob = vec![0.7, 0.3];
+                prob.into_iter()
+                    .zip(YOSI_EMBEDS)
+                    .collect::<Vec<(f64, fn() -> CreateEmbed)>>()
+            };
+            let embed = yosi_embeds_added_probability
+                .choose_weighted(&mut rng, |item| item.0)
+                .unwrap()
+                .1;
+
             if let Err(why) = msg
                 .channel_id
-                .send_message(&ctx.http, |m| m.set_embed(yosi()))
+                .send_message(&ctx.http, |m| m.set_embed(embed()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
@@ -531,6 +545,20 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(motyo()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("ｼﾃ…ｺﾛｼﾃ……")
+            || content.contains("コロシテ")
+            || content.contains("侮辱")
+            || content == "ヨシ"
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(yosi_inoti()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

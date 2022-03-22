@@ -6,6 +6,7 @@ pub const SONNEKINEKO_EMBEDS: [fn() -> CreateEmbed; 4] =
     [sonnekineko0, sonnekineko1, sonnekineko2, sonnekineko3];
 pub const NAMEURARA_EMBEDS: [fn() -> CreateEmbed; 2] = [tyuuname, urabetu];
 pub const TENJYO_EMBEDS: [fn() -> CreateEmbed; 2] = [tenjyo, hello_tenjyo];
+pub const YOSI_EMBEDS: [fn() -> CreateEmbed; 2] = [yosi, yosi_inoti];
 
 pub fn www() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
@@ -416,6 +417,17 @@ pub fn motyo() -> CreateEmbed {
     embed
         .title("(o・∇・o)")
         .image("https://pbs.twimg.com/media/EJfSAklUYAAFPAy?format=jpg&name=large");
+
+    embed
+}
+
+pub fn yosi_inoti() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("ヨシ…")
+        .description("極めてなにか生命に対する侮辱を感じます")
+        .image("https://pbs.twimg.com/media/FOboZf2VgAML8Zs?format=jpg&name=medium");
 
     embed
 }
