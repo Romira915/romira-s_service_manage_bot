@@ -555,6 +555,7 @@ impl EventHandler for Handler {
             || content.contains("コロシテ")
             || content.contains("侮辱")
             || content == "ヨシ"
+            || content.contains("ヨシヨシヨシ")
         {
             if let Err(why) = msg
                 .channel_id
