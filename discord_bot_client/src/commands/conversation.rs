@@ -110,7 +110,7 @@ pub fn tenjyo() -> CreateEmbed {
     embed
         .title("もしかして: ")
         .url("https://www.google.com/search?q=%E3%81%A6%E3%82%93%E3%81%98%E3%82%87%E3%81%86")
-        .image("http://www.tamura-kensetsu.com/tkblog/photo/yabudukanoiegoutenjyoubefre.jpg");
+        .image("http://verdure.tyanoyu.net/img/cyasitu_tenjou_funazoko.jpg");
 
     embed
 }
