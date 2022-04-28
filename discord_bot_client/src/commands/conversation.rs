@@ -441,3 +441,13 @@ pub fn yosiyosiyosi() -> CreateEmbed {
 
     embed
 }
+
+pub fn wakuwaku() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("ワクワク！")
+        .image("https://pbs.twimg.com/media/FOWEO_LaIAcGdW-?format=jpg&name=small");
+
+    embed
+}
