@@ -9,8 +9,8 @@ use commands::{
         ikare, ikare_one, imwin, konata, kusadora0, kusadora1, monhanneko, motidesuwa, motyo, mun,
         nannnoimiga, otu, pakupaku, paxan, pita, safety, sake, soturon_owata, souhayarann, tearai,
         teio_tuntun, thesis_donot_end, tiyono_o_, today_ganba, tyuuname, what, what_buru, www,
-        yada, yosi, yosi_inoti, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS,
-        YOSI_EMBEDS,
+        yada, yosi, yosi_inoti, yosiyosiyosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS,
+        TENJYO_EMBEDS, YOSI_EMBEDS,
     },
     simple::*,
 };
@@ -555,11 +555,21 @@ impl EventHandler for Handler {
             || content.contains("コロシテ")
             || content.contains("侮辱")
             || content == "ヨシ"
-            || content.contains("ヨシヨシヨシ")
         {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(yosi_inoti()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("ヨシヨシヨシ") || content.contains("ヨシ！ヨシ！ヨシ！")
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(yosiyosiyosi()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

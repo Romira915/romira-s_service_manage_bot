@@ -431,3 +431,13 @@ pub fn yosi_inoti() -> CreateEmbed {
 
     embed
 }
+
+pub fn yosiyosiyosi() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("ヨシ！ヨシ！ヨシ！ヨシ！ヨシ！ヨシ！")
+        .image("https://pbs.twimg.com/media/FRbQGQYVUAAIJ99?format=jpg&name=900x900");
+
+    embed
+}
