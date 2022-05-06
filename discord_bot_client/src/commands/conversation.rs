@@ -451,3 +451,23 @@ pub fn wakuwaku() -> CreateEmbed {
 
     embed
 }
+
+pub fn hello_anya() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("おはやいます")
+        .image("https://alu-web-herokuapp-com.global.ssl.fastly.net/cropped_images/esSU1A7kZzdBu0zVrpDomlXaS4H3/c_1578141350070?auto=webp&format=jpg&width=1360");
+
+    embed
+}
+
+pub fn fight_anya() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("がんばるます")
+        .image("https://alu-web-herokuapp-com.global.ssl.fastly.net/cropped_images/PrAvrZShntbW3GpRXkeHPWnPsfl1/c_1588632000517?auto=webp&format=jpg&width=1360");
+
+    embed
+}
