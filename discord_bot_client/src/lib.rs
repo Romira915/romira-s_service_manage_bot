@@ -576,7 +576,10 @@ impl EventHandler for Handler {
             }
         }
 
-        if content.contains("楽しい") || content.contains("ワクワク") {
+        if content.contains("楽しい")
+            || content.contains("ワクワク")
+            || content.contains("わくわく")
+        {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(wakuwaku()))
