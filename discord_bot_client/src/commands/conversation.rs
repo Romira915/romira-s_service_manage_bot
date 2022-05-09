@@ -471,3 +471,13 @@ pub fn fight_anya() -> CreateEmbed {
 
     embed
 }
+
+pub fn dontstop() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("止まるんじゃねえぞ…")
+        .image("https://pbs.twimg.com/media/ETb8K-PUUAE2ag0?format=jpg&name=900x900");
+
+    embed
+}
