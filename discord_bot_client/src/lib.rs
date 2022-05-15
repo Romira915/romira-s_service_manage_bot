@@ -5,10 +5,10 @@ use std::{collections::HashSet, time::Duration};
 
 use commands::{
     conversation::{
-        ai_chan, akeome, chiyopanchi, dousite, exactly, fight_anya, hadou, hamu, hello_anya,
-        hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, konata, kusadora0, kusadora1,
-        monhanneko, motidesuwa, motyo, muka_anya, mun, nannnoimiga, otu, pakupaku, paxan, pita,
-        punch_anya, safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun,
+        ai_chan, akeome, chiyopanchi, dontstop, dousite, exactly, fight_anya, hadou, hamu,
+        hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, konata, kusadora0,
+        kusadora1, monhanneko, motidesuwa, motyo, muka_anya, mun, nannnoimiga, otu, pakupaku,
+        paxan, pita, punch_anya, safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun,
         thesis_donot_end, tiyono_o_, today_ganba, tyuuname, wakuwaku, wara_anya, what, what_buru,
         www, yada, yosi, yosi_inoti, yosiyosiyosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS,
         TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
@@ -647,6 +647,16 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(punch_anya()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("止まる") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(dontstop()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
