@@ -1,4 +1,4 @@
-use std::process::{ExitStatus, Output};
+
 
 use duct::cmd;
 use serenity::{
@@ -21,7 +21,7 @@ pub struct Valheim;
 
 #[command]
 #[description = "Valheimサーバを起動する"]
-async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+async fn start(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
     let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
 
     msg.channel_id
@@ -75,7 +75,7 @@ async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
 
 #[command]
 #[description = "Valheimサーバの状態を表示する"]
-async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+async fn status(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
     let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
 
     let embed = match cmd!(
@@ -133,7 +133,7 @@ async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
 
 #[command]
 #[description = "Valheimサーバを停止する"]
-async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+async fn stop(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
     let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
 
     msg.channel_id
@@ -186,7 +186,7 @@ async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
 
 #[command]
 #[description = "Valheimサーバを再起動する"]
-async fn restart(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+async fn restart(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
     let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
 
     msg.channel_id

@@ -1,6 +1,6 @@
-use std::{env, fs::File, io::Read, iter::Sum};
+use std::{env, fs::File, io::Read};
 
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{post, web, App, HttpResponse, HttpServer, Responder};
 use duct::cmd;
 use homeserver_receive_process::{home_server_config::Config, Command};
 

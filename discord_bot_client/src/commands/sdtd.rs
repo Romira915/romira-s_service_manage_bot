@@ -1,16 +1,16 @@
-use core::fmt;
-use std::borrow::BorrowMut;
+
+
 use std::time::Duration;
 
-use homeserver_receive_process::{Command, CommandBuilder};
-use serenity::builder::CreateMessage;
+use homeserver_receive_process::{CommandBuilder};
+
 
 use serenity::framework::standard::macros::{command, group};
 use serenity::framework::standard::{Args, CommandResult};
 use serenity::http::CacheHttp;
 use serenity::model::prelude::*;
 use serenity::prelude::*;
-use serenity::utils::Colour;
+
 
 use crate::bot_config::ConfigContainer;
 
@@ -133,24 +133,24 @@ impl Sdtd {
 
 #[command]
 #[description = "7dtdサーバを起動する"]
-async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+async fn start(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
     Sdtd::sdtd_command_exec(SystemctlCommand::Start, ctx, msg).await
 }
 
 #[command]
 #[description = "7dtdサーバの状態を表示する"]
-async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+async fn status(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
     Sdtd::sdtd_command_exec(SystemctlCommand::Status, ctx, msg).await
 }
 
 #[command]
 #[description = "7dtdサーバを停止する"]
-async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+async fn stop(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
     Sdtd::sdtd_command_exec(SystemctlCommand::Stop, ctx, msg).await
 }
 
 #[command]
 #[description = "7dtdサーバを再起動する"]
-async fn restart(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+async fn restart(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
     Sdtd::sdtd_command_exec(SystemctlCommand::Restart, ctx, msg).await
 }

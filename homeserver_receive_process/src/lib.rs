@@ -1,7 +1,7 @@
 pub mod home_server_config;
 
 use derive_builder::Builder;
-use getset::{CopyGetters, Getters, MutGetters, Setters};
+use getset::{Getters};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default, Builder, Getters)]

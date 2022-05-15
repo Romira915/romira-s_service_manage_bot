@@ -6,16 +6,15 @@ use std::{collections::HashSet, time::Duration};
 use commands::{
     conversation::{
         ai_chan, akeome, chiyopanchi, dontstop, dousite, exactly, fight_anya, hadou, hamu,
-        hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, konata, kusadora0,
-        kusadora1, monhanneko, motidesuwa, motyo, muka_anya, mun, nannnoimiga, otu, pakupaku,
-        paxan, pita, punch_anya, safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun,
-        thesis_donot_end, tiyono_o_, today_ganba, tyuuname, wakuwaku, wara_anya, what, what_buru,
-        www, yada, yosi, yosi_inoti, yosiyosiyosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS,
-        TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
+        hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, konata, monhanneko,
+        motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku, paxan, pita, punch_anya, safety, sake,
+        soturon_owata, souhayarann, tearai, teio_tuntun, thesis_donot_end, tiyono_o_, today_ganba,
+        wakuwaku, wara_anya, what_buru, yada, yosi_inoti, yosiyosiyosi, KUSA, NAMEURARA_EMBEDS,
+        SONNEKINEKO_EMBEDS, TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
     },
     simple::*,
 };
-use log::{debug, error, info, LevelFilter};
+use log::{debug, error, info};
 
 use rand::prelude::*;
 use serenity::{
@@ -27,18 +26,13 @@ use serenity::{
         macros::{group, help},
         Args, CommandGroup, CommandResult, HelpOptions,
     },
-    model::{
-        channel::Message,
-        event::ResumedEvent,
-        id::UserId,
-        prelude::{Activity, Ready},
-    },
+    model::{channel::Message, event::ResumedEvent, id::UserId, prelude::Ready},
     utils::Colour,
 };
 
 use tokio::time;
 
-const sonneki_interval_ms: u64 = 1000;
+const SONNEKI_INTERVAL_MS: u64 = 1000;
 
 #[group]
 #[commands(ping)]
@@ -675,7 +669,7 @@ async fn sonnekineko(ctx: &Context, msg: &Message) {
             error!("Error sending message: {:?}", why);
         }
 
-        time::sleep(Duration::from_millis(sonneki_interval_ms)).await;
+        time::sleep(Duration::from_millis(SONNEKI_INTERVAL_MS)).await;
     }
 }
 
@@ -689,7 +683,7 @@ async fn namebetu(ctx: &Context, msg: &Message) {
             error!("Error sending message: {:?}", why);
         }
 
-        time::sleep(Duration::from_millis(sonneki_interval_ms)).await;
+        time::sleep(Duration::from_millis(SONNEKI_INTERVAL_MS)).await;
     }
 }
 

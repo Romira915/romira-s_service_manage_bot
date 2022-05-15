@@ -1,5 +1,5 @@
 use serenity::{
-    builder::{CreateEmbed, CreateMessage},
+    builder::{CreateEmbed},
     utils::Colour,
 };
 

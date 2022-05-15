@@ -1,24 +1,17 @@
 extern crate discord_bot_client;
 
 use discord_bot_client::{
-    bot_config::{self, Config as BotConfig, ConfigContainer},
+    bot_config::{Config as BotConfig, ConfigContainer},
     commands::{minecraft::*, sdtd::*, terraria::*, valheim::*},
     *,
 };
 use log::error;
 use serenity::{
-    async_trait,
     client::bridge::gateway::ShardManager,
     framework::{
-        standard::{
-            help_commands,
-            macros::{group, help},
-            Args, CommandGroup, CommandResult, HelpOptions,
-        },
         StandardFramework,
     },
     http::Http,
-    model::{channel::Message, event::ResumedEvent, gateway::Ready, id::UserId},
     prelude::*,
 };
 use simplelog::{
