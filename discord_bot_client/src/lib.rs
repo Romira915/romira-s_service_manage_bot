@@ -7,10 +7,11 @@ use commands::{
     conversation::{
         ai_chan, akeome, chiyopanchi, dousite, exactly, fight_anya, hadou, hamu, hello_anya,
         hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, konata, kusadora0, kusadora1,
-        monhanneko, motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku, paxan, pita, safety, sake,
-        soturon_owata, souhayarann, tearai, teio_tuntun, thesis_donot_end, tiyono_o_, today_ganba,
-        tyuuname, wakuwaku, what, what_buru, www, yada, yosi, yosi_inoti, yosiyosiyosi, KUSA,
-        NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS, YOSI_EMBEDS,
+        monhanneko, motidesuwa, motyo, muka_anya, mun, nannnoimiga, otu, pakupaku, paxan, pita,
+        punch_anya, safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun,
+        thesis_donot_end, tiyono_o_, today_ganba, tyuuname, wakuwaku, wara_anya, what, what_buru,
+        www, yada, yosi, yosi_inoti, yosiyosiyosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS,
+        TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
     },
     simple::*,
 };
@@ -122,10 +123,23 @@ impl EventHandler for Handler {
             }
         }
 
-        if content.starts_with("?") || content.starts_with("？") {
+        if content.starts_with("?") || content.starts_with("？") || content.starts_with("は？") {
+            let mut rng = StdRng::from_rng(thread_rng()).unwrap();
+
+            let yosi_embeds_added_probability = {
+                let prob = vec![0.1, 0.9];
+                prob.into_iter()
+                    .zip(WHAT_EMBEDS)
+                    .collect::<Vec<(f64, fn() -> CreateEmbed)>>()
+            };
+            let embed = yosi_embeds_added_probability
+                .choose_weighted(&mut rng, |item| item.0)
+                .unwrap()
+                .1;
+
             if let Err(why) = msg
                 .channel_id
-                .send_message(&ctx.http, |m| m.set_embed(what()))
+                .send_message(&ctx.http, |m| m.set_embed(embed()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
@@ -607,6 +621,32 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(fight_anya()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("笑") || content.contains("ﾌｯ") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(wara_anya()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("うるせぇ")
+            || content.contains("うるせえ")
+            || content.contains("パンチ")
+            || content.contains("ブチ切れ")
+            || content.contains("死ぬ")
+            || content.contains("死ね")
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(punch_anya()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

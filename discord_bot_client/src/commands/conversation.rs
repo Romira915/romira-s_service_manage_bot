@@ -1,12 +1,13 @@
 use chrono::{Duration, Utc};
 use serenity::builder::CreateEmbed;
 
-pub const KUSA: [fn() -> CreateEmbed; 3] = [www, kusadora0, kusadora1];
+pub const KUSA: [fn() -> CreateEmbed; 4] = [www, kusadora0, kusadora1, wara_anya];
 pub const SONNEKINEKO_EMBEDS: [fn() -> CreateEmbed; 4] =
     [sonnekineko0, sonnekineko1, sonnekineko2, sonnekineko3];
 pub const NAMEURARA_EMBEDS: [fn() -> CreateEmbed; 2] = [tyuuname, urabetu];
 pub const TENJYO_EMBEDS: [fn() -> CreateEmbed; 2] = [tenjyo, hello_tenjyo];
 pub const YOSI_EMBEDS: [fn() -> CreateEmbed; 2] = [yosi, yosi_inoti];
+pub const WHAT_EMBEDS: [fn() -> CreateEmbed; 2] = [what, muka_anya];
 
 pub fn www() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
@@ -468,6 +469,32 @@ pub fn fight_anya() -> CreateEmbed {
     embed
         .title("がんばるます")
         .image("https://alu-web-herokuapp-com.global.ssl.fastly.net/cropped_images/PrAvrZShntbW3GpRXkeHPWnPsfl1/c_1588632000517?auto=webp&format=jpg&width=1360");
+
+    embed
+}
+
+pub fn wara_anya() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("ﾌｯ...")
+        .image("https://anicai.jp/wp-content/uploads/2022/05/NoName_2022-5-15_0-18-53_No-00.jpg");
+
+    embed
+}
+
+pub fn punch_anya() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed.image("https://anicai.jp/wp-content/uploads/2022/05/1652538999761.gif");
+
+    embed
+}
+
+pub fn muka_anya() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed.image("https://blog-imgs-154.fc2.com/y/a/r/yarakan/1652537830049.jpg");
 
     embed
 }
