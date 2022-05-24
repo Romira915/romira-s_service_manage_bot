@@ -508,3 +508,13 @@ pub fn dontstop() -> CreateEmbed {
 
     embed
 }
+
+pub fn wakannnaippi() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("わ  わかんないっピ・・・")
+        .image("https://pbs.twimg.com/media/FMsA-9EaUAIkJG1?format=jpg&name=large");
+
+    embed
+}

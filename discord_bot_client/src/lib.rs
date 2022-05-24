@@ -9,8 +9,8 @@ use commands::{
         hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, konata, monhanneko,
         motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku, paxan, pita, punch_anya, safety, sake,
         soturon_owata, souhayarann, tearai, teio_tuntun, thesis_donot_end, tiyono_o_, today_ganba,
-        wakuwaku, wara_anya, what_buru, yada, yosi_inoti, yosiyosiyosi, KUSA, NAMEURARA_EMBEDS,
-        SONNEKINEKO_EMBEDS, TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
+        wakannnaippi, wakuwaku, wara_anya, what_buru, yada, yosi_inoti, yosiyosiyosi, KUSA,
+        NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
     },
     simple::*,
 };
@@ -651,6 +651,24 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(dontstop()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("わからない")
+            || content.contains("わかんない")
+            || content.contains("わからん")
+            || content.contains("わかんね")
+            || content.contains("分からない")
+            || content.contains("分かんない")
+            || content.contains("分からん")
+            || content.contains("分かんね")
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(wakannnaippi()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
