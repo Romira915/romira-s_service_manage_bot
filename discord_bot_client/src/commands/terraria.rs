@@ -1,16 +1,12 @@
-
-
 use std::time::Duration;
 
-use homeserver_receive_process::{CommandBuilder};
-
+use homeserver_receive_process::CommandBuilder;
 
 use serenity::framework::standard::macros::{command, group};
 use serenity::framework::standard::{Args, CommandResult};
 use serenity::http::CacheHttp;
 use serenity::model::prelude::*;
 use serenity::prelude::*;
-
 
 use crate::bot_config::ConfigContainer;
 

@@ -1,5 +1,3 @@
-
-
 use duct::cmd;
 use serenity::{
     client::Context,

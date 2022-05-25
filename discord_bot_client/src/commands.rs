@@ -1,7 +1,4 @@
-use serenity::{
-    builder::{CreateEmbed},
-    utils::Colour,
-};
+use serenity::{builder::CreateEmbed, utils::Colour};
 
 pub mod conversation;
 pub mod minecraft;

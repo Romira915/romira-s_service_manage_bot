@@ -7,12 +7,7 @@ use discord_bot_client::{
 };
 use log::error;
 use serenity::{
-    client::bridge::gateway::ShardManager,
-    framework::{
-        StandardFramework,
-    },
-    http::Http,
-    prelude::*,
+    client::bridge::gateway::ShardManager, framework::StandardFramework, http::Http, prelude::*,
 };
 use simplelog::{
     ColorChoice, CombinedLogger, Config, ConfigBuilder, LevelFilter, TermLogger, TerminalMode,
