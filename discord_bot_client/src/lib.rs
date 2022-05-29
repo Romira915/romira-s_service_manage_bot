@@ -445,6 +445,9 @@ impl EventHandler for Handler {
         }
 
         if content.contains("Hello Tenjyo")
+            || content.contains("Hello tenjyo")
+            || content.contains("Hello tenjo")
+            || content.contains("hello tenjyo")
             || content.contains("はろーてんじょう")
             || content.contains("ハロー")
         {
