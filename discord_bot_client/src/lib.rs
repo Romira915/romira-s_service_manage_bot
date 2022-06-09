@@ -6,11 +6,12 @@ use std::{collections::HashSet, time::Duration};
 use commands::{
     conversation::{
         ai_chan, akeome, chiyopanchi, dontstop, dousite, exactly, fight_anya, hadou, hamu,
-        hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, konata, monhanneko,
-        motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku, paxan, pita, punch_anya, safety, sake,
-        soturon_owata, souhayarann, tearai, teio_tuntun, thesis_donot_end, tiyono_o_, today_ganba,
-        wakannnaippi, wakuwaku, wara_anya, what_buru, yada, yosi_inoti, yosiyosiyosi, KUSA,
-        NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
+        hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, kakusensou, konata,
+        monhanneko, motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku, paxan, pita, punch_anya,
+        safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun, thesis_donot_end, tiyono_o_,
+        today_ganba, wakannnaippi, wakuwaku, wara_anya, what_buru, world_end, yada, yosi_inoti,
+        yosiyosiyosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS, WHAT_EMBEDS,
+        YOSI_EMBEDS,
     },
     simple::*,
 };
@@ -672,6 +673,29 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(wakannnaippi()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("かくせんそう") || content.contains("核") || content.contains("戦争")
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(kakusensou()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if (content.contains("世界") && content.contains("せかい"))
+            || (content.contains("終わ") && content.contains("おわ"))
+        {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(world_end()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

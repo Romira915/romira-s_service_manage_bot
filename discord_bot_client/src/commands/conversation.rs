@@ -518,3 +518,23 @@ pub fn wakannnaippi() -> CreateEmbed {
 
     embed
 }
+
+pub fn kakusensou() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("かくせんそう・・・！？")
+        .image("https://pbs.twimg.com/media/FT85tD2UcAEHwCJ?format=jpg&name=900x900");
+
+    embed
+}
+
+pub fn world_end() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("せかい  おわった・・・")
+        .image("https://alu-web-herokuapp-com.global.ssl.fastly.net/cropped_images/gK9DNcY4Spg4NFxDR5RecirdnxH2/c_1591013265489?auto=webp&format=jpg&width=680");
+
+    embed
+}
