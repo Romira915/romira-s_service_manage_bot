@@ -433,6 +433,7 @@ pub fn yosi_inoti() -> CreateEmbed {
     embed
 }
 
+// URL: HTTP ERROR 404
 pub fn yosiyosiyosi() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
 
@@ -535,6 +536,16 @@ pub fn world_end() -> CreateEmbed {
     embed
         .title("せかい  おわった・・・")
         .image("https://alu-web-herokuapp-com.global.ssl.fastly.net/cropped_images/gK9DNcY4Spg4NFxDR5RecirdnxH2/c_1591013265489?auto=webp&format=jpg&width=680");
+
+    embed
+}
+
+pub fn yosi_three() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("ヨシ！ヨシ！ヨシ！")
+        .image("https://objectstorage.ap-tokyo-1.oraclecloud.com/n/nr7eduszgfzb/b/image-bucket/o/bot%2F20220614_222930.JPG");
 
     embed
 }

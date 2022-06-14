@@ -10,8 +10,8 @@ use commands::{
         monhanneko, motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku, paxan, pita, punch_anya,
         safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun, thesis_donot_end, tiyono_o_,
         today_ganba, wakannnaippi, wakuwaku, wara_anya, what_buru, world_end, yada, yosi_inoti,
-        yosiyosiyosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS, WHAT_EMBEDS,
-        YOSI_EMBEDS,
+        yosi_three, yosiyosiyosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS,
+        WHAT_EMBEDS, YOSI_EMBEDS,
     },
     simple::*,
 };
@@ -581,7 +581,8 @@ impl EventHandler for Handler {
         {
             if let Err(why) = msg
                 .channel_id
-                .send_message(&ctx.http, |m| m.set_embed(yosiyosiyosi()))
+                // .send_message(&ctx.http, |m| m.set_embed(yosiyosiyosi()))
+                .send_message(&ctx.http, |m| m.set_embed(yosi_three()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
