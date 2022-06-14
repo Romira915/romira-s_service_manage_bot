@@ -93,7 +93,17 @@ impl EventHandler for Handler {
             }
         }
 
-        if (content.contains("ヨシ") || content.contains("ﾖｼ"))
+        if content.contains("ヨシヨシヨシ") || content.contains("ヨシ！ヨシ！ヨシ！")
+        {
+            if let Err(why) = msg
+                .channel_id
+                // .send_message(&ctx.http, |m| m.set_embed(yosiyosiyosi()))
+                .send_message(&ctx.http, |m| m.set_embed(yosi_three()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        } else if (content.contains("ヨシ") || content.contains("ﾖｼ"))
             && (content.contains("！") || content.contains("!"))
         {
             let mut rng = StdRng::from_rng(thread_rng()).unwrap();
@@ -571,18 +581,6 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(yosi_inoti()))
-                .await
-            {
-                error!("Error sending message: {:?}", why);
-            }
-        }
-
-        if content.contains("ヨシヨシヨシ") || content.contains("ヨシ！ヨシ！ヨシ！")
-        {
-            if let Err(why) = msg
-                .channel_id
-                // .send_message(&ctx.http, |m| m.set_embed(yosiyosiyosi()))
-                .send_message(&ctx.http, |m| m.set_embed(yosi_three()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
