@@ -152,9 +152,22 @@ impl EventHandler for Handler {
         }
 
         if content.contains("どうして") {
+            let mut rng = StdRng::from_rng(thread_rng()).unwrap();
+
+            let yosi_embeds_added_probability = {
+                let prob = vec![0.3, 0.7];
+                prob.into_iter()
+                    .zip(WHAT_EMBEDS)
+                    .collect::<Vec<(f64, fn() -> CreateEmbed)>>()
+            };
+            let embed = yosi_embeds_added_probability
+                .choose_weighted(&mut rng, |item| item.0)
+                .unwrap()
+                .1;
+
             if let Err(why) = msg
                 .channel_id
-                .send_message(&ctx.http, |m| m.set_embed(dousite()))
+                .send_message(&ctx.http, |m| m.set_embed(embed()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

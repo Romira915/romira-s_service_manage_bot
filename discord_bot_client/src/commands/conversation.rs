@@ -8,6 +8,7 @@ pub const NAMEURARA_EMBEDS: [fn() -> CreateEmbed; 2] = [tyuuname, urabetu];
 pub const TENJYO_EMBEDS: [fn() -> CreateEmbed; 2] = [tenjyo, hello_tenjyo];
 pub const YOSI_EMBEDS: [fn() -> CreateEmbed; 2] = [yosi, yosi_inoti];
 pub const WHAT_EMBEDS: [fn() -> CreateEmbed; 2] = [what, muka_anya];
+pub const DOUSITE_EMBEDS: [fn() -> CreateEmbed; 2] = [dousite, syami_dousite];
 
 pub fn www() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
@@ -546,6 +547,16 @@ pub fn yosi_three() -> CreateEmbed {
     embed
         .title("ヨシ！ヨシ！ヨシ！")
         .image("https://objectstorage.ap-tokyo-1.oraclecloud.com/n/nr7eduszgfzb/b/image-bucket/o/bot%2F20220614_222930.JPG");
+
+    embed
+}
+
+pub fn syami_dousite() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("どうして")
+        .image("https://img.anitubu.com/imgs/2022/06/10/dpbjpYipPpDUOog.jpg");
 
     embed
 }
