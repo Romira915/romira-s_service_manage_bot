@@ -10,8 +10,8 @@ use commands::{
         monhanneko, motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku, paxan, pita, punch_anya,
         safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun, thesis_donot_end, tiyono_o_,
         today_ganba, wakannnaippi, wakuwaku, wara_anya, what_buru, world_end, yada, yosi_inoti,
-        yosi_three, yosiyosiyosi, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS,
-        WHAT_EMBEDS, YOSI_EMBEDS,
+        yosi_three, yosiyosiyosi, DOUSITE_EMBEDS, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS,
+        TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
     },
     simple::*,
 };
@@ -157,7 +157,7 @@ impl EventHandler for Handler {
             let yosi_embeds_added_probability = {
                 let prob = vec![0.3, 0.7];
                 prob.into_iter()
-                    .zip(WHAT_EMBEDS)
+                    .zip(DOUSITE_EMBEDS)
                     .collect::<Vec<(f64, fn() -> CreateEmbed)>>()
             };
             let embed = yosi_embeds_added_probability
