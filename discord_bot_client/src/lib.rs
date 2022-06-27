@@ -5,13 +5,13 @@ use std::{collections::HashSet, time::Duration};
 
 use commands::{
     conversation::{
-        ai_chan, akeome, bay_kyan, chiyopanchi, dontstop, dousite, exactly, fight_anya, hadou,
-        hamu, hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, kakusensou, konata,
+        ai_chan, akeome, buy_kyan, chiyopanchi, dontstop, exactly, fight_anya, hadou, hamu,
+        hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, kakusensou, konata,
         monhanneko, motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku, paxan, pita, punch_anya,
         safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun, thesis_donot_end, tiyono_o_,
         today_ganba, wakannnaippi, wakuwaku, wara_anya, what_buru, world_end, yada, yosi_inoti,
-        yosi_three, yosiyosiyosi, DOUSITE_EMBEDS, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS,
-        TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
+        yosi_three, DOUSITE_EMBEDS, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS,
+        WHAT_EMBEDS, YOSI_EMBEDS,
     },
     simple::*,
 };
@@ -717,7 +717,7 @@ impl EventHandler for Handler {
         if content.contains("買っちった") || content.contains("かっちった") {
             if let Err(why) = msg
                 .channel_id
-                .send_message(&ctx.http, |m| m.set_embed(bay_kyan()))
+                .send_message(&ctx.http, |m| m.set_embed(buy_kyan()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
