@@ -5,8 +5,8 @@ use std::{collections::HashSet, time::Duration};
 
 use commands::{
     conversation::{
-        ai_chan, akeome, chiyopanchi, dontstop, dousite, exactly, fight_anya, hadou, hamu,
-        hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, kakusensou, konata,
+        ai_chan, akeome, bay_kyan, chiyopanchi, dontstop, dousite, exactly, fight_anya, hadou,
+        hamu, hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, kakusensou, konata,
         monhanneko, motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku, paxan, pita, punch_anya,
         safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun, thesis_donot_end, tiyono_o_,
         today_ganba, wakannnaippi, wakuwaku, wara_anya, what_buru, world_end, yada, yosi_inoti,
@@ -708,6 +708,16 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(world_end()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("買っちった") || content.contains("かっちった") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(bay_kyan()))
                 .await
             {
                 error!("Error sending message: {:?}", why);

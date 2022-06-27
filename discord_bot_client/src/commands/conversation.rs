@@ -560,3 +560,13 @@ pub fn syami_dousite() -> CreateEmbed {
 
     embed
 }
+
+pub fn bay_kyan() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed.title("買っちった").image(
+        "https://cdn-ak.f.st-hatena.com/images/fotolife/r/repisie/20180720/20180720230851.jpg",
+    );
+
+    embed
+}
