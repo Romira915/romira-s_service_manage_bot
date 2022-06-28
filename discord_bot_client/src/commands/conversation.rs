@@ -561,7 +561,7 @@ pub fn syami_dousite() -> CreateEmbed {
     embed
 }
 
-pub fn bay_kyan() -> CreateEmbed {
+pub fn buy_kyan() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
 
     embed.title("買っちった").image(
