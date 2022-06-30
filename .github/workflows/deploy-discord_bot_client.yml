@@ -24,44 +24,44 @@ jobs:
   test:
     runs-on: ubuntu-20.04
     steps:
-        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-        - uses: actions/checkout@v3
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
 
-        - uses: actions/cache@v3
-          id: cache-cargo
-          with:
-            path: |
-              ~/.cargo/bin/
-              ~/.cargo/registry/index/
-              ~/.cargo/registry/cache/
-              ~/.cargo/git/db/
-              ./**/target
-            key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - uses: actions/cache@v3
+        id: cache-cargo
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            ./**/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-        - uses: actions-rs/toolchain@v1
-          with:
-            toolchain: stable
-            target: x86_64-unknown-linux-gnu
-            override: true
-            components: rustfmt, clippy
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+          override: true
+          components: rustfmt, clippy
 
-        - name: cargo fmt
-          uses: actions-rs/cargo@v1
-          with:
-            command: fmt
-            args: --all -p discord_bot_client -- --check
+      - name: cargo fmt
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -p discord_bot_client -- --check
 
-        - name: cargo clippy
-          uses: actions-rs/cargo@v1
-          with:
-            command: clippy
-            args: -p discord_bot_client
+      - name: cargo clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -p discord_bot_client
 
-        - name: cargo test
-          uses: actions-rs/cargo@v1
-          with:
-            command: test
-            args: --release -p discord_bot_client --all-features
+      - name: cargo test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --release -p discord_bot_client --all-features
 
   build:
     if: ${{ github.event_name == 'push' }}
