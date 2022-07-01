@@ -6,7 +6,9 @@ version = "0.1.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = "3.3.2"
+actix-files = "0.6.0"
+actix-web = "4.1.0"
+
 derive_builder = "0.10.2"
 duct = "0.13.5"
 getset = "0.1.1"

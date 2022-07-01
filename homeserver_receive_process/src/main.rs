@@ -1,6 +1,7 @@
 use std::{env, fs::File, io::Read};
 
-use actix_web::{post, web, App, HttpResponse, HttpServer, Responder};
+use actix_files::Files;
+use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use duct::cmd;
 use homeserver_receive_process::{home_server_config::Config, Command};
 
@@ -71,12 +72,18 @@ async fn post_terraria(command: web::Json<Command>) -> impl Responder {
     exec_systemctl(command, "terraria-server.service").await
 }
 
+#[get("/")]
+async fn index() -> impl Responder {
+    HttpResponse::Ok().body("Ok")
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let exe_dir = env::current_exe().unwrap().parent().unwrap().to_path_buf();
     let config: Config = {
-        let mut exe_dir = env::current_exe().unwrap().parent().unwrap().to_path_buf();
-        exe_dir.push(CONFIG_PATH);
-        let mut file = File::open(exe_dir).expect("file not found");
+        let mut config_full_path = exe_dir.clone();
+        config_full_path.push(CONFIG_PATH);
+        let mut file = File::open(config_full_path).expect("file not found");
 
         let mut toml_str = String::new();
         file.read_to_string(&mut toml_str).unwrap();
@@ -84,11 +91,15 @@ async fn main() -> std::io::Result<()> {
         toml::from_str(&toml_str).expect("Fall to toml parser")
     };
 
-    HttpServer::new(|| {
+    HttpServer::new(move || {
+        let mut well_known_path = exe_dir.clone();
+        well_known_path.push(".well-known");
         App::new()
+            .service(index)
             .service(post_minecraft)
             .service(post_sdtd)
             .service(post_terraria)
+            .service(Files::new("/.well-known", well_known_path.as_path()))
     })
     .bind(format!(
         "{}:{}",

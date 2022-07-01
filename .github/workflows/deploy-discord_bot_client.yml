@@ -1,0 +1,178 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy and Release discord_bot_client
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [main]
+    paths:
+      - "discord_bot_client/**"
+
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - "discord_bot_client/**"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        id: cache-cargo
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            ./**/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+          override: true
+          components: rustfmt, clippy
+
+      - name: cargo fmt
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -p discord_bot_client -- --check
+
+      - name: cargo clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -p discord_bot_client
+
+      - name: cargo test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --release -p discord_bot_client --all-features
+
+  build:
+    if: ${{ github.event_name == 'push' }}
+    needs: [test]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+
+    outputs:
+      new_tag: ${{ steps.tag_version.outputs.new_tag }}
+      changelog: ${{ steps.tag_version.outputs.changelog }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Bump version and push tag
+        uses: mathieudutour/github-tag-action@v6.0
+        id: tag_version
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+
+      - name: Restore mtime
+        run: python ./git-restore-mtime.py
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            ./**/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+          components: rustfmt, clippy
+          override: true
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release -p discord_bot_client --all-features --target x86_64-unknown-linux-gnu
+      - uses: actions/upload-artifact@v2
+        with:
+          name: binary_artifact
+          path: |
+            target/x86_64-unknown-linux-gnu/release/discord_bot_client
+
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: binary_artifact
+          path: ./
+
+      - name: make release package
+        run: |
+          mkdir -p ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}/.config
+          echo '${{ secrets.BOT_CONFIG }}' > ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}/.config/bot_config.toml
+          chmod 755 discord_bot_client
+          zip romira-s_service_manage_bot_release discord_bot_client
+          mv discord_bot_client ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}
+
+      - uses: burnett01/rsync-deployments@5.1
+        name: deploy discord bot
+        with:
+          switches: -avzr --delete
+          path: ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}
+          remote_path: ${{ secrets.BOT_SERVER_PATH }}
+          remote_host: ${{ secrets.BOT_SERVER_HOST }}
+          remote_port: ${{ secrets.BOT_SERVER_PORT }}
+          remote_user: ${{ secrets.BOT_SERVER_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Restart Bot
+        uses: fifsky/ssh-action@v0.0.6
+        with:
+          host: ${{ secrets.BOT_SERVER_HOST }}
+          port: ${{ secrets.BOT_SERVER_PORT }}
+          user: ${{ secrets.BOT_SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command: sudo systemctl restart ${{ secrets.BOT_SERVER_SERVICE_NAME }}
+
+      - uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.Build.outputs.new_tag }}
+          release_name: Release ${{ needs.Build.outputs.new_tag }}
+          draft: false
+          prerelease: false
+          body: ${{ needs.Build.outputs.changelog }}
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./romira-s_service_manage_bot_release.zip
+          asset_name: discord_bot_client.zip
+          asset_content_type: application/zip
