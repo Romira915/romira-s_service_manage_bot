@@ -19,3 +19,4 @@ target/
 .config/
 .env
 *.log
+.tmp/
