@@ -1,6 +1,6 @@
 use std::{env, fs::File, io::Read};
 
-use actix_web::{post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use duct::cmd;
 use homeserver_receive_process::{home_server_config::Config, Command};
 
@@ -71,6 +71,11 @@ async fn post_terraria(command: web::Json<Command>) -> impl Responder {
     exec_systemctl(command, "terraria-server.service").await
 }
 
+#[get("/")]
+async fn index() -> impl Responder {
+    HttpResponse::Ok().body("Ok")
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let config: Config = {
@@ -86,6 +91,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
+            .service(index)
             .service(post_minecraft)
             .service(post_sdtd)
             .service(post_terraria)
