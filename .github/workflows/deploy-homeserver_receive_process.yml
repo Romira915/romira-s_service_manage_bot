@@ -127,7 +127,7 @@ jobs:
       - name: make release package
         run: |
           mkdir -p ${{ secrets.HOMESERVER_RECEIVE_PROCESS_DIRNAME }}/.config
-          echo '${{ secrets.HOME_SERVER_CONFIG }}' > ${{ secrets.HOMESERVER_RECEIVE_PROCESS_DIRNAME }}/.config/bot_config.toml
+          echo '${{ secrets.HOME_SERVER_CONFIG }}' > ${{ secrets.HOMESERVER_RECEIVE_PROCESS_DIRNAME }}/.config/home_server_config.toml
           chmod 755 homeserver_receive_process
           zip romira-s_service_manage_bot_release homeserver_receive_process
           mv homeserver_receive_process ${{ secrets.HOMESERVER_RECEIVE_PROCESS_DIRNAME }}
