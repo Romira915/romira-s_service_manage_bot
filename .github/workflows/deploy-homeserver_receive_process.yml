@@ -133,7 +133,7 @@ jobs:
       - uses: burnett01/rsync-deployments@5.1
         name: deploy discord bot
         with:
-          switches: -avzr --delete
+          switches: -avzr --delete --rsync-path='sudo rsync'
           path: ${{ secrets.HOMESERVER_RECEIVE_PROCESS_DIRNAME }}
           remote_path: ${{ secrets.HOME_SERVER_PATH }}
           remote_host: ${{ secrets.HOME_SERVER_HOST }}
