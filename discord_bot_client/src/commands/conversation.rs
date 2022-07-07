@@ -574,7 +574,7 @@ pub fn buy_kyan() -> CreateEmbed {
 pub fn lose_syamiko() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
 
-    embed.image("https://ameblo.jp/fuiba-railway/image-12685433397-14969553083.html");
+    embed.image("https://stat.ameba.jp/user_images/20210709/15/fuiba-railway/15/31/g/o0600033814969553083.gif?caw=1125");
 
     embed
 }
