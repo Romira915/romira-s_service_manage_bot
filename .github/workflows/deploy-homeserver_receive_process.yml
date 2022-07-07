@@ -110,6 +110,7 @@ jobs:
         with:
           command: build
           args: --release -p homeserver_receive_process --all-features --target x86_64-unknown-linux-gnu
+
       - uses: actions/upload-artifact@v2
         with:
           name: binary_artifact
@@ -124,6 +125,7 @@ jobs:
         with:
           name: binary_artifact
           path: ./
+          
       - name: make release package
         run: |
           mkdir -p ${{ secrets.HOMESERVER_RECEIVE_PROCESS_DIRNAME }}/.config
@@ -131,6 +133,7 @@ jobs:
           chmod 755 homeserver_receive_process
           zip romira-s_service_manage_bot_release homeserver_receive_process
           mv homeserver_receive_process ${{ secrets.HOMESERVER_RECEIVE_PROCESS_DIRNAME }}
+
       - uses: burnett01/rsync-deployments@5.1
         name: deploy discord bot
         with:
@@ -141,8 +144,8 @@ jobs:
           remote_port: ${{ secrets.HOME_SERVER_PORT }}
           remote_user: ${{ secrets.HOME_SERVER_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
-
           
+      # セキュリティ的に良くない動作をしているaction．別のactionに変えるべき
       - name: Restart Bot
         uses: fifsky/ssh-action@v0.0.6
         with:
