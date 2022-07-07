@@ -72,7 +72,7 @@ async fn post_terraria(command: web::Json<Command>) -> impl Responder {
     exec_systemctl(command, "terraria-server.service").await
 }
 
-#[get("/")]
+#[get("/test")]
 async fn index() -> impl Responder {
     HttpResponse::Ok().body("Ok")
 }
