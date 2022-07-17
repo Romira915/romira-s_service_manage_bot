@@ -578,3 +578,11 @@ pub fn lose_syamiko() -> CreateEmbed {
 
     embed
 }
+
+pub fn meat_syamiko() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed.image("https://tn.smilevideo.jp/smile?i=40291969.34000830.M");
+
+    embed
+}

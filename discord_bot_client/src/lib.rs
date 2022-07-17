@@ -7,8 +7,8 @@ use commands::{
     conversation::{
         ai_chan, akeome, buy_kyan, chiyopanchi, dontstop, exactly, fight_anya, hadou, hamu,
         hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, kakusensou, konata,
-        lose_syamiko, monhanneko, motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku, paxan, pita,
-        punch_anya, safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun,
+        lose_syamiko, meat_syamiko, monhanneko, motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku,
+        paxan, pita, punch_anya, safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun,
         thesis_donot_end, tiyono_o_, today_ganba, wakannnaippi, wakuwaku, wara_anya, what_buru,
         world_end, yada, yosi_inoti, yosi_three, DOUSITE_EMBEDS, KUSA, NAMEURARA_EMBEDS,
         SONNEKINEKO_EMBEDS, TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
@@ -728,6 +728,16 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(lose_syamiko()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("焼肉") || content.contains("バァァーン") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(meat_syamiko()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
