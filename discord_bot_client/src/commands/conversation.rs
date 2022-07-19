@@ -45,7 +45,7 @@ pub fn dousite() -> CreateEmbed {
 pub fn ai_chan() -> CreateEmbed {
     let mut embed = CreateEmbed::default();
     embed
-        .title("よくわかったね\n君は今日からヨシ！")
+        .title("君は今日からヨシ！")
         .image("https://matome.hacker-hacker.com/wp-content/uploads/2020/05/genba-1.gif");
 
     embed

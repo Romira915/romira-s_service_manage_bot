@@ -175,7 +175,10 @@ impl EventHandler for Handler {
         }
 
         // Ai chan reply
-        if content.eq("あいちゃん") || content.eq("Aiちゃん") {
+        if content.eq("あいちゃん")
+            || content.eq("Aiちゃん")
+            || content.contains("あいちゃんが静かでヨシ")
+        {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(ai_chan()))
