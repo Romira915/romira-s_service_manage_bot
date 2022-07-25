@@ -745,6 +745,7 @@ impl EventHandler for Handler {
         }
 
         if content.contains("さかな")
+            || content.contains("魚")
             || content.contains("🐟")
             || content.contains("🎣")
             || content.contains("🐠")
