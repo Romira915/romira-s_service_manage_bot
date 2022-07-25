@@ -586,3 +586,13 @@ pub fn meat_syamiko() -> CreateEmbed {
 
     embed
 }
+
+pub fn fish_takina() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title(":fish:")
+        .image("https://anicai.jp/wp-content/uploads/2022/07/1658588412827532.gif");
+
+    embed
+}
