@@ -10,8 +10,8 @@ use commands::{
         lose_syamiko, meat_syamiko, monhanneko, motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku,
         paxan, pita, punch_anya, safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun,
         thesis_donot_end, tiyono_o_, today_ganba, wakannnaippi, wakuwaku, wara_anya, what_buru,
-        world_end, yada, yosi_inoti, yosi_three, DOUSITE_EMBEDS, KUSA, NAMEURARA_EMBEDS,
-        SONNEKINEKO_EMBEDS, TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
+        world_end, yada, yosi_inoti, yosi_three, yosiyosiyosi, DOUSITE_EMBEDS, KUSA,
+        NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
     },
     simple::*,
 };
@@ -753,6 +753,16 @@ impl EventHandler for Handler {
             if let Err(why) = msg
                 .channel_id
                 .send_message(&ctx.http, |m| m.set_embed(fish_takina()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        }
+
+        if content.contains("百裂ヨシ") {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(yosiyosiyosi()))
                 .await
             {
                 error!("Error sending message: {:?}", why);
