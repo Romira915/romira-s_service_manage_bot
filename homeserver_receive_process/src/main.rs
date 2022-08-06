@@ -104,6 +104,7 @@ async fn main() -> std::io::Result<()> {
             .service(post_minecraft)
             .service(post_sdtd)
             .service(post_terraria)
+            .service(post_ark)
             .service(Files::new("/.well-known", well_known_path.as_path()))
     })
     .bind(format!(
