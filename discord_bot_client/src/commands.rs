@@ -1,5 +1,6 @@
 use serenity::{builder::CreateEmbed, utils::Colour};
 
+pub mod ark;
 pub mod conversation;
 pub mod minecraft;
 pub mod sdtd;
