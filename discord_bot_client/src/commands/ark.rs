@@ -70,7 +70,7 @@ impl Ark {
 
                 match command {
                     SystemctlCommand::Start | SystemctlCommand::Restart => {
-                        ctx.set_activity(Activity::playing("Ark")).await
+                        ctx.set_activity(Activity::playing("ARK")).await
                     }
                     SystemctlCommand::Stop => ctx.reset_presence().await,
                     _ => (),
@@ -92,7 +92,7 @@ impl Ark {
                                     .gameinfo();
                                 if let Some(game_info) = game_info {
                                     e.field(
-                                        "[Ark pass info]",
+                                        "[ARK pass info]",
                                         game_info
                                             .sdtd_password()
                                             .as_ref()
