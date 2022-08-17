@@ -13,7 +13,7 @@ use crate::bot_config::ConfigContainer;
 use super::minecraft::SystemctlCommand;
 use super::EmbedMessageBuilder;
 
-const REQUEST_TIMEOUT: u64 = 60;
+const REQUEST_TIMEOUT: u64 = 30;
 
 #[group]
 #[commands(start, status, stop, restart)]
