@@ -1,4 +1,4 @@
-use std::{env, fs::File, io::Read};
+use std::{env, fs::File, io::Read, time::Duration};
 
 use actix_files::Files;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
@@ -114,6 +114,7 @@ async fn main() -> std::io::Result<()> {
             .service(post_ark)
             .service(Files::new("/.well-known", well_known_path.as_path()))
     })
+    .client_request_timeout(Duration::from_millis(30000))
     .bind(format!(
         "{}:{}",
         config.address().home_server_bind_ip(),
