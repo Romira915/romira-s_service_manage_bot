@@ -115,6 +115,7 @@ async fn main() -> std::io::Result<()> {
             .service(Files::new("/.well-known", well_known_path.as_path()))
     })
     .client_request_timeout(Duration::from_millis(30000))
+    .client_disconnect_timeout(Duration::from_millis(30000))
     .bind(format!(
         "{}:{}",
         config.address().home_server_bind_ip(),
