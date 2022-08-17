@@ -595,7 +595,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serenity",
- "simplelog",
+ "simplelog 0.10.2",
  "tokio",
  "toml",
 ]
@@ -828,8 +828,10 @@ dependencies = [
  "derive_builder",
  "duct",
  "getset",
+ "log",
  "serde",
  "serde_json",
+ "simplelog 0.12.0",
  "toml",
 ]
 
@@ -1051,9 +1053,9 @@ dependencies = [
 
 [[package]]
 name = "log"
-version = "0.4.14"
+version = "0.4.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "51b9bbe6c47d51fc3e1a9b945965946b4c44142ab8792c50835a980d362c2710"
+checksum = "abb12e687cfb44aa40f41fc3978ef76448f9b6038cad6aef4259d3c095a2382e"
 dependencies = [
  "cfg-if",
 ]
@@ -1782,6 +1784,17 @@ dependencies = [
  "chrono",
  "log",
  "termcolor",
+]
+
+[[package]]
+name = "simplelog"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "48dfff04aade74dd495b007c831cd6f4e0cee19c344dd9dc0884c0289b70a786"
+dependencies = [
+ "log",
+ "termcolor",
+ "time 0.3.11",
 ]
 
 [[package]]

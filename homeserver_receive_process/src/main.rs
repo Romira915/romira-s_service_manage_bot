@@ -26,6 +26,7 @@ async fn exec_systemctl(command: web::Json<Command>, service_name: &str) -> impl
     {
         Ok(output) => {
             let exit_code = output.status;
+            log::info!("exit code {}", exit_code);
 
             if exit_code.success() {
                 let content = if command.request() == "status" {
@@ -59,21 +60,25 @@ async fn exec_systemctl(command: web::Json<Command>, service_name: &str) -> impl
 
 #[post("/minecraft")]
 async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
+    log::info!("post minecraft");
     exec_systemctl(command, "minecraft-server-mgpf.service").await
 }
 
 #[post("/sdtd")]
 async fn post_sdtd(command: web::Json<Command>) -> impl Responder {
+    log::info!("post sdtd");
     exec_systemctl(command, "sdtd-server.service").await
 }
 
 #[post("/terraria")]
 async fn post_terraria(command: web::Json<Command>) -> impl Responder {
+    log::info!("post terraria");
     exec_systemctl(command, "terraria-server.service").await
 }
 
 #[post("/ark")]
 async fn post_ark(command: web::Json<Command>) -> impl Responder {
+    log::info!("post ark");
     exec_systemctl(command, "ark-server.service").await
 }
 
