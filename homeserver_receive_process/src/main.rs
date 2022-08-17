@@ -3,7 +3,7 @@ use std::{env, fs::File, io::Read};
 use actix_files::Files;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use duct::cmd;
-use homeserver_receive_process::{home_server_config::Config, Command};
+use homeserver_receive_process::{home_server_config::Config, init_logger, Command};
 
 const CONFIG_PATH: &'static str = ".config/home_server_config.toml";
 
@@ -89,7 +89,9 @@ async fn index() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    init_logger();
     let exe_dir = env::current_exe().unwrap().parent().unwrap().to_path_buf();
+
     let config: Config = {
         let mut config_full_path = exe_dir.clone();
         config_full_path.push(CONFIG_PATH);
