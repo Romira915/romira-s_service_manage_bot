@@ -1,0 +1,18 @@
+[address]
+home_server_ip = ""
+home_server_macaddress = ""
+home_server_port = 0
+home_server_wol_port = 0
+valheim_confirmation_port = 0
+
+[discord]
+administrator = []
+prefix = "~"
+token = ""
+
+[gameinfo]
+sdtd_password = ""
+
+[log]
+term_log = "debug"
+write_log = "off"
