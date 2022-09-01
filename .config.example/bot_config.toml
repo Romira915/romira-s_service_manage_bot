@@ -1,17 +1,17 @@
 [address]
-home_server_ip = ""
-home_server_macaddress = ""
-home_server_port = 0
-home_server_wol_port = 0
-valheim_confirmation_port = 0
+home_server_ip = "<Home Server Ip>"
+home_server_macaddress = "<MACADDRESS>"
+home_server_port = "<Port> : int"
+home_server_wol_port = "<Port> : int"
+valheim_confirmation_port = "<Port> : int"
 
 [discord]
-administrator = []
+administrator = ["<ADMIN ID> : int"]
 prefix = "~"
-token = ""
+token = "<Discord token>"
 
 [gameinfo]
-sdtd_password = ""
+sdtd_password = "<pass>"
 
 [log]
 term_log = "debug"
