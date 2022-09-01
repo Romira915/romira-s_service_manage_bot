@@ -6,12 +6,13 @@ use std::{collections::HashSet, time::Duration};
 use commands::{
     conversation::{
         ai_chan, akeome, buy_kyan, chiyopanchi, dontstop, exactly, fight_anya, fish_takina, hadou,
-        hamu, hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, kakusensou, konata,
-        lose_syamiko, meat_syamiko, monhanneko, motidesuwa, motyo, mun, nannnoimiga, otu, pakupaku,
-        paxan, pita, punch_anya, safety, sake, soturon_owata, souhayarann, tearai, teio_tuntun,
-        thesis_donot_end, tiyono_o_, today_ganba, wakannnaippi, wakuwaku, wara_anya, what_buru,
-        world_end, yada, yosi_inoti, yosi_three, yosiyosiyosi, DOUSITE_EMBEDS, KUSA,
-        NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS, WHAT_EMBEDS, YOSI_EMBEDS,
+        hamu, hello_anya, hello_tenjyo, hopak, hugu, ikare, ikare_one, imwin, jasin_yosi,
+        kakusensou, konata, lose_syamiko, meat_syamiko, monhanneko, motidesuwa, motyo, mun,
+        nannnoimiga, otu, pakupaku, paxan, pita, punch_anya, safety, sake, soturon_owata,
+        souhayarann, tearai, teio_tuntun, thesis_donot_end, tiyono_o_, today_ganba, wakannnaippi,
+        wakuwaku, wara_anya, what_buru, world_end, yada, yosi_inoti, yosi_three, yosiyosiyosi,
+        DOUSITE_EMBEDS, KUSA, NAMEURARA_EMBEDS, SONNEKINEKO_EMBEDS, TENJYO_EMBEDS, WHAT_EMBEDS,
+        YOSI_EMBEDS,
     },
     simple::*,
 };
@@ -93,7 +94,15 @@ impl EventHandler for Handler {
             }
         }
 
-        if content.contains("ヨシヨシヨシ") || content.contains("ヨシ！ヨシ！ヨシ！")
+        if content == "ヨシ！ですの" || content == "ヨシですの" {
+            if let Err(why) = msg
+                .channel_id
+                .send_message(&ctx.http, |m| m.set_embed(jasin_yosi()))
+                .await
+            {
+                error!("Error sending message: {:?}", why);
+            }
+        } else if content.contains("ヨシヨシヨシ") || content.contains("ヨシ！ヨシ！ヨシ！")
         {
             if let Err(why) = msg
                 .channel_id
@@ -109,7 +118,7 @@ impl EventHandler for Handler {
             let mut rng = StdRng::from_rng(thread_rng()).unwrap();
 
             let yosi_embeds_added_probability = {
-                let prob = vec![0.7, 0.3];
+                let prob = vec![0.5, 0.2, 0.3];
                 prob.into_iter()
                     .zip(YOSI_EMBEDS)
                     .collect::<Vec<(f64, fn() -> CreateEmbed)>>()

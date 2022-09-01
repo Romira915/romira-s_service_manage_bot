@@ -6,7 +6,7 @@ pub const SONNEKINEKO_EMBEDS: [fn() -> CreateEmbed; 4] =
     [sonnekineko0, sonnekineko1, sonnekineko2, sonnekineko3];
 pub const NAMEURARA_EMBEDS: [fn() -> CreateEmbed; 2] = [tyuuname, urabetu];
 pub const TENJYO_EMBEDS: [fn() -> CreateEmbed; 2] = [tenjyo, hello_tenjyo];
-pub const YOSI_EMBEDS: [fn() -> CreateEmbed; 2] = [yosi, yosi_inoti];
+pub const YOSI_EMBEDS: [fn() -> CreateEmbed; 3] = [yosi, yosi_inoti, jasin_yosi];
 pub const WHAT_EMBEDS: [fn() -> CreateEmbed; 2] = [what, muka_anya];
 pub const DOUSITE_EMBEDS: [fn() -> CreateEmbed; 2] = [dousite, syami_dousite];
 
@@ -593,6 +593,16 @@ pub fn fish_takina() -> CreateEmbed {
     embed
         .title(":fish:")
         .image("https://anicai.jp/wp-content/uploads/2022/07/1658588412827532.gif");
+
+    embed
+}
+
+pub fn jasin_yosi() -> CreateEmbed {
+    let mut embed = CreateEmbed::default();
+
+    embed
+        .title("ヨシ！ですの")
+        .image("https://pbs.twimg.com/media/FbbOUCoagAE0Yt3?format=jpg&name=large");
 
     embed
 }
