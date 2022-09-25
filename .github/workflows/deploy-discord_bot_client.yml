@@ -121,6 +121,7 @@ jobs:
           name: binary_artifact
           path: |
             target/aarch64-unknown-linux-gnu/release/discord_bot_client
+            colab-cli
 
   deploy:
     needs: [build]
@@ -139,6 +140,7 @@ jobs:
           chmod 755 discord_bot_client
           zip romira-s_service_manage_bot_release discord_bot_client
           mv discord_bot_client ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}
+          mv colab-cli ${{ secrets.DISCORD_BOT_CLIENT_DIRNAME }}
 
       - uses: burnett01/rsync-deployments@5.1
         name: deploy discord bot
