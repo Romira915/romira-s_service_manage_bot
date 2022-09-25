@@ -3,7 +3,7 @@ extern crate discord_bot_client;
 use discord_bot_client::{
     bot_config::{Config as BotConfig, ConfigContainer},
     commands::{
-        activity::ACTIVITYCOMMAND_GROUP, ark::ARK_GROUP, minecraft::*, sdtd::*, terraria::*,
+        activity::ACTIVITYCOMMAND_GROUP, ai::*, ark::ARK_GROUP, minecraft::*, sdtd::*, terraria::*,
         valheim::*,
     },
     *,
@@ -94,7 +94,8 @@ async fn main() {
         .group(&SDTD_GROUP)
         .group(&TERRARIA_GROUP)
         .group(&ARK_GROUP)
-        .group(&ACTIVITYCOMMAND_GROUP);
+        .group(&ACTIVITYCOMMAND_GROUP)
+        .group(&AI_GROUP);
 
     let mut client = Client::builder(&token)
         .framework(framework)
