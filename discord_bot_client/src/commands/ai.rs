@@ -4,12 +4,16 @@ use std::time::Duration;
 use duct::cmd;
 use nix::unistd::{self, ForkResult};
 use serde_json::json;
+use serde_json::Value;
 use serenity::framework::standard::macros::group;
 use serenity::framework::standard::{macros::command, Args, CommandResult};
 use serenity::http::CacheHttp;
 use serenity::model::prelude::*;
 use serenity::prelude::Context;
 use serenity::prelude::*;
+
+const PROMPT_ENDPOINT: &'static str =
+    "https://k5vi72fcdo5u6gjqmuaqu5yoba0draxm.lambda-url.ap-northeast-1.on.aws/prompt";
 
 #[group]
 #[commands(draw)]
@@ -35,8 +39,20 @@ pub async fn draw(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
     }
 
     let client = reqwest::Client::new();
+
+    let prompt: Value = client.get(PROMPT_ENDPOINT).send().await?.json().await?;
+    if prompt["prompt"] != "~completed" {
+        msg.channel_id
+            .send_message(&ctx.http, |m| {
+                m.embed(|e| e.title("前回の絵をまだ描いているが？"))
+            })
+            .await?;
+
+        return Ok(());
+    }
+
     client
-        .post("https://k5vi72fcdo5u6gjqmuaqu5yoba0draxm.lambda-url.ap-northeast-1.on.aws/prompt")
+        .post(PROMPT_ENDPOINT)
         .json(&json!({ "prompt": arg }))
         .send()
         .await?;
