@@ -121,6 +121,11 @@ jobs:
           name: binary_artifact
           path: |
             target/aarch64-unknown-linux-gnu/release/discord_bot_client
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: python_artifact
+          path: |
             colab-cli
 
   deploy:
@@ -131,6 +136,11 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: binary_artifact
+          path: ./
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: python_artifact
           path: ./
 
       - name: make release package

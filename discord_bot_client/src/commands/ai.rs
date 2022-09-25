@@ -68,7 +68,7 @@ pub async fn draw(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
     }
 
     msg.channel_id
-        .send_message(&ctx.http, |m| m.content("絵を書くよ～(o・∇・o)"))
+        .send_message(&ctx.http, |m| m.embed(|e| e.title("絵を書くよ～(o・∇・o)")))
         .await?;
 
     Ok(())
