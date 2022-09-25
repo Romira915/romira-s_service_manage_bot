@@ -126,7 +126,7 @@ jobs:
         with:
           name: python_artifact
           path: |
-            colab-cli
+            colab-cli/main.py
 
   deploy:
     needs: [build]
@@ -141,7 +141,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: python_artifact
-          path: ./
+          path: ./colab-cli
 
       - name: make release package
         run: |

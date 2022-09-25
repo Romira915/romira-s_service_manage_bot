@@ -52,7 +52,6 @@ async fn main() {
     // if let Err(_) = env::var("RUST_LOG") {
     //     env::set_var("RUST_LOG", "info");
     // }
-    //
 
     let config: BotConfig = {
         let mut exe_dir = if cfg!(debug_assertions) {
