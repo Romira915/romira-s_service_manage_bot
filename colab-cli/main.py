@@ -11,7 +11,8 @@ options.headless = True
 options.add_argument('--no-sandbox')
 profile = webdriver.FirefoxProfile(
     "/home/ubuntu/.mozilla/firefox/k8q7oj2s.colab-cli")
-driver = webdriver.Firefox(options=options, firefox_profile=profile)
+driver = webdriver.Firefox(options=options, firefox_profile=profile,
+                           executable_path="/home/ubuntu/.cargo/bin/geckodriver")
 
 driver.get(
     "https://colab.research.google.com/drive/16k_Z9PrVuxzOPi-R_5sIhgNYi227_wfH")
