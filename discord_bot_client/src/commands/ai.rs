@@ -52,11 +52,11 @@ pub async fn draw(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
                 unistd::getppid()
             );
             unistd::execv(
-                CString::new("/home/romira/miniconda3/envs/browser/bin/python")
+                CString::new("/home/ubuntu/.miniconda3/envs/colab-cli/bin/python")
                     .unwrap()
                     .as_c_str(),
                 &[
-                    CString::new("/home/romira/miniconda3/envs/browser/bin/python")
+                    CString::new("/home/ubuntu/.miniconda3/envs/colab-cli/bin/python")
                         .unwrap()
                         .as_c_str(),
                     CString::new("./colab-cli/main.py").unwrap().as_c_str(),

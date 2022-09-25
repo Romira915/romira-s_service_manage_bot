@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
+print("[INFO] run colab-cli")
 options = webdriver.FirefoxOptions()
 options.headless = True
 options.add_argument('--no-sandbox')
