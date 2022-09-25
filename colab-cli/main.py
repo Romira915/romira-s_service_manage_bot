@@ -26,7 +26,7 @@ all_exe.click()
 time.sleep(1)
 all_exe = driver.find_element(by=By.CSS_SELECTOR, value="#\:1y")
 all_exe.click()
-time.sleep(10)
+time.sleep(240)
 driver.save_screenshot("exe.png")
 
 driver.quit()
