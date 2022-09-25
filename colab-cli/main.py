@@ -9,7 +9,7 @@ options = webdriver.FirefoxOptions()
 options.headless = True
 options.add_argument('--no-sandbox')
 profile = webdriver.FirefoxProfile(
-    "/home/romira/.mozilla/firefox/usi4rc5m.colab-cli")
+    "/home/ubuntu/.mozilla/firefox/k8q7oj2s.colab-cli")
 driver = webdriver.Firefox(options=options, firefox_profile=profile)
 
 driver.get(
