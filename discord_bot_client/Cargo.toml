@@ -13,6 +13,7 @@ duct = "0.13.5"
 getset = "0.1.1"
 homeserver_receive_process = {path = "../homeserver_receive_process"}
 log = "0.4.14"
+nix = "0.25.0"
 openssl = {version = "0.10.41", features = ["vendored"]}
 rand = "0.8.4"
 reqwest = {version = "0.11.4", features = ["json"]}
