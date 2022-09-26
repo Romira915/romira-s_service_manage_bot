@@ -77,4 +77,6 @@ pub struct Log {
 pub struct Secret {
     #[getset(get = "pub")]
     rinna_subscription_key: String,
+    #[getset(get = "pub")]
+    rinna_cce_subscription_key: String,
 }

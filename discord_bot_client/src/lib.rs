@@ -3,6 +3,7 @@ pub mod commands;
 
 use std::{collections::HashSet, time::Duration};
 
+use bot_config::ConfigContainer;
 use commands::{
     conversation::{
         ai_chan, akeome, buy_kyan, chiyopanchi, dontstop, exactly, fight_anya, fish_takina, hadou,
@@ -18,7 +19,8 @@ use commands::{
 };
 use log::{debug, error, info};
 
-use rand::prelude::*;
+use rand::{distributions::WeightedIndex, prelude::*};
+use serde_json::{json, Value};
 use serenity::{
     async_trait,
     builder::CreateEmbed,
@@ -35,6 +37,7 @@ use serenity::{
 use tokio::time;
 
 const SONNEKI_INTERVAL_MS: u64 = 1000;
+const RINNA_CCE_ENDPOINT: &'static str = "https://api.rinna.co.jp/models/cce";
 
 #[group]
 #[commands(ping)]
@@ -57,13 +60,23 @@ impl EventHandler for Handler {
             return;
         }
 
+        let data_read = ctx.data.read().await;
+        let config = data_read
+            .get::<ConfigContainer>()
+            .expect("Expected ConfigContainer in TypeMap");
+
         let content = msg.content.clone();
+
+        // コマンドなら早期リターン
+        if content.starts_with(config.discord().prefix()) {
+            return;
+        }
 
         if content.starts_with("/") && content.split_whitespace().count() == 2 {
             if let Err(why)  = msg.channel_id.send_message(&ctx.http, |m|{
                 m.embed(|e| {
                     e.title("コマンドを実行しようとしてる？")
-                    .description("`/` プレフィックスは無効になりました．\n今後は `~` プレフィックスを使用してください．\n\n詳しくは `~help` で参照できます．")
+                    .description(&format!("`/` プレフィックスは無効になりました．\n今後は `{}` プレフィックスを使用してください．\n\n詳しくは `~help` で参照できます．",config.discord().prefix()))
                     .colour(Colour::ORANGE)
                 })
             }).await {
@@ -71,6 +84,46 @@ impl EventHandler for Handler {
             }
         }
 
+        // 会話AI
+        {
+            let choices = [true, false];
+            let weights = [0.40, 0.60];
+            let dist = WeightedIndex::new(&weights).unwrap();
+            let mut rng = StdRng::from_rng(thread_rng()).unwrap();
+
+            if choices[dist.sample(&mut rng)] {
+                let client = reqwest::Client::new();
+                let resp = client
+                    .post(RINNA_CCE_ENDPOINT)
+                    .header("content-type", "application/json")
+                    .header("cache-control", "no-cache")
+                    .header(
+                        "Ocp-Apim-Subscription-Key",
+                        config.secret().rinna_cce_subscription_key(),
+                    )
+                    .json(&json!({
+                        "rawInput": format!("B: {}A:",&content),
+                        "outputLength": 30
+                    }))
+                    .send()
+                    .await
+                    .unwrap();
+
+                if resp.status().is_success() {
+                    let json: Value = resp.json().await.unwrap();
+                    let answer = json.get("answer").unwrap().as_str().unwrap();
+
+                    msg.channel_id
+                        .send_message(&ctx.http, |m| m.content(&answer))
+                        .await
+                        .unwrap();
+
+                    return;
+                }
+            }
+        }
+
+        // conversation
         if content.ends_with("草")
             || {
                 let len = content.chars().count();

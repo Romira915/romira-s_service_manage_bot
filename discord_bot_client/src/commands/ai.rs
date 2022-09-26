@@ -169,6 +169,7 @@ pub async fn draw_jp(ctx: &Context, msg: &Message, args: Args) -> CommandResult 
     }
     let json: Value = resp.json().await.unwrap();
 
+    // TODO: as_strで""でないかも
     let split: Vec<String> = json["image"]
         .to_string()
         .splitn(2, ",")

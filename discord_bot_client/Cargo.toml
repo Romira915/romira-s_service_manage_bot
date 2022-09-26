@@ -17,7 +17,7 @@ image = "0.24.4"
 log = "0.4.14"
 nix = "0.25.0"
 openssl = {version = "0.10.41", features = ["vendored"]}
-rand = "0.8.4"
+rand = {version = "0.8.5", features = ["alloc"]}
 reqwest = {version = "0.11.4", features = ["json"]}
 serde = "1.0.126"
 serde_json = "1.0.66"
