@@ -151,6 +151,22 @@ pub async fn draw_jp(ctx: &Context, msg: &Message, args: Args) -> CommandResult 
         .unwrap();
 
     log::info!("status code {}", resp.status().as_str());
+    // status code 500
+    if resp.status() == reqwest::StatusCode::INTERNAL_SERVER_ERROR {
+        msg.channel_id
+            .send_message(&ctx.http, |m| {
+                m.embed(|e| {
+                    e.title(format!(
+                        "Status code {} Internal Server Error",
+                        resp.status().as_str()
+                    ))
+                    .description("暫く時間をおけ")
+                })
+            })
+            .await?;
+
+        return Ok(());
+    }
     let json: Value = resp.json().await.unwrap();
 
     let split: Vec<String> = json["image"]
