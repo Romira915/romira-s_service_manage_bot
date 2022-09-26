@@ -68,3 +68,10 @@ pub struct Log {
     #[getset(get = "pub")]
     write_log: String,
 }
+
+#[derive(
+    Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default, Clone,
+)]
+pub struct Secret {
+    rinna_subscription_key: String,
+}

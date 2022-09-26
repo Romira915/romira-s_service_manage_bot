@@ -16,7 +16,7 @@ const PROMPT_ENDPOINT: &'static str =
     "https://k5vi72fcdo5u6gjqmuaqu5yoba0draxm.lambda-url.ap-northeast-1.on.aws/prompt";
 
 #[group]
-#[commands(draw)]
+#[commands(draw, draw_jp)]
 #[prefixes("ai", "ml")]
 #[description = "機械学習コマンド"]
 pub struct Ai;
@@ -92,5 +92,11 @@ pub async fn draw(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
         })
         .await?;
 
+    Ok(())
+}
+
+#[command]
+pub async fn draw_jp(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
+    
     Ok(())
 }
