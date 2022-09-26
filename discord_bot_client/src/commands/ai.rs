@@ -2,6 +2,7 @@ use std::ffi::{CStr, CString};
 use std::time::Duration;
 
 use duct::cmd;
+use image::DynamicImage;
 use nix::unistd::{self, ForkResult};
 use serde_json::json;
 use serde_json::Value;
@@ -12,8 +13,11 @@ use serenity::model::prelude::*;
 use serenity::prelude::Context;
 use serenity::prelude::*;
 
+use crate::bot_config::ConfigContainer;
+
 const PROMPT_ENDPOINT: &'static str =
     "https://k5vi72fcdo5u6gjqmuaqu5yoba0draxm.lambda-url.ap-northeast-1.on.aws/prompt";
+const RINNA_ENDPOINT: &'static str = "https://api.rinna.co.jp/models/tti/v2";
 
 #[group]
 #[commands(draw, draw_jp)]
@@ -97,6 +101,84 @@ pub async fn draw(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
 
 #[command]
 pub async fn draw_jp(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
-    
+    let arg = args.message();
+    let arg = arg.trim_start_matches('\"').trim_end_matches('\"');
+    log::info!("{:?}", arg);
+    if arg.is_empty() {
+        msg.channel_id
+            .send_message(&ctx.http, |m| {
+                m.embed(|e| {
+                    e.title("引数を与えてね")
+                        .field("Example", "~ai draw_jp cat", false)
+                })
+            })
+            .await?;
+
+        return Ok(());
+    }
+
+    msg.channel_id
+        .send_message(&ctx.http, |m| {
+            m.embed(|e| {
+                e.title("絵を描くよ～(o・∇・o)")
+                    .description("3分くらいで描き終わるよ～(o・∇・o)")
+            })
+        })
+        .await?;
+    let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
+
+    let data_read = ctx.data.read().await;
+    let config = data_read
+        .get::<ConfigContainer>()
+        .expect("Expected ConfigContainer in TypeMap");
+
+    let client = reqwest::Client::new();
+    let resp = client
+        .post(RINNA_ENDPOINT)
+        .header("content-type", "application/json")
+        .header("cache-control", "no-cache")
+        .header(
+            "Ocp-Apim-Subscription-Key",
+            config.secret().rinna_subscription_key(),
+        )
+        .json(&json!({
+            "prompts": arg,
+            "scale": 7.5
+        }
+        ))
+        .send()
+        .await
+        .unwrap();
+
+    log::info!("status code {}", resp.status().as_str());
+    let json: Value = resp.json().await.unwrap();
+
+    let split: Vec<String> = json["image"]
+        .to_string()
+        .splitn(2, ",")
+        .map(|i| i.to_string())
+        .collect();
+
+    // let split: Vec<String> = image.splitn(2, ",").map(|i| i.to_string()).collect();
+
+    let (_format, image_base64) = (
+        split[0].as_str(),
+        split[1].as_str().trim().trim_end_matches('\"'),
+    );
+    let image_raw = base64::decode_config(image_base64, base64::STANDARD).unwrap();
+
+    let dynamic_image = image::load_from_memory(&image_raw).unwrap();
+    match dynamic_image {
+        DynamicImage::ImageRgb8(image) => image.save("ai-draw-jp.png").unwrap(),
+        _ => (),
+    }
+    msg.channel_id
+        .send_message(&ctx.http, |m| {
+            m.embed(|e| e.image("attachment://ai-draw-jp.png"))
+                .add_file("ai-draw-jp.png")
+        })
+        .await?;
+    typing.stop();
+
     Ok(())
 }
