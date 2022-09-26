@@ -6,12 +6,14 @@ version = "0.1.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+base64 = "0.13.0"
 chrono = "0.4.19"
 counted-array = "0.1.2"
 dotenv = "0.15.0"
 duct = "0.13.5"
 getset = "0.1.1"
 homeserver_receive_process = {path = "../homeserver_receive_process"}
+image = "0.24.4"
 log = "0.4.14"
 nix = "0.25.0"
 openssl = {version = "0.10.41", features = ["vendored"]}

@@ -15,6 +15,8 @@ pub struct Config {
     gameinfo: Option<GameInfo>,
     #[getset(get = "pub")]
     log: Log,
+    #[getset(get = "pub")]
+    secret: Secret,
 }
 
 pub struct ConfigContainer;
@@ -67,4 +69,12 @@ pub struct Log {
     term_log: String,
     #[getset(get = "pub")]
     write_log: String,
+}
+
+#[derive(
+    Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default, Clone,
+)]
+pub struct Secret {
+    #[getset(get = "pub")]
+    rinna_subscription_key: String,
 }
