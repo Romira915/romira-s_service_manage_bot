@@ -121,7 +121,7 @@ pub async fn draw_jp(ctx: &Context, msg: &Message, args: Args) -> CommandResult 
         .send_message(&ctx.http, |m| {
             m.embed(|e| {
                 e.title("絵を描くよ～(o・∇・o)")
-                    .description("3分くらいで描き終わるよ～(o・∇・o)")
+                    .description("20秒くらいで描き終わるよ～(o・∇・o)")
             })
         })
         .await?;
