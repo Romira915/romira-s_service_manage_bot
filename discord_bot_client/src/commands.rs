@@ -10,9 +10,9 @@ pub mod simple;
 pub mod terraria;
 pub mod valheim;
 
-const SUCCESS_IMAGE_URL: &'static str =
+const SUCCESS_IMAGE_URL: &str =
     "https://i.pinimg.com/564x/c9/72/f0/c972f0909879d3ce4137c7140e26922c.jpg";
-const FAILED_IMAGE_URL: &'static str =
+const FAILED_IMAGE_URL: &str =
     "https://p100k.jp/wp-content/uploads/2021/03/EI4vUVMUYAAZzj7-1024x905-1-1.jpg";
 
 #[derive(Debug, Default)]

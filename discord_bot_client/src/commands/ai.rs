@@ -13,9 +13,9 @@ use serenity::prelude::*;
 
 use crate::bot_config::ConfigContainer;
 
-const PROMPT_ENDPOINT: &'static str =
+const PROMPT_ENDPOINT: &str =
     "https://k5vi72fcdo5u6gjqmuaqu5yoba0draxm.lambda-url.ap-northeast-1.on.aws/prompt";
-const RINNA_ENDPOINT: &'static str = "https://api.rinna.co.jp/models/tti/v2";
+const RINNA_ENDPOINT: &str = "https://api.rinna.co.jp/models/tti/v2";
 
 #[group]
 #[commands(draw, draw_jp)]
@@ -170,7 +170,7 @@ pub async fn draw_jp(ctx: &Context, msg: &Message, args: Args) -> CommandResult 
     // TODO: as_strで""でないかも
     let split: Vec<String> = json["image"]
         .to_string()
-        .splitn(2, ",")
+        .splitn(2, ',')
         .map(|i| i.to_string())
         .collect();
 

@@ -5,14 +5,14 @@ use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use duct::cmd;
 use homeserver_receive_process::{home_server_config::Config, init_logger, Command};
 
-const CONFIG_PATH: &'static str = ".config/home_server_config.toml";
+const CONFIG_PATH: &str = ".config/home_server_config.toml";
 
 async fn exec_systemctl(command: web::Json<Command>, service_name: &str) -> impl Responder {
     #[allow(clippy::if_same_then_else)]
     if let "start" | "status" = command.request().as_str() {
         // start and status
     } else if let ("stop" | "restart", true) =
-        (&*command.request().as_str(), command.administrator())
+        (command.request().as_str(), command.administrator())
     {
         // stop and restart with admin
     } else {
@@ -42,7 +42,7 @@ async fn exec_systemctl(command: web::Json<Command>, service_name: &str) -> impl
                 HttpResponse::Ok().body(content)
             } else {
                 HttpResponse::ExpectationFailed()
-                    .body(format!("Failed to systemctl\n{}", exit_code.to_string()))
+                    .body(format!("Failed to systemctl\n{}", exit_code))
             }
         }
         Err(e) => {
@@ -50,7 +50,7 @@ async fn exec_systemctl(command: web::Json<Command>, service_name: &str) -> impl
                 HttpResponse::ExpectationFailed().body("inactive (dead)")
             } else {
                 HttpResponse::ExpectationFailed()
-                    .body(format!("Failed to cmd! macro\n{}", e.to_string()))
+                    .body(format!("Failed to cmd! macro\n{}", e))
             }
         }
     };

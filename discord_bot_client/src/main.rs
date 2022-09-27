@@ -20,7 +20,7 @@ use std::{collections::HashSet, path::PathBuf, sync::Arc};
 use std::{env, fs::File};
 use std::{io::prelude::*, str::FromStr};
 
-const CONFIG_PATH: &'static str = ".config/bot_config.toml";
+const CONFIG_PATH: &str = ".config/bot_config.toml";
 
 struct ShardManagerContainer;
 
@@ -72,7 +72,7 @@ async fn main() {
 
     let token = config.discord().token();
 
-    let http = Http::new_with_token(&token);
+    let http = Http::new_with_token(token);
 
     let (owners, _bot_id) = match http.get_current_application_info().await {
         Ok(info) => {

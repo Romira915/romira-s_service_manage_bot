@@ -15,7 +15,7 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
     let content = msg.content.clone();
 
     // conversation
-    if content.ends_with("草")
+    if content.ends_with('草')
         || {
             let len = content.chars().count();
             let mut www = content.to_string();
@@ -57,7 +57,7 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
             error!("Error sending message: {:?}", why);
         }
     } else if (content.contains("ヨシ") || content.contains("ﾖｼ"))
-        && (content.contains("！") || content.contains("!"))
+        && (content.contains('！') || content.contains('!'))
     {
         let mut rng = StdRng::from_rng(thread_rng()).unwrap();
 
@@ -81,7 +81,7 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
         }
     }
 
-    if content.starts_with("?") || content.starts_with("？") || content.starts_with("は？") {
+    if content.starts_with('?') || content.starts_with('？') || content.starts_with("は？") {
         let mut rng = StdRng::from_rng(thread_rng()).unwrap();
 
         let yosi_embeds_added_probability = {
@@ -151,7 +151,7 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
         }
     }
 
-    if content.contains("酒") {
+    if content.contains('酒') {
         if let Err(why) = msg
             .channel_id
             .send_message(&ctx.http, |m| m.set_embed(sake()))
@@ -235,7 +235,7 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
         }
     }
 
-    if content.contains("ふぐ") || content.contains("フグ") || content.contains("🐡") {
+    if content.contains("ふぐ") || content.contains("フグ") || content.contains('🐡') {
         if let Err(why) = msg
             .channel_id
             .send_message(&ctx.http, |m| m.set_embed(hugu()))
@@ -285,7 +285,7 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
         }
     }
 
-    if content.ends_with("😭") {
+    if content.ends_with('😭') {
         if let Err(why) = msg
             .channel_id
             .send_message(&ctx.http, |m| m.content(":sob:"))
@@ -330,7 +330,7 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
 
     if content.contains("やだ")
         || content.contains("いやだ")
-        || content.contains("嫌")
+        || content.contains('嫌')
         || content.contains("イヤ")
     {
         if let Err(why) = msg
@@ -376,7 +376,7 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
         }
     }
 
-    if content.contains("餅")
+    if content.contains('餅')
         || content.contains("もちですわ")
         || content.contains("もちうめぇ")
         || content.contains("おしるこ")
@@ -390,9 +390,9 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
         }
     }
 
-    if content.contains("損") || content.contains("くそったれ") || content.contains("デデーン")
+    if content.contains('損') || content.contains("くそったれ") || content.contains("デデーン")
     {
-        sonnekineko(&ctx, &msg).await;
+        sonnekineko(ctx, msg).await;
     }
 
     if content.contains("パァン") || content.contains("ぱぁん") {
@@ -417,7 +417,7 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
 
     if content.contains("なめる") || content.contains("なめてる") || content.contains("舐め")
     {
-        namebetu(&ctx, &msg).await;
+        namebetu(ctx, msg).await;
     }
 
     if content.contains("Hello Tenjyo")
@@ -466,7 +466,7 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
         }
     }
 
-    if content.contains("何") && (content.contains("?") || content.contains("？")) {
+    if content.contains('何') && (content.contains('?') || content.contains('？')) {
         if let Err(why) = msg
             .channel_id
             .send_message(&ctx.http, |m| m.set_embed(what_buru()))
@@ -585,7 +585,7 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
         }
     }
 
-    if content.contains("笑") || content.contains("ﾌｯ") {
+    if content.contains('笑') || content.contains("ﾌｯ") {
         if let Err(why) = msg
             .channel_id
             .send_message(&ctx.http, |m| m.set_embed(wara_anya()))
@@ -639,7 +639,7 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
         }
     }
 
-    if content.contains("かくせんそう") || content.contains("核") || content.contains("戦争")
+    if content.contains("かくせんそう") || content.contains('核') || content.contains("戦争")
     {
         if let Err(why) = msg
             .channel_id
@@ -693,10 +693,10 @@ pub async fn conversation(ctx: &Context, msg: &Message) {
     }
 
     if content.contains("さかな")
-        || content.contains("魚")
-        || content.contains("🐟")
-        || content.contains("🎣")
-        || content.contains("🐠")
+        || content.contains('魚')
+        || content.contains('🐟')
+        || content.contains('🎣')
+        || content.contains('🐠')
     {
         if let Err(why) = msg
             .channel_id

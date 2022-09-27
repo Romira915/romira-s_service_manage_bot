@@ -22,7 +22,7 @@ use serenity::{
 };
 
 const SONNEKI_INTERVAL_MS: u64 = 1000;
-const RINNA_CCE_ENDPOINT: &'static str = "https://api.rinna.co.jp/models/cce";
+const RINNA_CCE_ENDPOINT: &str = "https://api.rinna.co.jp/models/cce";
 
 #[group]
 #[commands(ping)]
@@ -57,7 +57,7 @@ impl EventHandler for Handler {
             return;
         }
 
-        if content.starts_with("/") && content.split_whitespace().count() == 2 {
+        if content.starts_with('/') && content.split_whitespace().count() == 2 {
             if let Err(why)  = msg.channel_id.send_message(&ctx.http, |m|{
                 m.embed(|e| {
                     e.title("コマンドを実行しようとしてる？")
