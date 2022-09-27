@@ -72,7 +72,7 @@ impl EventHandler for Handler {
         // 会話AI
         {
             let choices = [true, false];
-            let weights = [0.40, 0.60];
+            let weights = [0.20, 0.80];
             let dist = WeightedIndex::new(&weights).unwrap();
             let mut rng = StdRng::from_rng(thread_rng()).unwrap();
 
