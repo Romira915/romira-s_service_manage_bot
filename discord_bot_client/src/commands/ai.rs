@@ -1,7 +1,7 @@
-use std::ffi::{CStr, CString};
-use std::time::Duration;
+use std::ffi::{CString};
 
-use duct::cmd;
+
+
 use image::DynamicImage;
 use nix::unistd::{self, ForkResult};
 use serde_json::json;

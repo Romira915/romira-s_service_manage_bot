@@ -1,7 +1,7 @@
 pub mod bot_config;
 pub mod commands;
 
-use std::{collections::HashSet, time::Duration};
+use std::collections::HashSet;
 
 use bot_config::ConfigContainer;
 use commands::{conversation::*, simple::*};
@@ -11,7 +11,6 @@ use rand::{distributions::WeightedIndex, prelude::*};
 use serde_json::{json, Value};
 use serenity::{
     async_trait,
-    builder::CreateEmbed,
     client::{Context, EventHandler},
     framework::standard::{
         help_commands,
@@ -21,8 +20,6 @@ use serenity::{
     model::{channel::Message, event::ResumedEvent, id::UserId, prelude::Ready},
     utils::Colour,
 };
-
-use tokio::time;
 
 const SONNEKI_INTERVAL_MS: u64 = 1000;
 const RINNA_CCE_ENDPOINT: &'static str = "https://api.rinna.co.jp/models/cce";

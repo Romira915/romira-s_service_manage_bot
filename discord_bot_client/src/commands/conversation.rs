@@ -2,7 +2,7 @@ mod embed;
 
 use std::time::Duration;
 
-use chrono::Utc;
+
 use log::*;
 use rand::{prelude::*, rngs::StdRng, thread_rng, SeedableRng};
 use serenity::{builder::CreateEmbed, model::prelude::Message, prelude::Context};
