@@ -92,6 +92,8 @@ impl EventHandler for Handler {
             let mut rng = StdRng::from_rng(thread_rng()).unwrap();
 
             if choices[dist.sample(&mut rng)] {
+                let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
+
                 let client = reqwest::Client::new();
                 let resp = client
                     .post(RINNA_CCE_ENDPOINT)
@@ -118,8 +120,12 @@ impl EventHandler for Handler {
                         .await
                         .unwrap();
 
+                    typing.stop();
+
                     return;
                 }
+
+                typing.stop();
             }
         }
 

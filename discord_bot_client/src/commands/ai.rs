@@ -195,7 +195,7 @@ pub async fn draw_jp(ctx: &Context, msg: &Message, args: Args) -> CommandResult 
                 .add_file("ai-draw-jp.png")
         })
         .await?;
-    typing.stop();
+    typing.stop().unwrap();
 
     Ok(())
 }
