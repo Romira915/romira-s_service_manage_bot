@@ -92,9 +92,11 @@ impl EventHandler for Handler {
             let mut rng = StdRng::from_rng(thread_rng()).unwrap();
 
             if choices[dist.sample(&mut rng)] {
+                log::info!("Hit 会話AI");
                 let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
 
                 let client = reqwest::Client::new();
+                log::info!("Request to CCE");
                 let resp = client
                     .post(RINNA_CCE_ENDPOINT)
                     .header("content-type", "application/json")
@@ -111,6 +113,7 @@ impl EventHandler for Handler {
                     .await
                     .unwrap();
 
+                log::info!("CCE Status code {}", resp.status().as_str());
                 if resp.status().is_success() {
                     let json: Value = resp.json().await.unwrap();
                     let answer = json.get("answer").unwrap().as_str().unwrap();
