@@ -11,8 +11,7 @@ async fn exec_systemctl(command: web::Json<Command>, service_name: &str) -> impl
     #[allow(clippy::if_same_then_else)]
     if let "start" | "status" = command.request().as_str() {
         // start and status
-    } else if let ("stop" | "restart", true) =
-        (command.request().as_str(), command.administrator())
+    } else if let ("stop" | "restart", true) = (command.request().as_str(), command.administrator())
     {
         // stop and restart with admin
     } else {
@@ -49,8 +48,7 @@ async fn exec_systemctl(command: web::Json<Command>, service_name: &str) -> impl
             if command.request() == "status" {
                 HttpResponse::ExpectationFailed().body("inactive (dead)")
             } else {
-                HttpResponse::ExpectationFailed()
-                    .body(format!("Failed to cmd! macro\n{}", e))
+                HttpResponse::ExpectationFailed().body(format!("Failed to cmd! macro\n{}", e))
             }
         }
     };
