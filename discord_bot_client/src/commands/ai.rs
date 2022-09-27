@@ -1,6 +1,4 @@
-use std::ffi::{CString};
-
-
+use std::ffi::CString;
 
 use image::DynamicImage;
 use nix::unistd::{self, ForkResult};

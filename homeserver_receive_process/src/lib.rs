@@ -1,7 +1,5 @@
 pub mod home_server_config;
 
-
-
 use derive_builder::Builder;
 use getset::Getters;
 use log::LevelFilter;
