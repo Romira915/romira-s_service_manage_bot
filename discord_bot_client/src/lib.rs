@@ -91,7 +91,7 @@ impl EventHandler for Handler {
             let dist = WeightedIndex::new(&weights).unwrap();
             let mut rng = StdRng::from_rng(thread_rng()).unwrap();
 
-            if choices[dist.sample(&mut rng)] {
+            if msg.mentions_me(&ctx.http).await.unwrap() || choices[dist.sample(&mut rng)] {
                 log::info!("Hit 会話AI");
                 let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
 
@@ -118,10 +118,13 @@ impl EventHandler for Handler {
                     let json: Value = resp.json().await.unwrap();
                     let answer = json.get("answer").unwrap().as_str().unwrap();
 
-                    msg.channel_id
+                    if let Err(why) = msg
+                        .channel_id
                         .send_message(&ctx.http, |m| m.content(&answer))
                         .await
-                        .unwrap();
+                    {
+                        error!("Error sending message: {:?}", why);
+                    };
 
                     typing.stop();
 
