@@ -8,6 +8,7 @@ use commands::{conversation::*, simple::*};
 use log::{debug, error, info};
 
 use rand::{distributions::WeightedIndex, prelude::*};
+use regex::Regex;
 use serde_json::{json, Value};
 use serenity::{
     async_trait,
@@ -80,6 +81,10 @@ impl EventHandler for Handler {
                 log::info!("Hit 会話AI");
                 let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
 
+                let regex: Regex = Regex::new("<@\\d+>").unwrap();
+                let tmp = regex.replace_all(&content, "");
+                let content_without_mentions = tmp.trim_start();
+
                 let client = reqwest::Client::new();
                 log::info!("Request to CCE");
                 let resp = client
@@ -91,7 +96,7 @@ impl EventHandler for Handler {
                         config.secret().rinna_cce_subscription_key(),
                     )
                     .json(&json!({
-                        "rawInput": format!("B: {}A:",&content),
+                        "rawInput": format!("B: {}A:", content_without_mentions),
                         "outputLength": 30
                     }))
                     .send()
