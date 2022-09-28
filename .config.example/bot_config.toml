@@ -16,3 +16,7 @@ sdtd_password = "<pass>"
 [log]
 term_log = "debug"
 write_log = "off"
+
+[secret]
+rinna_cce_subscription_key = "<API_KEY>"
+rinna_subscription_key = "<API_KEY>"
