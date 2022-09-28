@@ -15,7 +15,7 @@ FIREFOX_PROFILE = os.environ["FIREFOX_PROFILE"]
 
 print("[INFO] run colab-cli")
 options = webdriver.FirefoxOptions()
-options.headless = False
+options.headless = True
 options.add_argument('--no-sandbox')
 profile = webdriver.FirefoxProfile(FIREFOX_PROFILE)
 
@@ -100,28 +100,29 @@ with webdriver.Firefox(options=options, firefox_profile=profile,
 
     driver.switch_to.window(driver.window_handles[-1])
 
-    runtime = driver.find_element(
-        by=By.CSS_SELECTOR, value="#runtime-menu-button > div > div > div.goog-inline-block.goog-menu-button-caption")
-    runtime.click()
-    print("runtime")
-    time.sleep(1)
+    # colabから接続解除
+    # runtime = driver.find_element(
+    #     by=By.CSS_SELECTOR, value="#runtime-menu-button > div > div > div.goog-inline-block.goog-menu-button-caption")
+    # runtime.click()
+    # print("runtime")
+    # time.sleep(1)
 
-    disconnect = driver.find_element(
-        by=By.CSS_SELECTOR, value="#\:27")
-    disconnect.click()
-    print("disconnect")
-    time.sleep(1)
+    # disconnect = driver.find_element(
+    #     by=By.CSS_SELECTOR, value="#\:27")
+    # disconnect.click()
+    # print("disconnect")
+    # time.sleep(1)
 
-    dialog = driver.find_element(
-        by=By.CSS_SELECTOR, value="body > colab-dialog > paper-dialog > div.content-area > div")
-    dialog.click()
-    print("dialog")
-    time.sleep(1)
+    # dialog = driver.find_element(
+    #     by=By.CSS_SELECTOR, value="body > colab-dialog > paper-dialog > div.content-area > div")
+    # dialog.click()
+    # print("dialog")
+    # time.sleep(1)
 
-    yes = driver.find_element(
-        by=By.CSS_SELECTOR, value="#ok")
-    yes.click()
-    print("yes")
-    time.sleep(1)
+    # yes = driver.find_element(
+    #     by=By.CSS_SELECTOR, value="#ok")
+    # yes.click()
+    # print("yes")
+    # time.sleep(1)
 
     driver.save_screenshot("exe.png")
