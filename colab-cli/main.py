@@ -19,7 +19,7 @@ options.headless = True
 options.add_argument('--no-sandbox')
 profile = webdriver.FirefoxProfile(FIREFOX_PROFILE)
 
-with webdriver.Firefox(options=options, firefox_profile=profile,
+with webdriver.Firefox(options=options, firefox_binary="/usr/bin/firefox", firefox_profile=profile,
                        executable_path=DRIVER_PATH) as driver:
     driver.get(
         "https://colab.research.google.com/drive/16k_Z9PrVuxzOPi-R_5sIhgNYi227_wfH")
