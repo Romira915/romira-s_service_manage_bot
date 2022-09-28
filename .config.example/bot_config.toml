@@ -20,3 +20,8 @@ write_log = "off"
 [secret]
 rinna_cce_subscription_key = "<API_KEY>"
 rinna_subscription_key = "<API_KEY>"
+
+[path]
+firefox_profile = "<FIREFOX PROFILE PATH>"
+geckodriver_path = "<Driver PATH>"
+python = "<Python PATH>"

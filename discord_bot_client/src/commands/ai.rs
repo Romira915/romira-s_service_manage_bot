@@ -69,18 +69,29 @@ pub async fn draw(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
                 unistd::getpid(),
                 unistd::getppid()
             );
-            unistd::execv(
-                CString::new("/home/ubuntu/.miniconda3/envs/colab-cli/bin/python")
-                    .unwrap()
-                    .as_c_str(),
+            let data_read = ctx.data.read().await;
+            let config = data_read
+                .get::<ConfigContainer>()
+                .expect("Expected ConfigContainer in TypeMap");
+
+            let python_path = CString::new(config.path().python().as_str()).unwrap();
+            let env = [
+                CString::new(format!("DRIVER_PATH={}", config.path().geckodriver_path())).unwrap(),
+                CString::new(format!(
+                    "FIREFOX_PROFILE={}",
+                    config.path().firefox_profile()
+                ))
+                .unwrap(),
+            ];
+
+            if let Ok(_) = unistd::execve(
+                python_path.as_c_str(),
                 &[
-                    CString::new("/home/ubuntu/.miniconda3/envs/colab-cli/bin/python")
-                        .unwrap()
-                        .as_c_str(),
+                    python_path.as_c_str(),
                     CString::new("./colab-cli/main.py").unwrap().as_c_str(),
                 ],
-            )
-            .unwrap();
+                &env,
+            ) {}
         }
         Err(_) => log::debug!("Fork failed"),
     }

@@ -17,6 +17,8 @@ pub struct Config {
     log: Log,
     #[getset(get = "pub")]
     secret: Secret,
+    #[getset(get = "pub")]
+    path: Path,
 }
 
 pub struct ConfigContainer;
@@ -79,4 +81,16 @@ pub struct Secret {
     rinna_subscription_key: String,
     #[getset(get = "pub")]
     rinna_cce_subscription_key: String,
+}
+
+#[derive(
+    Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default, Clone,
+)]
+pub struct Path {
+    #[getset(get = "pub")]
+    python: String,
+    #[getset(get = "pub")]
+    geckodriver_path: String,
+    #[getset(get = "pub")]
+    firefox_profile: String,
 }

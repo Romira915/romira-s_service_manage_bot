@@ -1,3 +1,4 @@
+import os
 import time
 from itertools import tee
 
@@ -9,15 +10,17 @@ from selenium.webdriver.common.keys import Keys
 PROMPT_ENDPOINT = "https://k5vi72fcdo5u6gjqmuaqu5yoba0draxm.lambda-url.ap-northeast-1.on.aws/prompt"
 TIMEOUT = 12
 
+DRIVER_PATH = os.environ["DRIVER_PATH"]
+FIREFOX_PROFILE = os.environ["FIREFOX_PROFILE"]
+
 print("[INFO] run colab-cli")
 options = webdriver.FirefoxOptions()
 options.headless = True
 options.add_argument('--no-sandbox')
-profile = webdriver.FirefoxProfile(
-    "/home/ubuntu/.mozilla/firefox/k8q7oj2s.colab-cli")
+profile = webdriver.FirefoxProfile(FIREFOX_PROFILE)
 
 with webdriver.Firefox(options=options, firefox_profile=profile,
-                       executable_path="/home/ubuntu/.cargo/bin/geckodriver") as driver:
+                       executable_path=DRIVER_PATH) as driver:
     driver.get(
         "https://colab.research.google.com/drive/16k_Z9PrVuxzOPi-R_5sIhgNYi227_wfH")
     time.sleep(3)
