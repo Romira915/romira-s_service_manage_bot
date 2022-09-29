@@ -22,7 +22,7 @@ regex = "1.6.0"
 reqwest = {version = "0.11.4", features = ["json"]}
 serde = "1.0.126"
 serde_json = "1.0.66"
-serenity = {version = "0.10.8", features = ["client", "framework", "standard_framework", "rustls_backend"]}
+serenity = {version = "0.11.5", features = ["client", "framework", "standard_framework", "rustls_backend"]}
 simplelog = "0.10.0"
 tokio = {version = "1.9.0", features = ["macros", "signal", "rt-multi-thread", "time"]}
 toml = "0.5.8"
