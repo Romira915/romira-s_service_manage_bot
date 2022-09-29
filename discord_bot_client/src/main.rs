@@ -6,6 +6,7 @@ use discord_bot_client::{
         activity::ACTIVITYCOMMAND_GROUP, ai::*, ark::ARK_GROUP, minecraft::*, sdtd::*, terraria::*,
         valheim::*,
     },
+    state::{BotState, BotStateContainer},
     *,
 };
 use log::error;
@@ -68,6 +69,8 @@ async fn main() {
         toml::from_str(&toml_str).expect("Fall to toml parser")
     };
 
+    let bot_state = BotState::default();
+
     init_logger(&config);
 
     let token = config.discord().token();
@@ -106,6 +109,7 @@ async fn main() {
         let mut data = client.data.write().await;
         data.insert::<ShardManagerContainer>(client.shard_manager.clone());
         data.insert::<ConfigContainer>(config);
+        data.insert::<BotStateContainer>(bot_state);
     }
 
     let shard_manager = client.shard_manager.clone();

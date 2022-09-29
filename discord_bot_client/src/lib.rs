@@ -1,5 +1,6 @@
 pub mod bot_config;
 pub mod commands;
+pub mod state;
 
 use std::collections::HashSet;
 
@@ -21,6 +22,7 @@ use serenity::{
     model::{channel::Message, event::ResumedEvent, id::UserId, prelude::Ready},
     utils::Colour,
 };
+use state::{BotState, BotStateContainer};
 
 const SONNEKI_INTERVAL_MS: u64 = 1000;
 const RINNA_CCE_ENDPOINT: &str = "https://api.rinna.co.jp/models/cce";
@@ -46,27 +48,67 @@ impl EventHandler for Handler {
             return;
         }
 
-        let data_read = ctx.data.read().await;
-        let config = data_read
-            .get::<ConfigContainer>()
-            .expect("Expected ConfigContainer in TypeMap");
-
         let content = msg.content.clone();
+        let regex: Regex = Regex::new("<@\\d+>").unwrap();
+        let tmp = regex.replace_all(&content, "");
+        let content_without_mentions = tmp.trim_start();
 
-        // コマンドなら早期リターン
-        if content.starts_with(config.discord().prefix()) {
-            return;
+        // Read Config Block
+        {
+            let data_read = ctx.data.read().await;
+            let config = data_read
+                .get::<ConfigContainer>()
+                .expect("Expected ConfigContainer in TypeMap");
+            // コマンドなら早期リターン
+            if content.starts_with(config.discord().prefix()) {
+                return;
+            }
+
+            if content.starts_with('/') && content.split_whitespace().count() == 2 {
+                if let Err(why)  = msg.channel_id.send_message(&ctx.http, |m|{
+                    m.embed(|e| {
+                        e.title("コマンドを実行しようとしてる？")
+                        .description(&format!("`/` プレフィックスは無効になりました．\n今後は `{}` プレフィックスを使用してください．\n\n詳しくは `~help` で参照できます．",config.discord().prefix()))
+                        .colour(Colour::ORANGE)
+                    })
+                }).await {
+                    error!("Error sending message: {:?}", why);
+                }
+            }
         }
 
-        if content.starts_with('/') && content.split_whitespace().count() == 2 {
-            if let Err(why)  = msg.channel_id.send_message(&ctx.http, |m|{
-                m.embed(|e| {
-                    e.title("コマンドを実行しようとしてる？")
-                    .description(&format!("`/` プレフィックスは無効になりました．\n今後は `{}` プレフィックスを使用してください．\n\n詳しくは `~help` で参照できます．",config.discord().prefix()))
-                    .colour(Colour::ORANGE)
-                })
-            }).await {
-                error!("Error sending message: {:?}", why);
+        if msg.mentions_me(&ctx.http).await.unwrap() {
+            let mut data_write = ctx.data.write().await;
+            let bot_state = data_write
+                .get_mut::<BotStateContainer>()
+                .expect("Failed to ctx data write BotState");
+
+            if content_without_mentions == "だまれ" {
+                bot_state.is_quiet = true;
+                log::info!("is_quiet {}", bot_state.is_quiet);
+                if let Err(why) = msg
+                    .channel_id
+                    .send_message(&ctx.http, |m| m.content("だまる:anya19:"))
+                    .await
+                {
+                    error!("Error sending message: {:?}", why);
+                }
+
+                return;
+            }
+
+            if content_without_mentions == "ヨシ" {
+                bot_state.is_quiet = false;
+                log::info!("is_quiet {}", bot_state.is_quiet);
+                if let Err(why) = msg
+                    .channel_id
+                    .send_message(&ctx.http, |m| m.content("しゃべる:ANYA:"))
+                    .await
+                {
+                    error!("Error sending message: {:?}", why);
+                }
+
+                return;
             }
         }
 
@@ -77,13 +119,20 @@ impl EventHandler for Handler {
             let dist = WeightedIndex::new(&weights).unwrap();
             let mut rng = StdRng::from_rng(thread_rng()).unwrap();
 
-            if msg.mentions_me(&ctx.http).await.unwrap() || choices[dist.sample(&mut rng)] {
+            let data_read = ctx.data.read().await;
+            let bot_state = data_read
+                .get::<BotStateContainer>()
+                .expect("Failed to ctx data read BotState");
+
+            if !bot_state.is_quiet
+                && (msg.mentions_me(&ctx.http).await.unwrap() || choices[dist.sample(&mut rng)])
+            {
                 log::info!("Hit 会話AI");
                 let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
 
-                let regex: Regex = Regex::new("<@\\d+>").unwrap();
-                let tmp = regex.replace_all(&content, "");
-                let content_without_mentions = tmp.trim_start();
+                let config = data_read
+                    .get::<ConfigContainer>()
+                    .expect("Expected ConfigContainer in TypeMap");
 
                 let client = reqwest::Client::new();
                 log::info!("Request to CCE");
@@ -125,6 +174,7 @@ impl EventHandler for Handler {
             }
         }
 
+        // リアクション
         conversation(&ctx, &msg).await;
     }
 }
