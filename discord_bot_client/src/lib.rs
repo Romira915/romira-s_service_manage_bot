@@ -89,7 +89,7 @@ impl EventHandler for Handler {
                 log::info!("is_quiet {}", bot_state.is_quiet);
                 if let Err(why) = msg
                     .channel_id
-                    .send_message(&ctx.http, |m| m.content("だまる:anya19:"))
+                    .send_message(&ctx.http, |m| m.content("だまる :anya19:"))
                     .await
                 {
                     error!("Error sending message: {:?}", why);
@@ -103,7 +103,7 @@ impl EventHandler for Handler {
                 log::info!("is_quiet {}", bot_state.is_quiet);
                 if let Err(why) = msg
                     .channel_id
-                    .send_message(&ctx.http, |m| m.content("しゃべる:ANYA:"))
+                    .send_message(&ctx.http, |m| m.content("しゃべる :ANYA:"))
                     .await
                 {
                     error!("Error sending message: {:?}", why);
