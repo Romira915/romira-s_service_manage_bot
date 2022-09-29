@@ -22,7 +22,7 @@ profile = webdriver.FirefoxProfile(FIREFOX_PROFILE)
 with webdriver.Firefox(options=options, firefox_binary="/usr/bin/firefox", firefox_profile=profile,
                        executable_path=DRIVER_PATH) as driver:
     driver.get(
-        "https://colab.research.google.com/drive/16k_Z9PrVuxzOPi-R_5sIhgNYi227_wfH")
+        "https://colab.research.google.com/drive/1h1DrXRX40PIFJ3iUIdEmJsq8nAxT-wfU")
     time.sleep(3)
     driver.save_screenshot("google_colab.png")
 
