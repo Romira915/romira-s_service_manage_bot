@@ -77,6 +77,7 @@ impl EventHandler for Handler {
             }
         }
 
+        // Bot Quiet On/Off
         if msg.mentions_me(&ctx.http).await.unwrap() {
             let mut data_write = ctx.data.write().await;
             let bot_state = data_write
