@@ -75,7 +75,7 @@ async fn main() {
 
     let token = config.discord().token();
 
-    let http = Http::new_with_token(token);
+    let http = Http::new(token);
 
     let (owners, _bot_id) = match http.get_current_application_info().await {
         Ok(info) => {
@@ -98,8 +98,9 @@ async fn main() {
         .group(&ARK_GROUP)
         .group(&ACTIVITYCOMMAND_GROUP)
         .group(&AI_GROUP);
+    let intents = GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT;
 
-    let mut client = Client::builder(&token)
+    let mut client = Client::builder(&token, intents)
         .framework(framework)
         .event_handler(Handler)
         .await
