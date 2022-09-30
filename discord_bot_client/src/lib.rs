@@ -147,7 +147,7 @@ impl EventHandler for Handler {
                     )
                     .json(&json!({
                         "rawInput": format!("B: {}A:", content_without_mentions),
-                        "outputLength": 30
+                        "outputLength": 25
                     }))
                     .send()
                     .await
