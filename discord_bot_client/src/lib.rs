@@ -175,8 +175,16 @@ impl EventHandler for Handler {
             }
         }
 
-        // リアクション
-        conversation(&ctx, &msg).await;
+        {
+            let data_read = ctx.data.read().await;
+            let bot_state = data_read
+                .get::<BotStateContainer>()
+                .expect("Failed to ctx data read BotState");
+            if !bot_state.is_quiet {
+                // リアクション
+                conversation(&ctx, &msg).await;
+            }
+        }
     }
 }
 
