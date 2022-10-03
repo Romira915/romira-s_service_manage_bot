@@ -4,11 +4,15 @@ use getset::{CopyGetters, Getters, MutGetters, Setters};
 use serde::{Deserialize, Serialize};
 use serenity::prelude::TypeMapKey;
 
-#[derive(
-    Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Default, Clone,
-)]
+#[derive(Debug, Serialize, Deserialize, Getters, Setters, MutGetters, CopyGetters, Clone)]
 pub struct BotState {
     pub is_quiet: bool,
+}
+
+impl Default for BotState {
+    fn default() -> Self {
+        BotState { is_quiet: true }
+    }
 }
 
 pub struct BotStateContainer;
