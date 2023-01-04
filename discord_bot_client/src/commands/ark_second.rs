@@ -17,11 +17,11 @@ const REQUEST_TIMEOUT: u64 = 30;
 
 #[group]
 #[commands(start, status, stop, restart)]
-#[prefixes("ark")]
-#[description = "ARK管理コマンド"]
-pub struct Ark;
+#[prefixes("ark-second")]
+#[description = "ARK Second管理コマンド"]
+pub struct ArkSecond;
 
-impl Ark {
+impl ArkSecond {
     async fn generate_url(ctx: &Context) -> String {
         let data_read = ctx.data.read().await;
         let config = data_read
@@ -30,7 +30,7 @@ impl Ark {
 
         let address = config.address();
         format!(
-            "http://{}:{}/ark",
+            "http://{}:{}/ark-second",
             address.home_server_ip(),
             address.home_server_port()
         )
@@ -43,7 +43,7 @@ impl Ark {
     ) -> CommandResult {
         let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
         let data_read = ctx.data.read().await;
-        let url = Ark::generate_url(ctx).await;
+        let url = ArkSecond::generate_url(ctx).await;
         let admin = match command {
             SystemctlCommand::Start | SystemctlCommand::Status => false,
             SystemctlCommand::Stop | SystemctlCommand::Restart => true,
@@ -130,23 +130,23 @@ impl Ark {
 #[command]
 #[description = "ARKサーバを起動する"]
 async fn start(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
-    Ark::ark_command_exec(SystemctlCommand::Start, ctx, msg).await
+    ArkSecond::ark_command_exec(SystemctlCommand::Start, ctx, msg).await
 }
 
 #[command]
 #[description = "ARKサーバの状態を表示する"]
 async fn status(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
-    Ark::ark_command_exec(SystemctlCommand::Status, ctx, msg).await
+    ArkSecond::ark_command_exec(SystemctlCommand::Status, ctx, msg).await
 }
 
 #[command]
 #[description = "ARKサーバを停止する"]
 async fn stop(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
-    Ark::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await
+    ArkSecond::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await
 }
 
 #[command]
 #[description = "ARKサーバを再起動する"]
 async fn restart(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
-    Ark::ark_command_exec(SystemctlCommand::Restart, ctx, msg).await
+    ArkSecond::ark_command_exec(SystemctlCommand::Restart, ctx, msg).await
 }

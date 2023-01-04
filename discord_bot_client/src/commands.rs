@@ -3,6 +3,7 @@ use serenity::{builder::CreateEmbed, utils::Colour};
 pub mod activity;
 pub mod ai;
 pub mod ark;
+pub mod ark_second;
 pub mod conversation;
 pub mod minecraft;
 pub mod sdtd;
