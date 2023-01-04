@@ -80,6 +80,12 @@ async fn post_ark(command: web::Json<Command>) -> impl Responder {
     exec_systemctl(command, "ark-server.service").await
 }
 
+#[post("/ark-second")]
+async fn post_ark_second(command: web::Json<Command>) -> impl Responder {
+    log::info!("post ark-second");
+    exec_systemctl(command, "ark-server-second.service").await
+}
+
 #[get("/test")]
 async fn index() -> impl Responder {
     HttpResponse::Ok().body("test")
@@ -110,6 +116,7 @@ async fn main() -> std::io::Result<()> {
             .service(post_sdtd)
             .service(post_terraria)
             .service(post_ark)
+            .service(post_ark_second)
             .service(Files::new("/.well-known", well_known_path.as_path()))
     })
     .client_request_timeout(Duration::from_millis(30000))
