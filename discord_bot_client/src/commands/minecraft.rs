@@ -29,11 +29,7 @@ impl Minecraft {
             .expect("Expected ConfigContainer in TypeMap");
 
         let address = config.address();
-        format!(
-            "http://{}:{}/minecraft",
-            address.home_server_ip(),
-            address.home_server_port()
-        )
+        format!("https://{}/minecraft", address.home_server_ip(),)
     }
 
     async fn minecraft_command_exec(

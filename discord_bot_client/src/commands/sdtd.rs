@@ -29,11 +29,7 @@ impl Sdtd {
             .expect("Expected ConfigContainer in TypeMap");
 
         let address = config.address();
-        format!(
-            "http://{}:{}/sdtd",
-            address.home_server_ip(),
-            address.home_server_port()
-        )
+        format!("https://{}/sdtd", address.home_server_ip(),)
     }
 
     async fn sdtd_command_exec(
