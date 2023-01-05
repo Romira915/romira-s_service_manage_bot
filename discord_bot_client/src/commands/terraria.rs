@@ -29,11 +29,7 @@ impl Terraria {
             .expect("Expected ConfigContainer in TypeMap");
 
         let address = config.address();
-        format!(
-            "http://{}:{}/terraria",
-            address.home_server_ip(),
-            address.home_server_port()
-        )
+        format!("https://{}/terraria", address.home_server_ip(),)
     }
 
     async fn terraria_command_exec(

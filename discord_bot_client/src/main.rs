@@ -3,8 +3,8 @@ extern crate discord_bot_client;
 use discord_bot_client::{
     bot_config::{Config as BotConfig, ConfigContainer},
     commands::{
-        activity::ACTIVITYCOMMAND_GROUP, ai::*, ark::ARK_GROUP, ark_second::ARKSECOND_GROUP,
-        minecraft::*, sdtd::*, terraria::*, valheim::*,
+        activity::ACTIVITYCOMMAND_GROUP, ai::*, ark::ARK_GROUP, minecraft::*, sdtd::*, terraria::*,
+        valheim::*,
     },
     state::{BotState, BotStateContainer},
     *,
@@ -96,7 +96,6 @@ async fn main() {
         .group(&SDTD_GROUP)
         .group(&TERRARIA_GROUP)
         .group(&ARK_GROUP)
-        .group(&ARKSECOND_GROUP)
         .group(&ACTIVITYCOMMAND_GROUP)
         .group(&AI_GROUP);
     let intents = GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT;
