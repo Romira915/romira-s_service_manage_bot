@@ -74,7 +74,7 @@ async fn post_terraria(command: web::Json<Command>) -> impl Responder {
     exec_systemctl(command, "terraria-server.service").await
 }
 
-#[post("/ark")]
+#[post("/ark-first")]
 async fn post_ark(command: web::Json<Command>) -> impl Responder {
     log::info!("post ark");
     exec_systemctl(command, "ark-server.service").await
