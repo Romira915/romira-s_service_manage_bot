@@ -66,7 +66,7 @@ async fn main() {
         let mut toml_str = String::new();
         file.read_to_string(&mut toml_str).unwrap();
 
-        toml::from_str(&toml_str).expect("Fall to toml parser")
+        toml::from_str(&toml_str).expect("Fall to toml parser.")
     };
 
     let bot_state = BotState::default();
