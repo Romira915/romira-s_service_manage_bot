@@ -12,13 +12,18 @@ use serenity::prelude::Context;
 use serenity::prelude::*;
 
 use crate::bot_config::ConfigContainer;
+use crate::models::ChatGPTResponse;
+use crate::models::ChatGPTSchema;
 
 const PROMPT_ENDPOINT: &str =
     "https://k5vi72fcdo5u6gjqmuaqu5yoba0draxm.lambda-url.ap-northeast-1.on.aws/prompt";
 const RINNA_ENDPOINT: &str = "https://api.rinna.co.jp/models/tti/v2";
+const OPENAI_ENDPOINT: &'static str =
+    "https://genbaneko-ai.openai.azure.com/openai/deployments/bocchi/completions";
+const OPENAI_QUERY: [(&'static str, &'static str); 1] = [("api-version", "2022-12-01")];
 
 #[group]
-#[commands(draw, draw_jp)]
+#[commands(draw, draw_jp, bocchi)]
 #[prefixes("ai", "ml")]
 #[description = "機械学習コマンド"]
 pub struct Ai;
@@ -205,6 +210,49 @@ pub async fn draw_jp(ctx: &Context, msg: &Message, args: Args) -> CommandResult 
         })
         .await?;
     typing.stop().unwrap();
+
+    Ok(())
+}
+
+#[command]
+pub async fn bocchi(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
+    let arg = args.message();
+    log::info!("{:?}", arg);
+    if arg.is_empty() {
+        msg.channel_id
+            .send_message(&ctx.http, |m| {
+                m.embed(|e| {
+                    e.title("引数を与えてね")
+                        .field("Example", "~ai bocchi ぼっちちゃん！", false)
+                })
+            })
+            .await?;
+
+        return Ok(());
+    }
+
+    let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
+
+    let mut chat_gpt_data = ChatGPTSchema::new_with_bocchi(0.5, 0.95, 0, 0, 2500);
+    chat_gpt_data.user_query(arg);
+
+    let client = reqwest::Client::new();
+    let response = client
+        .post(OPENAI_ENDPOINT)
+        .query(&OPENAI_QUERY)
+        .header("Content-Type", "application/json")
+        .header("api-key", "8cc0b2987e674501b22cfdc638f2158f")
+        .json(&chat_gpt_data)
+        .send()
+        .await?;
+
+    let chat_gpt_res = response.json::<ChatGPTResponse>().await?;
+
+    msg.channel_id
+        .say(&ctx.http, &chat_gpt_res.choices[0].text)
+        .await?;
+
+    typing.stop().unwrap_or_default();
 
     Ok(())
 }
