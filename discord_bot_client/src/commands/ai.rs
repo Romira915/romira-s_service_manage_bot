@@ -233,6 +233,11 @@ pub async fn bocchi(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
 
     let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
 
+    let data_read = ctx.data.read().await;
+    let config = data_read
+        .get::<ConfigContainer>()
+        .expect("Expected ConfigContainer in TypeMap");
+
     let mut chat_gpt_data = ChatGPTSchema::new_with_bocchi(0.5, 0.95, 0, 0, 2500);
     chat_gpt_data.user_query(arg);
 
@@ -241,7 +246,7 @@ pub async fn bocchi(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
         .post(OPENAI_ENDPOINT)
         .query(&OPENAI_QUERY)
         .header("Content-Type", "application/json")
-        .header("api-key", "8cc0b2987e674501b22cfdc638f2158f")
+        .header("api-key", config.secret().openai_api_key())
         .json(&chat_gpt_data)
         .send()
         .await?;

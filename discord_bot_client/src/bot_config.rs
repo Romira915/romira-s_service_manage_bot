@@ -81,6 +81,8 @@ pub struct Secret {
     rinna_subscription_key: String,
     #[getset(get = "pub")]
     rinna_cce_subscription_key: String,
+    #[getset(get = "pub")]
+    openai_api_key: String,
 }
 
 #[derive(
