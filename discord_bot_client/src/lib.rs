@@ -1,5 +1,6 @@
 pub mod bot_config;
 pub mod commands;
+pub mod models;
 pub mod state;
 
 use std::collections::HashSet;
