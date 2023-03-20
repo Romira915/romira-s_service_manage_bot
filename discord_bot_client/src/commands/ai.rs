@@ -23,7 +23,7 @@ const OPENAI_ENDPOINT: &'static str =
 const OPENAI_QUERY: [(&'static str, &'static str); 1] = [("api-version", "2022-12-01")];
 
 #[group]
-#[commands(draw, draw_jp, bocchi)]
+#[commands(draw, draw_jp, bocchi, chat_gpt)]
 #[prefixes("ai", "ml")]
 #[description = "機械学習コマンド"]
 pub struct Ai;
@@ -239,6 +239,62 @@ pub async fn bocchi(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
         .expect("Expected ConfigContainer in TypeMap");
 
     let mut chat_gpt_data = ChatGPTSchema::new_with_bocchi(0.5, 0.95, 0, 0, 2500);
+    chat_gpt_data.user_query(arg);
+
+    let client = reqwest::Client::new();
+    let response = client
+        .post(OPENAI_ENDPOINT)
+        .query(&OPENAI_QUERY)
+        .header("Content-Type", "application/json")
+        .header("api-key", config.secret().openai_api_key())
+        .json(&chat_gpt_data)
+        .send()
+        .await?;
+
+    let chat_gpt_res = response.json::<ChatGPTResponse>().await?;
+
+    msg.channel_id
+        .say(&ctx.http, &chat_gpt_res.choices[0].text)
+        .await?;
+
+    typing.stop().unwrap_or_default();
+
+    Ok(())
+}
+
+#[command]
+pub async fn chat_gpt(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
+    let arg = args.message();
+    log::info!("{:?}", arg);
+    if arg.is_empty() {
+        msg.channel_id
+            .send_message(&ctx.http, |m| {
+                m.embed(|e| {
+                    e.title("引数を与えてね")
+                        .field("Example", "~ai bocchi Rust", false)
+                })
+            })
+            .await?;
+
+        return Ok(());
+    }
+
+    let typing = msg.channel_id.start_typing(&ctx.http).unwrap();
+
+    let data_read = ctx.data.read().await;
+    let config = data_read
+        .get::<ConfigContainer>()
+        .expect("Expected ConfigContainer in TypeMap");
+
+    let mut chat_gpt_data = ChatGPTSchema::new(
+        "<|im_start|>system\nYou are a Technology Assistant\n<|im_end|>\n".to_string(),
+        0.5,
+        0.95,
+        0,
+        0,
+        2500,
+        vec!["<|im_end|>".to_string()],
+    );
     chat_gpt_data.user_query(arg);
 
     let client = reqwest::Client::new();
