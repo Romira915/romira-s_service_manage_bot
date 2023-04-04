@@ -1,5 +1,6 @@
 pub(crate) mod ark_first;
 pub(crate) mod ark_second;
+pub(crate) mod ark_third;
 
 use std::time::Duration;
 
@@ -17,11 +18,12 @@ use super::minecraft::SystemctlCommand;
 use super::EmbedMessageBuilder;
 use ark_first::*;
 use ark_second::*;
+use ark_third::*;
 
 const REQUEST_TIMEOUT: u64 = 30;
 
 #[group]
-#[sub_groups(arkfirst, arksecond)]
+#[sub_groups(arkfirst, arksecond, arkthird)]
 #[commands(start, status, stop, restart)]
 #[prefixes("ark")]
 #[description = "ARK管理コマンド"]
