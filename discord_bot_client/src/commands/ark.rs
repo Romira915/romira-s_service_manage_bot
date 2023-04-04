@@ -31,28 +31,60 @@ pub struct Ark;
 
 #[command]
 #[description = "ARKサーバを起動する"]
-async fn start(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
-    ArkFirst::ark_command_exec(SystemctlCommand::Start, ctx, msg).await?;
-    ArkSecond::ark_command_exec(SystemctlCommand::Start, ctx, msg).await
+async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    for arg in args.iter::<u32>() {
+        match arg {
+            Ok(1) => ArkFirst::ark_command_exec(SystemctlCommand::Start, ctx, msg).await?,
+            Ok(2) => ArkSecond::ark_command_exec(SystemctlCommand::Start, ctx, msg).await?,
+            Ok(3) => ArkThird::ark_command_exec(SystemctlCommand::Start, ctx, msg).await?,
+            _ => (),
+        }
+    }
+
+    Ok(())
 }
 
 #[command]
 #[description = "ARKサーバの状態を表示する"]
-async fn status(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
-    ArkFirst::ark_command_exec(SystemctlCommand::Status, ctx, msg).await?;
-    ArkSecond::ark_command_exec(SystemctlCommand::Status, ctx, msg).await
+async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    for arg in args.iter::<u32>() {
+        match arg {
+            Ok(1) => ArkFirst::ark_command_exec(SystemctlCommand::Status, ctx, msg).await?,
+            Ok(2) => ArkSecond::ark_command_exec(SystemctlCommand::Status, ctx, msg).await?,
+            Ok(3) => ArkThird::ark_command_exec(SystemctlCommand::Status, ctx, msg).await?,
+            _ => (),
+        }
+    }
+
+    Ok(())
 }
 
 #[command]
 #[description = "ARKサーバを停止する"]
-async fn stop(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
-    ArkFirst::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
-    ArkSecond::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await
+async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    for arg in args.iter::<u32>() {
+        match arg {
+            Ok(1) => ArkFirst::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?,
+            Ok(2) => ArkSecond::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?,
+            Ok(3) => ArkThird::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?,
+            _ => (),
+        }
+    }
+
+    Ok(())
 }
 
 #[command]
 #[description = "ARKサーバを再起動する"]
-async fn restart(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
-    ArkFirst::ark_command_exec(SystemctlCommand::Restart, ctx, msg).await?;
-    ArkSecond::ark_command_exec(SystemctlCommand::Restart, ctx, msg).await
+async fn restart(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    for arg in args.iter::<u32>() {
+        match arg {
+            Ok(1) => ArkFirst::ark_command_exec(SystemctlCommand::Restart, ctx, msg).await?,
+            Ok(2) => ArkSecond::ark_command_exec(SystemctlCommand::Restart, ctx, msg).await?,
+            Ok(3) => ArkThird::ark_command_exec(SystemctlCommand::Restart, ctx, msg).await?,
+            _ => (),
+        }
+    }
+
+    Ok(())
 }
