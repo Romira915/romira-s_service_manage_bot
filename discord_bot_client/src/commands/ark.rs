@@ -30,7 +30,7 @@ const REQUEST_TIMEOUT: u64 = 30;
 pub struct Ark;
 
 #[command]
-#[description = "ARKサーバを起動する"]
+#[description = "ARKサーバを起動する．args: int int int ... int"]
 async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     for arg in args.iter::<u32>() {
         match arg {
@@ -45,7 +45,7 @@ async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
 }
 
 #[command]
-#[description = "ARKサーバの状態を表示する"]
+#[description = "ARKサーバの状態を表示する．args: int int int ... int"]
 async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     for arg in args.iter::<u32>() {
         match arg {
@@ -60,7 +60,7 @@ async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
 }
 
 #[command]
-#[description = "ARKサーバを停止する"]
+#[description = "ARKサーバを停止する．args: int int int ... int"]
 async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     for arg in args.iter::<u32>() {
         match arg {
@@ -75,7 +75,7 @@ async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
 }
 
 #[command]
-#[description = "ARKサーバを再起動する"]
+#[description = "ARKサーバを再起動する．args: int int int ... int"]
 async fn restart(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     for arg in args.iter::<u32>() {
         match arg {
