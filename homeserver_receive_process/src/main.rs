@@ -77,7 +77,7 @@ fn into_response_by_cmd_output_with_status(output: &Result<Output>) -> HttpRespo
                 HttpResponse::ExpectationFailed().body("inactive".to_string())
             }
         }
-        Err(e) => HttpResponse::ExpectationFailed().body("inactive".to_string()),
+        Err(_) => HttpResponse::ExpectationFailed().body("inactive".to_string()),
     }
 }
 
@@ -99,8 +99,10 @@ async fn post_minecraft(
 
     if let Ok(_) = &result {
         if let "start" | "restart" = command.request().as_str() {
+            log::info!("running minecraft_server_mgpf");
             state.lock().unwrap().minecraft_server_mgpf = true;
         } else if let "stop" = command.request().as_str() {
+            log::info!("stoping minecraft_server_mgpf");
             state.lock().unwrap().minecraft_server_mgpf = false;
         }
     }
@@ -130,8 +132,10 @@ async fn post_sdtd(
 
     if let Ok(_) = &result {
         if let "start" | "restart" = command.request().as_str() {
+            log::info!("running sdtd_server");
             state.lock().unwrap().sdtd_server = true;
         } else if let "stop" = command.request().as_str() {
+            log::info!("stoping sdtd_server");
             state.lock().unwrap().sdtd_server = false;
         }
     }
@@ -161,8 +165,10 @@ async fn post_terraria(
 
     if let Ok(_) = &result {
         if let "start" | "restart" = command.request().as_str() {
+            log::info!("running terraria_server");
             state.lock().unwrap().terraria_server = true;
         } else if let "stop" = command.request().as_str() {
+            log::info!("stoping terraria_server");
             state.lock().unwrap().terraria_server = false;
         }
     }
@@ -192,8 +198,10 @@ async fn post_ark(
 
     if let Ok(_) = &result {
         if let "start" | "restart" = command.request().as_str() {
+            log::info!("running ark_server");
             state.lock().unwrap().ark_server = true;
         } else if let "stop" = command.request().as_str() {
+            log::info!("stoping ark_server");
             state.lock().unwrap().ark_server = false;
         }
     }
@@ -223,8 +231,10 @@ async fn post_ark_second(
 
     if let Ok(_) = &result {
         if let "start" | "restart" = command.request().as_str() {
+            log::info!("running ark_server_second");
             state.lock().unwrap().ark_server_second = true;
         } else if let "stop" = command.request().as_str() {
+            log::info!("stoping ark_server_second");
             state.lock().unwrap().ark_server_second = false;
         }
     }
@@ -254,8 +264,10 @@ async fn post_ark_third(
 
     if let Ok(_) = &result {
         if let "start" | "restart" = command.request().as_str() {
+            log::info!("running ark_server_third");
             state.lock().unwrap().ark_server_third = true;
         } else if let "stop" = command.request().as_str() {
+            log::info!("stoping ark_server_third");
             state.lock().unwrap().ark_server_third = false;
         }
     }
@@ -279,6 +291,18 @@ async fn get_current_executing_count(
     state: web::Data<Arc<Mutex<GameServerExecutingState>>>,
 ) -> impl Responder {
     HttpResponse::Ok().body(state.lock().unwrap().current_executing_count().to_string())
+}
+
+#[get("/get")]
+async fn get_test(state: web::Data<Arc<Mutex<GameServerExecutingState>>>) -> impl Responder {
+    {
+        if state.lock().unwrap().current_executing_count() >= 2 {
+            return HttpResponse::ExpectationFailed()
+                .body("Two games have already been activated.");
+        }
+    }
+
+    HttpResponse::Ok().body("".to_string())
 }
 
 #[actix_web::main]
@@ -316,6 +340,7 @@ async fn main() -> std::io::Result<()> {
             .service(post_ark_second)
             .service(post_ark_third)
             .service(get_current_executing_count)
+            .service(get_test)
             .service(Files::new("/.well-known", well_known_path.as_path()))
     })
     .client_request_timeout(Duration::from_millis(30000))
