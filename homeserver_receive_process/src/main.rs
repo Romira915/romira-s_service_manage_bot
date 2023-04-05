@@ -2,7 +2,9 @@ use std::{
     env,
     fs::File,
     io::{self, Read},
+    path::PathBuf,
     process::Output,
+    str::FromStr,
     sync::{Arc, Mutex},
     time::Duration,
 };
@@ -248,14 +250,27 @@ async fn post_ark_third(
 }
 
 #[get("/test")]
-async fn index() -> impl Responder {
-    HttpResponse::Ok().body("test")
+async fn index(state: web::Data<Arc<Mutex<GameServerExecutingState>>>) -> impl Responder {
+    state.lock().unwrap().ark_server = true;
+    state.lock().unwrap().ark_server_second = true;
+    HttpResponse::Ok().body(format!("{:?}", state))
+}
+
+#[get("/current-executing-count")]
+async fn get_current_executing_count(
+    state: web::Data<Arc<Mutex<GameServerExecutingState>>>,
+) -> impl Responder {
+    HttpResponse::Ok().body(state.lock().unwrap().current_executing_count().to_string())
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     init_logger();
-    let exe_dir = env::current_exe().unwrap().parent().unwrap().to_path_buf();
+    let exe_dir = if cfg!(debug_assertions) {
+        PathBuf::from_str("./").unwrap()
+    } else {
+        env::current_exe().unwrap().parent().unwrap().to_path_buf()
+    };
 
     let config: Config = {
         let mut config_full_path = exe_dir.clone();
@@ -282,6 +297,7 @@ async fn main() -> std::io::Result<()> {
             .service(post_ark)
             .service(post_ark_second)
             .service(post_ark_third)
+            .service(get_current_executing_count)
             .service(Files::new("/.well-known", well_known_path.as_path()))
     })
     .client_request_timeout(Duration::from_millis(30000))
