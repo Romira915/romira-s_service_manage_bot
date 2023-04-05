@@ -97,13 +97,15 @@ async fn post_minecraft(
 
     let result = exec_systemctl(&command, Game::MinecraftServerMgpf).await;
 
-    if let Ok(_) = &result {
-        if let "start" | "restart" = command.request().as_str() {
-            log::info!("running minecraft_server_mgpf");
-            state.lock().unwrap().minecraft_server_mgpf = true;
-        } else if let "stop" = command.request().as_str() {
-            log::info!("stoping minecraft_server_mgpf");
-            state.lock().unwrap().minecraft_server_mgpf = false;
+    if let Ok(output) = &result {
+        if output.status.success() {
+            if let "start" | "restart" = command.request().as_str() {
+                log::info!("running minecraft_server_mgpf");
+                state.lock().unwrap().minecraft_server_mgpf = true;
+            } else if let "stop" = command.request().as_str() {
+                log::info!("stoping minecraft_server_mgpf");
+                state.lock().unwrap().minecraft_server_mgpf = false;
+            }
         }
     }
 
@@ -130,13 +132,15 @@ async fn post_sdtd(
 
     let result = exec_systemctl(&command, Game::SdtdServer).await;
 
-    if let Ok(_) = &result {
-        if let "start" | "restart" = command.request().as_str() {
-            log::info!("running sdtd_server");
-            state.lock().unwrap().sdtd_server = true;
-        } else if let "stop" = command.request().as_str() {
-            log::info!("stoping sdtd_server");
-            state.lock().unwrap().sdtd_server = false;
+    if let Ok(output) = &result {
+        if output.status.success() {
+            if let "start" | "restart" = command.request().as_str() {
+                log::info!("running sdtd_server");
+                state.lock().unwrap().sdtd_server = true;
+            } else if let "stop" = command.request().as_str() {
+                log::info!("stoping sdtd_server");
+                state.lock().unwrap().sdtd_server = false;
+            }
         }
     }
 
@@ -163,13 +167,15 @@ async fn post_terraria(
 
     let result = exec_systemctl(&command, Game::TerrariaServer).await;
 
-    if let Ok(_) = &result {
-        if let "start" | "restart" = command.request().as_str() {
-            log::info!("running terraria_server");
-            state.lock().unwrap().terraria_server = true;
-        } else if let "stop" = command.request().as_str() {
-            log::info!("stoping terraria_server");
-            state.lock().unwrap().terraria_server = false;
+    if let Ok(output) = &result {
+        if output.status.success() {
+            if let "start" | "restart" = command.request().as_str() {
+                log::info!("running terraria_server");
+                state.lock().unwrap().terraria_server = true;
+            } else if let "stop" = command.request().as_str() {
+                log::info!("stoping terraria_server");
+                state.lock().unwrap().terraria_server = false;
+            }
         }
     }
 
@@ -196,13 +202,15 @@ async fn post_ark(
 
     let result = exec_systemctl(&command, Game::ArkServer).await;
 
-    if let Ok(_) = &result {
-        if let "start" | "restart" = command.request().as_str() {
-            log::info!("running ark_server");
-            state.lock().unwrap().ark_server = true;
-        } else if let "stop" = command.request().as_str() {
-            log::info!("stoping ark_server");
-            state.lock().unwrap().ark_server = false;
+    if let Ok(output) = &result {
+        if output.status.success() {
+            if let "start" | "restart" = command.request().as_str() {
+                log::info!("running ark_server");
+                state.lock().unwrap().ark_server = true;
+            } else if let "stop" = command.request().as_str() {
+                log::info!("stoping ark_server");
+                state.lock().unwrap().ark_server = false;
+            }
         }
     }
 
@@ -229,13 +237,15 @@ async fn post_ark_second(
 
     let result = exec_systemctl(&command, Game::ArkServerSecond).await;
 
-    if let Ok(_) = &result {
-        if let "start" | "restart" = command.request().as_str() {
-            log::info!("running ark_server_second");
-            state.lock().unwrap().ark_server_second = true;
-        } else if let "stop" = command.request().as_str() {
-            log::info!("stoping ark_server_second");
-            state.lock().unwrap().ark_server_second = false;
+    if let Ok(output) = &result {
+        if output.status.success() {
+            if let "start" | "restart" = command.request().as_str() {
+                log::info!("running ark_server_second");
+                state.lock().unwrap().ark_server_second = true;
+            } else if let "stop" = command.request().as_str() {
+                log::info!("stoping ark_server_second");
+                state.lock().unwrap().ark_server_second = false;
+            }
         }
     }
 
@@ -262,13 +272,15 @@ async fn post_ark_third(
 
     let result = exec_systemctl(&command, Game::ArkServerThird).await;
 
-    if let Ok(_) = &result {
-        if let "start" | "restart" = command.request().as_str() {
-            log::info!("running ark_server_third");
-            state.lock().unwrap().ark_server_third = true;
-        } else if let "stop" = command.request().as_str() {
-            log::info!("stoping ark_server_third");
-            state.lock().unwrap().ark_server_third = false;
+    if let Ok(output) = &result {
+        if output.status.success() {
+            if let "start" | "restart" = command.request().as_str() {
+                log::info!("running ark_server_third");
+                state.lock().unwrap().ark_server_third = true;
+            } else if let "stop" = command.request().as_str() {
+                log::info!("stoping ark_server_third");
+                state.lock().unwrap().ark_server_third = false;
+            }
         }
     }
 
