@@ -293,9 +293,11 @@ async fn post_ark_third(
 
 #[get("/test")]
 async fn index(state: web::Data<Arc<Mutex<GameServerExecutingState>>>) -> impl Responder {
-    state.lock().unwrap().ark_server = true;
-    state.lock().unwrap().ark_server_second = true;
-    HttpResponse::Ok().body(format!("{:?}", state))
+    {
+        state.lock().unwrap().ark_server = true;
+        state.lock().unwrap().ark_server_second = true;
+    }
+    HttpResponse::Ok().body(format!("{:?}", state.lock().unwrap().ark_server))
 }
 
 #[get("/current-executing-count")]
@@ -357,6 +359,7 @@ async fn main() -> std::io::Result<()> {
     })
     .client_request_timeout(Duration::from_millis(30000))
     .client_disconnect_timeout(Duration::from_millis(30000))
+    .workers(1)
     .bind(format!(
         "{}:{}",
         config.address().home_server_bind_ip(),
