@@ -88,8 +88,11 @@ async fn post_minecraft(
 ) -> impl Responder {
     log::info!("post minecraft");
 
-    if state.lock().unwrap().current_executing_count() >= 2 {
-        return HttpResponse::ExpectationFailed().body("Two games have already been activated.");
+    {
+        if state.lock().unwrap().current_executing_count() >= 2 {
+            return HttpResponse::ExpectationFailed()
+                .body("Two games have already been activated.");
+        }
     }
 
     let result = exec_systemctl(&command, Game::MinecraftServerMgpf).await;
@@ -116,8 +119,11 @@ async fn post_sdtd(
 ) -> impl Responder {
     log::info!("post sdtd");
 
-    if state.lock().unwrap().current_executing_count() >= 2 {
-        return HttpResponse::ExpectationFailed().body("Two games have already been activated.");
+    {
+        if state.lock().unwrap().current_executing_count() >= 2 {
+            return HttpResponse::ExpectationFailed()
+                .body("Two games have already been activated.");
+        }
     }
 
     let result = exec_systemctl(&command, Game::SdtdServer).await;
@@ -144,8 +150,11 @@ async fn post_terraria(
 ) -> impl Responder {
     log::info!("post terraria");
 
-    if state.lock().unwrap().current_executing_count() >= 2 {
-        return HttpResponse::ExpectationFailed().body("Two games have already been activated.");
+    {
+        if state.lock().unwrap().current_executing_count() >= 2 {
+            return HttpResponse::ExpectationFailed()
+                .body("Two games have already been activated.");
+        }
     }
 
     let result = exec_systemctl(&command, Game::TerrariaServer).await;
@@ -172,8 +181,11 @@ async fn post_ark(
 ) -> impl Responder {
     log::info!("post ark");
 
-    if state.lock().unwrap().current_executing_count() >= 2 {
-        return HttpResponse::ExpectationFailed().body("Two games have already been activated.");
+    {
+        if state.lock().unwrap().current_executing_count() >= 2 {
+            return HttpResponse::ExpectationFailed()
+                .body("Two games have already been activated.");
+        }
     }
 
     let result = exec_systemctl(&command, Game::ArkServer).await;
@@ -200,8 +212,11 @@ async fn post_ark_second(
 ) -> impl Responder {
     log::info!("post ark-second");
 
-    if state.lock().unwrap().current_executing_count() >= 2 {
-        return HttpResponse::ExpectationFailed().body("Two games have already been activated.");
+    {
+        if state.lock().unwrap().current_executing_count() >= 2 {
+            return HttpResponse::ExpectationFailed()
+                .body("Two games have already been activated.");
+        }
     }
 
     let result = exec_systemctl(&command, Game::ArkServerSecond).await;
@@ -228,8 +243,11 @@ async fn post_ark_third(
 ) -> impl Responder {
     log::info!("post ark-third");
 
-    if state.lock().unwrap().current_executing_count() >= 2 {
-        return HttpResponse::ExpectationFailed().body("Two games have already been activated.");
+    {
+        if state.lock().unwrap().current_executing_count() >= 2 {
+            return HttpResponse::ExpectationFailed()
+                .body("Two games have already been activated.");
+        }
     }
 
     let result = exec_systemctl(&command, Game::ArkServerThird).await;
