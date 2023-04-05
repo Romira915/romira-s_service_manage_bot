@@ -75,7 +75,7 @@ fn into_response_by_cmd_output_with_status(output: &Result<Output>) -> HttpRespo
                 HttpResponse::ExpectationFailed().body("inactive".to_string())
             }
         }
-        Err(e) => HttpResponse::ExpectationFailed().body(format!("Failed to cmd! macro\n{}", e)),
+        Err(e) => HttpResponse::ExpectationFailed().body("inactive".to_string()),
     }
 }
 
