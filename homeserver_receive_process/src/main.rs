@@ -1,13 +1,26 @@
-use std::{env, fs::File, io::Read, time::Duration};
+use std::{
+    env,
+    fs::File,
+    io::{self, Read},
+    process::Output,
+    sync::{Arc, Mutex},
+    time::Duration,
+};
 
 use actix_files::Files;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use anyhow::{bail, Context, Result};
 use duct::cmd;
-use homeserver_receive_process::{home_server_config::Config, init_logger, Command};
+use homeserver_receive_process::{
+    home_server_config::Config,
+    init_logger,
+    models::{Game, GameServerExecutingState},
+    Command,
+};
 
 const CONFIG_PATH: &str = ".config/home_server_config.toml";
 
-async fn exec_systemctl(command: web::Json<Command>, service_name: &str) -> impl Responder {
+async fn exec_systemctl(command: &web::Json<Command>, service: Game) -> Result<Output> {
     #[allow(clippy::if_same_then_else)]
     if let "start" | "status" = command.request().as_str() {
         // start and status
@@ -15,81 +28,223 @@ async fn exec_systemctl(command: web::Json<Command>, service_name: &str) -> impl
     {
         // stop and restart with admin
     } else {
-        return HttpResponse::MethodNotAllowed().body("Not Allowed command");
+        bail!("Not Allowed command");
     }
 
-    let response = match cmd!("systemctl", &command.request(), service_name)
+    let request = if command.request() == "status" {
+        "is-active"
+    } else {
+        command.request()
+    };
+
+    let result = cmd!("systemctl", request, service.to_service_name())
         .stdout_capture()
         .stderr_capture()
         .run()
-    {
+        .context("Failed to systemctl");
+
+    result
+}
+
+fn into_response_by_cmd_output(output: &Result<Output>) -> HttpResponse {
+    match output {
         Ok(output) => {
             let exit_code = output.status;
             log::info!("exit code {}", exit_code);
 
             if exit_code.success() {
-                let content = if command.request() == "status" {
-                    let output = String::from_utf8(output.stdout).unwrap();
-                    let mut split = output.split_whitespace();
-                    split.position(|p| p == "Active:");
-
-                    format!("{} {}", split.next().unwrap(), split.next().unwrap())
-                } else {
-                    "Success".to_string()
-                };
-
-                HttpResponse::Ok().body(content)
+                HttpResponse::Ok().body("Success".to_string())
             } else {
                 HttpResponse::ExpectationFailed()
                     .body(format!("Failed to systemctl\n{}", exit_code))
             }
         }
-        Err(e) => {
-            if command.request() == "status" {
-                HttpResponse::ExpectationFailed().body("inactive (dead)")
+        Err(e) => HttpResponse::ExpectationFailed().body(format!("Failed to cmd! macro\n{}", e)),
+    }
+}
+
+fn into_response_by_cmd_output_with_status(output: &Result<Output>) -> HttpResponse {
+    match output {
+        Ok(output) => {
+            let exit_code = output.status;
+            log::info!("exit code {}", exit_code);
+
+            if exit_code.success() {
+                HttpResponse::Ok().body("active".to_string())
             } else {
-                HttpResponse::ExpectationFailed().body(format!("Failed to cmd! macro\n{}", e))
+                HttpResponse::ExpectationFailed().body("inactive".to_string())
             }
         }
-    };
-
-    response
+        Err(e) => HttpResponse::ExpectationFailed().body(format!("Failed to cmd! macro\n{}", e)),
+    }
 }
 
 #[post("/minecraft")]
-async fn post_minecraft(command: web::Json<Command>) -> impl Responder {
+async fn post_minecraft(
+    command: web::Json<Command>,
+    state: web::Data<Arc<Mutex<GameServerExecutingState>>>,
+) -> impl Responder {
     log::info!("post minecraft");
-    exec_systemctl(command, "minecraft-server-mgpf.service").await
+
+    if state.lock().unwrap().current_executing_count() >= 2 {
+        return HttpResponse::ExpectationFailed().body("Two games have already been activated.");
+    }
+
+    let result = exec_systemctl(&command, Game::MinecraftServerMgpf).await;
+
+    if let Ok(_) = &result {
+        if let "start" | "restart" = command.request().as_str() {
+            state.lock().unwrap().minecraft_server_mgpf = true;
+        } else if let "stop" = command.request().as_str() {
+            state.lock().unwrap().minecraft_server_mgpf = false;
+        }
+    }
+
+    if command.request() == "status" {
+        into_response_by_cmd_output_with_status(&result)
+    } else {
+        into_response_by_cmd_output(&result)
+    }
 }
 
 #[post("/sdtd")]
-async fn post_sdtd(command: web::Json<Command>) -> impl Responder {
+async fn post_sdtd(
+    command: web::Json<Command>,
+    state: web::Data<Arc<Mutex<GameServerExecutingState>>>,
+) -> impl Responder {
     log::info!("post sdtd");
-    exec_systemctl(command, "sdtd-server.service").await
+
+    if state.lock().unwrap().current_executing_count() >= 2 {
+        return HttpResponse::ExpectationFailed().body("Two games have already been activated.");
+    }
+
+    let result = exec_systemctl(&command, Game::SdtdServer).await;
+
+    if let Ok(_) = &result {
+        if let "start" | "restart" = command.request().as_str() {
+            state.lock().unwrap().sdtd_server = true;
+        } else if let "stop" = command.request().as_str() {
+            state.lock().unwrap().sdtd_server = false;
+        }
+    }
+
+    if command.request() == "status" {
+        into_response_by_cmd_output_with_status(&result)
+    } else {
+        into_response_by_cmd_output(&result)
+    }
 }
 
 #[post("/terraria")]
-async fn post_terraria(command: web::Json<Command>) -> impl Responder {
+async fn post_terraria(
+    command: web::Json<Command>,
+    state: web::Data<Arc<Mutex<GameServerExecutingState>>>,
+) -> impl Responder {
     log::info!("post terraria");
-    exec_systemctl(command, "terraria-server.service").await
+
+    if state.lock().unwrap().current_executing_count() >= 2 {
+        return HttpResponse::ExpectationFailed().body("Two games have already been activated.");
+    }
+
+    let result = exec_systemctl(&command, Game::TerrariaServer).await;
+
+    if let Ok(_) = &result {
+        if let "start" | "restart" = command.request().as_str() {
+            state.lock().unwrap().terraria_server = true;
+        } else if let "stop" = command.request().as_str() {
+            state.lock().unwrap().terraria_server = false;
+        }
+    }
+
+    if command.request() == "status" {
+        into_response_by_cmd_output_with_status(&result)
+    } else {
+        into_response_by_cmd_output(&result)
+    }
 }
 
 #[post("/ark-first")]
-async fn post_ark(command: web::Json<Command>) -> impl Responder {
+async fn post_ark(
+    command: web::Json<Command>,
+    state: web::Data<Arc<Mutex<GameServerExecutingState>>>,
+) -> impl Responder {
     log::info!("post ark");
-    exec_systemctl(command, "ark-server.service").await
+
+    if state.lock().unwrap().current_executing_count() >= 2 {
+        return HttpResponse::ExpectationFailed().body("Two games have already been activated.");
+    }
+
+    let result = exec_systemctl(&command, Game::ArkServer).await;
+
+    if let Ok(_) = &result {
+        if let "start" | "restart" = command.request().as_str() {
+            state.lock().unwrap().ark_server = true;
+        } else if let "stop" = command.request().as_str() {
+            state.lock().unwrap().ark_server = false;
+        }
+    }
+
+    if command.request() == "status" {
+        into_response_by_cmd_output_with_status(&result)
+    } else {
+        into_response_by_cmd_output(&result)
+    }
 }
 
 #[post("/ark-second")]
-async fn post_ark_second(command: web::Json<Command>) -> impl Responder {
+async fn post_ark_second(
+    command: web::Json<Command>,
+    state: web::Data<Arc<Mutex<GameServerExecutingState>>>,
+) -> impl Responder {
     log::info!("post ark-second");
-    exec_systemctl(command, "ark-server-second.service").await
+
+    if state.lock().unwrap().current_executing_count() >= 2 {
+        return HttpResponse::ExpectationFailed().body("Two games have already been activated.");
+    }
+
+    let result = exec_systemctl(&command, Game::ArkServerSecond).await;
+
+    if let Ok(_) = &result {
+        if let "start" | "restart" = command.request().as_str() {
+            state.lock().unwrap().ark_server_second = true;
+        } else if let "stop" = command.request().as_str() {
+            state.lock().unwrap().ark_server_second = false;
+        }
+    }
+
+    if command.request() == "status" {
+        into_response_by_cmd_output_with_status(&result)
+    } else {
+        into_response_by_cmd_output(&result)
+    }
 }
 
 #[post("/ark-third")]
-async fn post_ark_third(command: web::Json<Command>) -> impl Responder {
+async fn post_ark_third(
+    command: web::Json<Command>,
+    state: web::Data<Arc<Mutex<GameServerExecutingState>>>,
+) -> impl Responder {
     log::info!("post ark-third");
-    exec_systemctl(command, "ark-server-third.service").await
+
+    if state.lock().unwrap().current_executing_count() >= 2 {
+        return HttpResponse::ExpectationFailed().body("Two games have already been activated.");
+    }
+
+    let result = exec_systemctl(&command, Game::ArkServerThird).await;
+
+    if let Ok(_) = &result {
+        if let "start" | "restart" = command.request().as_str() {
+            state.lock().unwrap().ark_server_third = true;
+        } else if let "stop" = command.request().as_str() {
+            state.lock().unwrap().ark_server_third = false;
+        }
+    }
+
+    if command.request() == "status" {
+        into_response_by_cmd_output_with_status(&result)
+    } else {
+        into_response_by_cmd_output(&result)
+    }
 }
 
 #[get("/test")]
@@ -117,6 +272,9 @@ async fn main() -> std::io::Result<()> {
         let mut well_known_path = exe_dir.clone();
         well_known_path.push(".well-known");
         App::new()
+            .data_factory(|| async {
+                Ok::<_, ()>(Arc::new(Mutex::new(GameServerExecutingState::default())))
+            })
             .service(index)
             .service(post_minecraft)
             .service(post_sdtd)

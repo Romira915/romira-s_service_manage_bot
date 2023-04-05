@@ -1,4 +1,5 @@
 pub mod home_server_config;
+pub mod models;
 
 use derive_builder::Builder;
 use getset::Getters;

@@ -9,6 +9,7 @@ version = "0.1.0"
 actix-files = "0.6.0"
 actix-web = "4.1.0"
 
+anyhow = "1.0.70"
 derive_builder = "0.10.2"
 duct = "0.13.5"
 getset = "0.1.1"
