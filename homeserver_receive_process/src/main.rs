@@ -89,8 +89,11 @@ async fn post_minecraft(
     log::info!("post minecraft");
 
     {
-        if (command.request() == "start" || command.request() == "restart")
-            && state.lock().unwrap().current_executing_count() >= 2
+        let state = state.lock().unwrap();
+        if (command.request() == "start" && state.current_executing_count() >= 2)
+            || (command.request() == "restart"
+                && !state.minecraft_server_mgpf
+                && state.current_executing_count() >= 2)
         {
             return HttpResponse::ExpectationFailed()
                 .body("Two games have already been activated.");
@@ -126,8 +129,11 @@ async fn post_sdtd(
     log::info!("post sdtd");
 
     {
-        if (command.request() == "start" || command.request() == "restart")
-            && state.lock().unwrap().current_executing_count() >= 2
+        let state = state.lock().unwrap();
+        if (command.request() == "start" && state.current_executing_count() >= 2)
+            || (command.request() == "restart"
+                && !state.sdtd_server
+                && state.current_executing_count() >= 2)
         {
             return HttpResponse::ExpectationFailed()
                 .body("Two games have already been activated.");
@@ -163,8 +169,11 @@ async fn post_terraria(
     log::info!("post terraria");
 
     {
-        if (command.request() == "start" || command.request() == "restart")
-            && state.lock().unwrap().current_executing_count() >= 2
+        let state = state.lock().unwrap();
+        if (command.request() == "start" && state.current_executing_count() >= 2)
+            || (command.request() == "restart"
+                && !state.terraria_server
+                && state.current_executing_count() >= 2)
         {
             return HttpResponse::ExpectationFailed()
                 .body("Two games have already been activated.");
@@ -200,8 +209,11 @@ async fn post_ark(
     log::info!("post ark");
 
     {
-        if (command.request() == "start" || command.request() == "restart")
-            && state.lock().unwrap().current_executing_count() >= 2
+        let state = state.lock().unwrap();
+        if (command.request() == "start" && state.current_executing_count() >= 2)
+            || (command.request() == "restart"
+                && !state.ark_server
+                && state.current_executing_count() >= 2)
         {
             return HttpResponse::ExpectationFailed()
                 .body("Two games have already been activated.");
@@ -237,8 +249,11 @@ async fn post_ark_second(
     log::info!("post ark-second");
 
     {
-        if (command.request() == "start" || command.request() == "restart")
-            && state.lock().unwrap().current_executing_count() >= 2
+        let state = state.lock().unwrap();
+        if (command.request() == "start" && state.current_executing_count() >= 2)
+            || (command.request() == "restart"
+                && !state.ark_server_second
+                && state.current_executing_count() >= 2)
         {
             return HttpResponse::ExpectationFailed()
                 .body("Two games have already been activated.");
@@ -274,8 +289,11 @@ async fn post_ark_third(
     log::info!("post ark-third");
 
     {
-        if (command.request() == "start" || command.request() == "restart")
-            && state.lock().unwrap().current_executing_count() >= 2
+        let state = state.lock().unwrap();
+        if (command.request() == "start" && state.current_executing_count() >= 2)
+            || (command.request() == "restart"
+                && !state.ark_server_third
+                && state.current_executing_count() >= 2)
         {
             return HttpResponse::ExpectationFailed()
                 .body("Two games have already been activated.");
