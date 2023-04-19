@@ -66,18 +66,21 @@ async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
 #[command]
 #[description = "ARKサーバを停止する．args: int int int ... int"]
 async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    if args.is_empty() {
+        ArkFirst::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
+        ArkSecond::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
+        ArkThird::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
+        ArkFourth::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
+
+        return Ok(());
+    }
+
     for arg in args.iter::<u32>() {
         match arg {
             Ok(1) => ArkFirst::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?,
             Ok(2) => ArkSecond::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?,
             Ok(3) => ArkThird::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?,
             Ok(4) => ArkFourth::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?,
-            Err(_) => {
-                ArkFirst::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
-                ArkSecond::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
-                ArkThird::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
-                ArkFourth::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
-            }
             _ => (),
         }
     }
