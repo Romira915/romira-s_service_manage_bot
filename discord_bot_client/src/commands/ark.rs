@@ -1,4 +1,5 @@
 pub(crate) mod ark_first;
+pub(crate) mod ark_fourth;
 pub(crate) mod ark_second;
 pub(crate) mod ark_third;
 
@@ -17,6 +18,7 @@ use crate::bot_config::ConfigContainer;
 use super::minecraft::SystemctlCommand;
 use super::EmbedMessageBuilder;
 use ark_first::*;
+use ark_fourth::*;
 use ark_second::*;
 use ark_third::*;
 
@@ -37,6 +39,7 @@ async fn start(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
             Ok(1) => ArkFirst::ark_command_exec(SystemctlCommand::Start, ctx, msg).await?,
             Ok(2) => ArkSecond::ark_command_exec(SystemctlCommand::Start, ctx, msg).await?,
             Ok(3) => ArkThird::ark_command_exec(SystemctlCommand::Start, ctx, msg).await?,
+            Ok(4) => ArkFourth::ark_command_exec(SystemctlCommand::Start, ctx, msg).await?,
             _ => (),
         }
     }
@@ -52,6 +55,7 @@ async fn status(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
             Ok(1) => ArkFirst::ark_command_exec(SystemctlCommand::Status, ctx, msg).await?,
             Ok(2) => ArkSecond::ark_command_exec(SystemctlCommand::Status, ctx, msg).await?,
             Ok(3) => ArkThird::ark_command_exec(SystemctlCommand::Status, ctx, msg).await?,
+            Ok(4) => ArkFourth::ark_command_exec(SystemctlCommand::Status, ctx, msg).await?,
             _ => (),
         }
     }
@@ -67,10 +71,12 @@ async fn stop(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
             Ok(1) => ArkFirst::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?,
             Ok(2) => ArkSecond::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?,
             Ok(3) => ArkThird::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?,
+            Ok(4) => ArkFourth::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?,
             Err(_) => {
                 ArkFirst::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
                 ArkSecond::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
                 ArkThird::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
+                ArkFourth::ark_command_exec(SystemctlCommand::Stop, ctx, msg).await?;
             }
             _ => (),
         }
@@ -87,6 +93,7 @@ async fn restart(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult 
             Ok(1) => ArkFirst::ark_command_exec(SystemctlCommand::Restart, ctx, msg).await?,
             Ok(2) => ArkSecond::ark_command_exec(SystemctlCommand::Restart, ctx, msg).await?,
             Ok(3) => ArkThird::ark_command_exec(SystemctlCommand::Restart, ctx, msg).await?,
+            Ok(4) => ArkFourth::ark_command_exec(SystemctlCommand::Restart, ctx, msg).await?,
             _ => (),
         }
     }
