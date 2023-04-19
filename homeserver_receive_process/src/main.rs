@@ -321,13 +321,44 @@ async fn post_ark_third(
     }
 }
 
-#[get("/test")]
-async fn index(state: web::Data<Arc<Mutex<GameServerExecutingState>>>) -> impl Responder {
+#[post("/ark-fourth")]
+async fn post_ark_fourth(
+    command: web::Json<Command>,
+    state: web::Data<Arc<Mutex<GameServerExecutingState>>>,
+) -> impl Responder {
+    log::info!("post ark-fourth");
+
     {
-        state.lock().unwrap().ark_server = true;
-        state.lock().unwrap().ark_server_second = true;
+        let state = state.lock().unwrap();
+        if (command.request() == "start" && state.current_executing_count() >= 2)
+            || (command.request() == "restart"
+                && !state.ark_server_fourth
+                && state.current_executing_count() >= 2)
+        {
+            return HttpResponse::ExpectationFailed()
+                .body("Two games have already been activated.");
+        }
     }
-    HttpResponse::Ok().body(format!("{:?}", state.lock().unwrap().ark_server))
+
+    let result = exec_systemctl(&command, Game::ArkServerFourth).await;
+
+    if let Ok(output) = &result {
+        if output.status.success() {
+            if let "start" | "restart" = command.request().as_str() {
+                log::info!("running ark_server_fourth");
+                state.lock().unwrap().ark_server_fourth = true;
+            } else if let "stop" = command.request().as_str() {
+                log::info!("stoping ark_server_fourth");
+                state.lock().unwrap().ark_server_fourth = false;
+            }
+        }
+    }
+
+    if command.request() == "status" {
+        into_response_by_cmd_output_with_status(&result)
+    } else {
+        into_response_by_cmd_output(&result)
+    }
 }
 
 #[get("/current-executing-count")]
@@ -335,18 +366,6 @@ async fn get_current_executing_count(
     state: web::Data<Arc<Mutex<GameServerExecutingState>>>,
 ) -> impl Responder {
     HttpResponse::Ok().body(state.lock().unwrap().current_executing_count().to_string())
-}
-
-#[get("/get")]
-async fn get_test(state: web::Data<Arc<Mutex<GameServerExecutingState>>>) -> impl Responder {
-    {
-        if state.lock().unwrap().current_executing_count() >= 2 {
-            return HttpResponse::ExpectationFailed()
-                .body("Two games have already been activated.");
-        }
-    }
-
-    HttpResponse::Ok().body("".to_string())
 }
 
 #[actix_web::main]
@@ -376,15 +395,14 @@ async fn main() -> std::io::Result<()> {
             .data_factory(|| async {
                 Ok::<_, ()>(Arc::new(Mutex::new(GameServerExecutingState::default())))
             })
-            .service(index)
             .service(post_minecraft)
             .service(post_sdtd)
             .service(post_terraria)
             .service(post_ark)
             .service(post_ark_second)
             .service(post_ark_third)
+            .service(post_ark_fourth)
             .service(get_current_executing_count)
-            .service(get_test)
             .service(Files::new("/.well-known", well_known_path.as_path()))
     })
     .client_request_timeout(Duration::from_millis(30000))

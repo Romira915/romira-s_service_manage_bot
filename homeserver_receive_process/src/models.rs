@@ -7,6 +7,7 @@ pub struct GameServerExecutingState {
     pub ark_server: bool,
     pub ark_server_second: bool,
     pub ark_server_third: bool,
+    pub ark_server_fourth: bool,
 }
 
 impl GameServerExecutingState {
@@ -17,6 +18,7 @@ impl GameServerExecutingState {
             + self.ark_server as usize
             + self.ark_server_second as usize
             + self.ark_server_third as usize
+            + self.ark_server_fourth as usize
     }
 }
 
@@ -27,6 +29,7 @@ pub enum Game {
     ArkServer,
     ArkServerSecond,
     ArkServerThird,
+    ArkServerFourth,
 }
 
 impl Game {
@@ -38,6 +41,7 @@ impl Game {
             Game::ArkServer => "ark-server.service".to_string(),
             Game::ArkServerSecond => "ark-server-second.service".to_string(),
             Game::ArkServerThird => "ark-server-third.service".to_string(),
+            Game::ArkServerFourth => "ark-server-fourth.service".to_string(),
         }
     }
 }
