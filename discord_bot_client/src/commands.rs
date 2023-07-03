@@ -4,6 +4,7 @@ pub mod activity;
 pub mod ai;
 pub mod ark;
 pub mod conversation;
+pub mod enquete;
 pub mod minecraft;
 pub mod sdtd;
 pub mod simple;

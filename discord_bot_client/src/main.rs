@@ -3,8 +3,8 @@ extern crate discord_bot_client;
 use discord_bot_client::{
     bot_config::{Config as BotConfig, ConfigContainer},
     commands::{
-        activity::ACTIVITYCOMMAND_GROUP, ai::*, ark::ARK_GROUP, minecraft::*, sdtd::*, terraria::*,
-        valheim::*,
+        activity::ACTIVITYCOMMAND_GROUP, ai::*, ark::ARK_GROUP, enquete::ENQUETE_GROUP,
+        minecraft::*, sdtd::*, terraria::*, valheim::*,
     },
     state::{BotState, BotStateContainer},
     *,
@@ -90,14 +90,15 @@ async fn main() {
     let framework = StandardFramework::new()
         .configure(|c| c.owners(owners).prefix(config.discord().prefix()))
         .help(&MY_HELP)
-        .group(&GENERAL_GROUP)
+        .group(&GENERALT_GROUP)
         .group(&MINECRAFT_GROUP)
         .group(&VALHEIM_GROUP)
         .group(&SDTD_GROUP)
         .group(&TERRARIA_GROUP)
         .group(&ARK_GROUP)
         .group(&ACTIVITYCOMMAND_GROUP)
-        .group(&AI_GROUP);
+        .group(&AI_GROUP)
+        .group(&ENQUETE_GROUP);
     let intents = GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT;
 
     let mut client = Client::builder(&token, intents)

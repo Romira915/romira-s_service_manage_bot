@@ -30,7 +30,7 @@ const RINNA_CCE_ENDPOINT: &str = "https://api.rinna.co.jp/models/cce";
 
 #[group]
 #[commands(ping)]
-pub struct General;
+pub struct GeneralT;
 
 pub struct Handler;
 
@@ -167,12 +167,12 @@ impl EventHandler for Handler {
                         error!("Error sending message: {:?}", why);
                     };
 
-                    typing.stop();
+                    typing.stop().unwrap_or_default();
 
                     return;
                 }
 
-                typing.stop();
+                typing.stop().unwrap_or_default();
             }
         }
 
